@@ -1,4 +1,5 @@
 {
+  lib,
   python3,
   fetchFromGitHub,
 }:
@@ -32,5 +33,11 @@ in
       wheel
       poetry-core
     ];
-  }
 
+    meta = {
+      description = "Xonsh extension for using direnv";
+      homepage = "https://github.com/74th/xonsh-direnv";
+      license = lib.licenses.mit;
+    };
+
+  }

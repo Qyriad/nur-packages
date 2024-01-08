@@ -1,16 +1,16 @@
 {
-  fetchPypi,
+  lib,
   python3,
+  fetchPypi,
 }:
 
 let
+  inherit (python3.pkgs) buildPythonPackage setuptools wheel;
+
   pname = "pipe";
   version = "2.0";
-
-  inherit (python3.pkgs) buildPythonPackage setuptools wheel;
 in
   buildPythonPackage {
-
     inherit pname version;
 
     src = fetchPypi {
@@ -25,4 +25,10 @@ in
         wheel
     ];
 
-  } # buildPythonPackage
+    meta = {
+      description = "A Python library to use infix notiation in Python";
+      homepage = "https://github.com/JulienPalard/Pipe";
+      license = lib.licenses.mit;
+    };
+
+  }

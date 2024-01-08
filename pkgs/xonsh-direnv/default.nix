@@ -1,7 +1,8 @@
 {
+  lib,
   python3,
   fetchFromGitHub,
-  direnv
+  direnv,
 }:
 
 let
@@ -28,5 +29,11 @@ in
     buildInputs = [
       direnv
     ];
+
+    meta = {
+      description = "Xonsh extension for command abbreviations. This expands input words as you type";
+      homepage = "https://github.com/xonsh/xontrib-abbrevs";
+      license = lib.licenses.mit;
+    };
 
   }
