@@ -9,19 +9,14 @@
       let
 
         pkgs = import nixpkgs { inherit system; };
+        inherit (pkgs) lib;
 
         nurPackages = import ./default.nix {
           inherit pkgs;
         };
 
       in {
-        packages = {
-          inherit (nurPackages)
-            python-pipe
-            xontrib-abbrevs
-            xonsh-direnv
-          ;
-        };
+        packages = lib.filterAttrs (name: value: lib.isDerivation value) nurPackages;
       }
 
     ) # eachDefaultSystem
