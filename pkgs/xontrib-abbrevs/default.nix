@@ -1,6 +1,7 @@
 {
   lib,
   python3,
+  xonsh-unwrapped,
   fetchFromGitHub,
 }:
 
@@ -10,6 +11,7 @@ let
     setuptools
     wheel
     poetry-core
+    prompt-toolkit
   ;
 
   pname = "xontrib-abbrevs";
@@ -32,6 +34,11 @@ in
       setuptools
       wheel
       poetry-core
+    ];
+
+    nativeCheckInputs = [
+      xonsh-unwrapped
+      prompt-toolkit
     ];
 
     meta = {
