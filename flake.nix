@@ -24,6 +24,7 @@
 
       in {
         packages = lib.filterAttrs (name: value: isDrvAndAvail value) nurPackages;
+        checks = self.packages.${system};
       }
 
     ) # eachDefaultSystem
