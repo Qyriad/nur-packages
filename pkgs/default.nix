@@ -8,4 +8,5 @@
   xonsh-direnv = pkgs.callPackage ./xonsh-direnv { };
   strace-process-tree = pkgs.callPackage ./strace-process-tree { };
   hammerspoon = pkgs.callPackage ./hammerspoon { };
+  electron-rebuild = pkgs.callPackage ./electron-rebuild { };
 }
