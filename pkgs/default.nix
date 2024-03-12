@@ -9,4 +9,5 @@
   strace-process-tree = pkgs.callPackage ./strace-process-tree { };
   hammerspoon = pkgs.callPackage ./hammerspoon { };
   electron-rebuild = pkgs.callPackage ./electron-rebuild { };
+  cinny = pkgs.callPackage ./cinny { };
 }
