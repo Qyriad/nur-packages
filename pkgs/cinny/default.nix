@@ -2,6 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
+  darwin,
   fetchFromGitHub,
   fetchNpmDeps,
   python3,
@@ -28,6 +29,7 @@
     version = "3.2.0";
 
     src = fetchFromGitHub {
+      name = "cinny-web-source";
       owner = "cinnyapp";
       repo = "cinny";
       rev = "v${self.version}";
@@ -77,6 +79,7 @@ in stdenv.mkDerivation (self: {
   inherit (self.passthru.cinny-web) version;
 
   src = fetchFromGitHub {
+    name = "cinny-desktop-source";
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "v${self.version}";
@@ -95,7 +98,8 @@ in stdenv.mkDerivation (self: {
   cargoBuildType = "release";
   cargoDeps = importCargoLock {
     lockFile = builtins.path {
-      path = self.src + "/src-tauri/Cargo.lock";  name = "Cargo.lock";
+      path = self.src + "/src-tauri/Cargo.lock";
+      name = "Cargo.lock";
     };
   };
 
@@ -103,41 +107,52 @@ in stdenv.mkDerivation (self: {
   # to call cargo build, we have to do it ourselves.
   env.rustHostPlatformSpec = rust.envVars.rustHostPlatformSpec;
 
+  env.cinnyBundle =
+    if stdenv.hostPlatform.isLinux then "deb"
+    else if stdenv.hostPlatform.isDarwin then "app"
+    else throw "unsupported platform for ${self.finalPackage.name}";
+
   nativeBuildInputs = [
     npmConfigHook
     cargoSetupHook
-    rustPlatform.cargoInstallHook
     cargo
     rustc
     pkg-config
+    nodejs
   ];
 
   buildInputs = [
-    nodejs
-    openssl
     gtk3
-    libappindicator
     libsoup
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libappindicator
     webkitgtk
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.WebKit;
 
+  # Replace the empty submodule directory with a copy of the above cinny-web derivation's artifacts.
   preBuild = ''
     rmdir cinny
     cp -r ${self.passthru.cinny-web}/lib/node_modules/cinny ./cinny
     chmod u+w -R ./cinny
   '';
 
-  # Here we ask Tauri to create a debian bundle,
+  # On Linux we ask Tauri to create a debian bundle,
   # which we'll yoink the files from in installPhase.
   buildPhase = ''
     runHook preBuild
-    npm run tauri -- build --verbose --bundles deb --target "$rustHostPlatformSpec"
+    npm run tauri -- build --bundles "$cinnyBundle" --target "$rustHostPlatformSpec"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     mv -v "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/deb/"*"/data/usr" "$out"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv -v "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/macos/Cinny.app" "$out/Applications/"
+  '' + ''
     runHook postInstall
   '';
 
