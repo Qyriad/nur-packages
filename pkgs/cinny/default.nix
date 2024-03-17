@@ -140,7 +140,10 @@ in stdenv.mkDerivation (self: {
     glib-networking
     libayatana-appindicator
     webkitgtk
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.WebKit;
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
+    darwin.apple_sdk.frameworks.WebKit
+  ];
 
   # Replace the empty submodule directory with a copy of the above cinny-web derivation's artifacts.
   # This has to be a copy instead of a symlink, because Tauri expects to be able to modify
@@ -173,11 +176,11 @@ in stdenv.mkDerivation (self: {
   '';
 
   # These aren't detected by the normal fixup phase and must be added manually.
-  runtimeDependencies = [
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     libayatana-appindicator
   ];
 
-  # This has to be postFixup or wrapGApps will nullify this.
+  # This has to be postFixup (rather than preFixup) or wrapGApps will nullify this.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath "${lib.makeLibraryPath self.runtimeDependencies}" "$out/bin/.cinny-wrapped"
   '';
