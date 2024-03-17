@@ -3,6 +3,8 @@
   stdenv,
   stdenvNoCC,
   darwin,
+  makeWrapper,
+  wrapGAppsHook,
   fetchFromGitHub,
   fetchNpmDeps,
   python3,
@@ -14,6 +16,7 @@
   cargo,
   pkg-config,
   gtk3,
+  glib-networking,
   libappindicator,
   libsoup,
   openssl,
@@ -22,6 +25,8 @@
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
   inherit (nodejs.pkgs) node-gyp;
   inherit (rustPlatform) importCargoLock cargoSetupHook;
+
+  NODE_OPTIONS = "--max-old-space-size=4096";
 
   cinny-web = stdenvNoCC.mkDerivation (self: {
 
@@ -61,6 +66,8 @@
       npmInstallHook
       python3
     ];
+
+    env.NODE_OPTIONS = NODE_OPTIONS;
 
     buildInputs = [
       nodejs
@@ -112,9 +119,13 @@ in stdenv.mkDerivation (self: {
     else if stdenv.hostPlatform.isDarwin then "app"
     else throw "unsupported platform for ${self.finalPackage.name}";
 
+  env.NODE_OPTIONS = NODE_OPTIONS;
+
   nativeBuildInputs = [
+    wrapGAppsHook
     npmConfigHook
     cargoSetupHook
+    makeWrapper
     cargo
     rustc
     pkg-config
@@ -126,11 +137,15 @@ in stdenv.mkDerivation (self: {
     libsoup
     openssl
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
     libappindicator
+    #libayatana-appindicator
     webkitgtk
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.WebKit;
 
   # Replace the empty submodule directory with a copy of the above cinny-web derivation's artifacts.
+  # This has to be a copy instead of a symlink, because Tauri expects to be able to modify
+  # cinny-web's sources, which is also the reason for the chmod.
   preBuild = ''
     rmdir cinny
     cp -r ${self.passthru.cinny-web}/lib/node_modules/cinny ./cinny
@@ -157,6 +172,22 @@ in stdenv.mkDerivation (self: {
   '' + ''
     runHook postInstall
   '';
+
+  # These aren't detected by the normal fixup phase and must be added manually.
+  runtimeDependencies = [
+    libappindicator
+    glib-networking
+  ];
+
+  # It's not setting the things we actually need. We'll do it manually.
+  #dontWrapGApps = true;
+
+  # We do this manually instead of using wrapGAppsHook as that seems to conflict with
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    ls -lah --color=always --group-directories-first "$out/bin"
+    patchelf --add-rpath "${lib.makeLibraryPath self.runtimeDependencies}" "$out/bin/.cinny-wrapped"
+  '';
+    #wrapProgram "$out/bin/.cinny-wrapped" --set "GIO_MODULE_DIR" "${lib.getLib glib-networking}/lib/gio/modules"
 
   passthru = {
     inherit cinny-web;
