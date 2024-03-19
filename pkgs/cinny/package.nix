@@ -22,31 +22,33 @@
   openssl,
   webkitgtk,
 }: let
+  inherit (lib) optionalDefault;
   inherit (stdenv) hostPlatform;
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
   inherit (nodejs.pkgs) node-gyp;
   inherit (rustPlatform) importCargoLock cargoSetupHook;
-  inherit (lib) optionalDefault;
 
+  # Fixes NodeJS running out of JavaScript heap while building on lower-memory machines.
   NODE_OPTIONS = "--max-old-space-size=4096";
 
   cinny-web = stdenvNoCC.mkDerivation (self: {
 
     pname = "cinny-web";
-    version = "3.3.0";
+    version = "3.2.0";
 
     src = fetchFromGitHub {
       name = "cinny-web-source";
       owner = "cinnyapp";
       repo = "cinny";
-      rev = "v${self.version}";
+      rev = "refs/tags/v${self.version}";
       hash = "sha256-wAa7y2mXPkXAfirRSFqwZYIJK0CKDzZG8ULzXzr4zZ4=";
     };
 
-    postPatch = ''
-      substituteInPlace vite.config.js \
-        --replace-fail "sourcemap: true," "sourcemap: false,"
-    '';
+    patches = [
+      # Fixes logspam about viteSvgLoader (a hack in the Cinny repo around Vite not supporting inline SVG)
+      # not generating a sourcemap for the stuff it modifies.
+      ./vite-svg-no-sourcemap.patch
+    ];
 
     # npmConfigHook arguments.
 
@@ -81,6 +83,11 @@
       node-gyp
     ];
 
+    postInstall = ''
+      # Include vite's artifacts, which are placed in ./dist.
+      cp -r ./dist "$out/lib/node_modules/cinny/"
+    '';
+
     meta = {
       description = "Yet another Matrix client (web)";
       homepage = "https://cinny.in";
@@ -90,15 +97,23 @@
 
 in stdenv.mkDerivation (self: {
   pname = "cinny-desktop";
-  version = "0.3.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     name = "cinny-desktop-source";
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    rev = "v${self.version}";
-    hash = "sha256-uHGqvulH7/9JpUjkpcbCh1pPvX4/ndVIKcBXzWmDo+s=";
+    rev = "refs/tags/v${self.version}";
+    hash = "sha256-++S1QM58ousi9wERE3HNNyqKAI+aNsaNcbTe1G9c+3A=";
   };
+
+  patches = [
+    # src-tauri/tauri.conf
+    # the preBuild script specified in src-tauri/tauri.conf, expecting to be able to modify the
+    # cinny-web directory, unconditionally runs the build commands for cinny-web. We've already
+    # built cinny-web, so let's just patch that out.
+    ./immutable-cinny-web.patch
+  ];
 
   # npmConfigHook arguments
   npmDeps = fetchNpmDeps {
@@ -152,13 +167,12 @@ in stdenv.mkDerivation (self: {
     darwin.apple_sdk.frameworks.WebKit
   ];
 
-  # Replace the empty submodule directory with a copy of the above cinny-web derivation's artifacts.
-  # This has to be a copy instead of a symlink, because Tauri expects to be able to modify
-  # cinny-web's sources, which is also the reason for the chmod.
+  # Replace the empty submodule with a symlink to cinny-web as built above.
+  # The Tauri prebuild script normally tries to run `npm run build` in here,
+  # but we patched that out above (see patches), so this can be immutable.
   preBuild = ''
     rmdir cinny
-    cp -r ${self.passthru.cinny-web}/lib/node_modules/cinny ./cinny
-    chmod u+w -R ./cinny
+    ln -sv "${self.passthru.cinny-web}/lib/node_modules/cinny" ./
   '';
 
   # On Linux we ask Tauri to create a debian bundle,
@@ -175,7 +189,7 @@ in stdenv.mkDerivation (self: {
     mv -v "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/deb/"*"/data/usr" "$out"
   '' + optionalDefault hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
-    mv -v "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/macos/Cinny.app" "$out/Applications/"
+    cp -r "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/macos/Cinny.app" "$out/Applications/"
     mkdir -p "$out/bin"
     ln -sv "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny";
   '' + ''
