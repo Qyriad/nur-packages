@@ -77,7 +77,7 @@
     meta = {
       description = "Yet another Matrix client (web)";
       homepage = "https://cinny.in";
-      license = lib.licenses.agpl3;
+      license = lib.licenses.agpl3Only;
     };
   });
 
@@ -193,6 +193,6 @@ in stdenv.mkDerivation (self: {
     mainProgram = "cinny";
     description = "Yet another Matrix client (desktop)";
     homepage = "https://cinny.in";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Only;
   };
 })
