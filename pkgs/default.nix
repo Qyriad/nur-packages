@@ -10,4 +10,5 @@
   hammerspoon = pkgs.callPackage ./hammerspoon { };
   electron-rebuild = pkgs.callPackage ./electron-rebuild { };
   cinny = pkgs.callPackage ./cinny { };
+  strace-with-colors = pkgs.callPackage ./strace-with-colors { };
 }
