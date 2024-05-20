@@ -14,15 +14,19 @@
         inherit pkgs;
       };
 
+      nurLib = import ./lib { inherit (pkgs) lib; };
+      isAvailableDerivation = nurLib.isAvailableDerivation pkgs.stdenv.hostPlatform;
+
       # We need to filter out attrsets that aren't derivations,
       # like the functors added by callPackage.
       # And then we also want to filter out packages that aren't available
       # on the system we're evaluating for.
-      isDrvAndAvail = drv:
-        lib.isDerivation drv && lib.meta.availableOn pkgs.stdenv.hostPlatform drv;
+      packages = lib.filterAttrs (lib.const isAvailableDerivation) nurPackages;
 
     in {
-      packages = lib.filterAttrs (name: value: isDrvAndAvail value) nurPackages;
+      packages = packages // {
+        default = pkgs.linkFarmFromDrvs "qyriad-nur" (lib.attrValues packages);
+      };
       checks = self.packages.${system};
     })
   ; # outputs
