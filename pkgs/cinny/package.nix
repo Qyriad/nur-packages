@@ -22,16 +22,18 @@
   openssl,
   webkitgtk,
 }: let
+  inherit (stdenv) hostPlatform;
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
   inherit (nodejs.pkgs) node-gyp;
   inherit (rustPlatform) importCargoLock cargoSetupHook;
+  inherit (lib) optionalDefault;
 
   NODE_OPTIONS = "--max-old-space-size=4096";
 
   cinny-web = stdenvNoCC.mkDerivation (self: {
 
     pname = "cinny-web";
-    version = "3.2.0";
+    version = "3.3.0";
 
     src = fetchFromGitHub {
       name = "cinny-web-source";
@@ -40,6 +42,11 @@
       rev = "v${self.version}";
       hash = "sha256-wAa7y2mXPkXAfirRSFqwZYIJK0CKDzZG8ULzXzr4zZ4=";
     };
+
+    postPatch = ''
+      substituteInPlace vite.config.js \
+        --replace-fail "sourcemap: true," "sourcemap: false,"
+    '';
 
     # npmConfigHook arguments.
 
@@ -83,7 +90,7 @@
 
 in stdenv.mkDerivation (self: {
   pname = "cinny-desktop";
-  inherit (self.passthru.cinny-web) version;
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     name = "cinny-desktop-source";
@@ -115,8 +122,8 @@ in stdenv.mkDerivation (self: {
   env.rustHostPlatformSpec = rust.envVars.rustHostPlatformSpec;
 
   env.cinnyBundle =
-    if stdenv.hostPlatform.isLinux then "deb"
-    else if stdenv.hostPlatform.isDarwin then "app"
+    if hostPlatform.isLinux then "deb"
+    else if hostPlatform.isDarwin then "app"
     else throw "unsupported platform for ${self.finalPackage.name}";
 
   env.NODE_OPTIONS = NODE_OPTIONS;
@@ -136,11 +143,11 @@ in stdenv.mkDerivation (self: {
     gtk3
     libsoup
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ optionalDefault hostPlatform.isLinux [
     glib-networking
     libayatana-appindicator
     webkitgtk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ optionalDefault hostPlatform.isDarwin [
     darwin.DarwinTools
     darwin.apple_sdk.frameworks.WebKit
   ];
@@ -164,9 +171,9 @@ in stdenv.mkDerivation (self: {
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + optionalDefault hostPlatform.isLinux ''
     mv -v "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/deb/"*"/data/usr" "$out"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  '' + optionalDefault hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv -v "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/macos/Cinny.app" "$out/Applications/"
     mkdir -p "$out/bin"
@@ -176,12 +183,12 @@ in stdenv.mkDerivation (self: {
   '';
 
   # These aren't detected by the normal fixup phase and must be added manually.
-  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
+  runtimeDependencies = optionalDefault stdenv.hostPlatform.isLinux [
     libayatana-appindicator
   ];
 
   # This has to be postFixup (rather than preFixup) or wrapGApps will nullify this.
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postFixup = optionalDefault stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath "${lib.makeLibraryPath self.runtimeDependencies}" "$out/bin/.cinny-wrapped"
   '';
 
