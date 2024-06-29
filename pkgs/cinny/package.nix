@@ -119,7 +119,7 @@ in stdenv.mkDerivation (self: {
   npmDeps = fetchNpmDeps {
     name = "${self.finalPackage.name}-npm-deps";
     inherit (self) src;
-    hash = "sha256-JLyyZ+CJhyqnC79cKt5XQvjOV1dZb2oYiMSbJYKcX/k=";
+    hash = "sha256-lIUaP9NR+NdOzHwf3BFsuFCzOKKuefuGuN/DILwn+EI=";
   };
 
   # cargoSetupHook arguments
