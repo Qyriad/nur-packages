@@ -11,6 +11,17 @@
     (drv.meta.broken or null != true)
   ];
 
+  optionalDefault = cond: valueIfTrue: let
+    fnByType = {
+      list = lib.optionals;
+      set = lib.optionalAttrs;
+      string = lib.optionalString;
+    };
+    valueType = builtins.typeOf valueIfTrue;
+    fn = fnByType.${valueType}
+      or (throw "no known lib.optional-type function for type: ${valueType}");
+  in fn cond valueIfTrue;
+
 in {
-  inherit isAvailableDerivation;
+  inherit isAvailableDerivation optionalDefault;
 }

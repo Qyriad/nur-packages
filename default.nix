@@ -1,9 +1,19 @@
 {
   pkgs ? import <nixpkgs> { },
-}: let
-  inherit (pkgs) lib;
+  lib ? pkgs.lib,
+}:
 
-in lib.makeScope pkgs.newScope (self: lib.packagesFromDirectoryRecursive {
-  callPackage = self.callPackage;
-  directory = ./pkgs;
+let
+
+  makePackages = self: lib.packagesFromDirectoryRecursive {
+    callPackage = self.callPackage;
+    directory = ./pkgs;
+  };
+
+  lib' = lib.extend (final: prev: import ./lib {
+    lib = final;
+  });
+
+in lib.makeScope pkgs.newScope (self: makePackages self // {
+  lib = lib';
 })
