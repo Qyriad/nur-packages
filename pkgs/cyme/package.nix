@@ -62,6 +62,8 @@ in stdenv.mkDerivation (self: {
     libusb1
   ] ++ optionalLinux [
     udev
+  ] ++ optionalDarwin [
+    darwin.libiconv
   ];
 
   postInstall = lib.optionalDefault (buildPlatform.canExecute hostPlatform) ''
