@@ -11,6 +11,8 @@
     (drv.meta.broken or null != true)
   ];
 
+  startsWith = needle: heystack: (lib.match "^(${lib.escapeRegex heystack}).*$") != null;
+
   optionalDefault = cond: valueIfTrue: let
     fnByType = {
       list = lib.optionals;
@@ -22,6 +24,29 @@
       or (throw "no known lib.optional-type function for type: ${valueType}");
   in fn cond valueIfTrue;
 
+  /** Turns every isFoo predicate on a stdenv platform into a partial application of
+   * of `optionalDefault`, with a name of the form `optionalFoo`.
+   */
+  mkPlatformPredicates = plat: let
+    platPredicates = lib.filterAttrs (lib.const startsWith "is") plat;
+  in lib.flip lib.mapAttrs' platPredicates (name: value: {
+    name = "optional${lib.removePrefix "is" name}";
+    value = optionalDefault value;
+  });
+
+  # A reimplementation of lib.callPackageWith tht doesn't lib.mkOverrideable the result.
+  autocallWith = import ./autocall-with.nix { inherit lib; };
+
+  # Autocall with no explicit args. Handy for inline destructring.
+  callWith' = from: f: autocallWith from f { };
+
+  # Autocall with no explicit args, from a list of attrsets.
+  # Handy for inline destructuring.
+  callWith = fromList: f: let
+    foldAttrList = lib.foldl lib.mergeAttrs { };
+    finalFrom = foldAttrList fromList;
+  in callWith finalFrom f;
+
 in {
-  inherit isAvailableDerivation optionalDefault;
+  inherit isAvailableDerivation optionalDefault mkPlatformPredicates callWith callWith';
 }
