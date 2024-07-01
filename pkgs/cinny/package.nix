@@ -9,6 +9,7 @@
   fetchNpmDeps,
   python3,
   nodejs,
+  nodePackages,
   npmHooks,
   rust,
   rustPlatform,
@@ -20,13 +21,16 @@
   libayatana-appindicator,
   libsoup,
   openssl,
+  gst_all_1,
+  libcanberra-gtk3,
   webkitgtk,
 }: let
   inherit (lib) optionalDefault;
   inherit (stdenv) hostPlatform;
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
-  inherit (nodejs.pkgs) node-gyp;
+  inherit (nodePackages) npm node-gyp;
   inherit (rustPlatform) importCargoLock cargoSetupHook;
+  inherit (gst_all_1) gstreamer gst-vaapi gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad;
 
   # Fixes NodeJS running out of JavaScript heap while building on lower-memory machines.
   NODE_OPTIONS = "--max-old-space-size=4096";
@@ -35,6 +39,9 @@
 
     pname = "cinny-web";
     version = "3.2.0";
+
+    strictDeps = true;
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       name = "cinny-web-source";
@@ -52,7 +59,8 @@
 
     # npmConfigHook arguments.
 
-    npmDeps = fetchNpmDeps {
+    # npmConfigHook has broken structured attrs support lol.
+    env.npmDeps = fetchNpmDeps {
       name = "${self.finalPackage.name}-npm-deps";
       inherit (self) src;
       hash = "sha256-dVdylvclUIHvF5syVumdxkXR4bG1FA4LOYg3GmnNzXE=";
@@ -70,6 +78,9 @@
     dontNpmPrune = true;
 
     nativeBuildInputs = [
+      nodejs
+      node-gyp
+      npm
       npmConfigHook
       npmBuildHook
       npmInstallHook
@@ -77,11 +88,6 @@
     ];
 
     env.NODE_OPTIONS = NODE_OPTIONS;
-
-    buildInputs = [
-      nodejs
-      node-gyp
-    ];
 
     postInstall = ''
       # Include vite's artifacts, which are placed in ./dist.
@@ -99,8 +105,11 @@ in stdenv.mkDerivation (self: {
   pname = "cinny-desktop";
   version = "3.2.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
-    name = "cinny-desktop-source";
+    name = "${self.finalPackage.name}-source";
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "refs/tags/v${self.version}";
@@ -116,7 +125,7 @@ in stdenv.mkDerivation (self: {
   ];
 
   # npmConfigHook arguments
-  npmDeps = fetchNpmDeps {
+  env.npmDeps = fetchNpmDeps {
     name = "${self.finalPackage.name}-npm-deps";
     inherit (self) src;
     hash = "sha256-lIUaP9NR+NdOzHwf3BFsuFCzOKKuefuGuN/DILwn+EI=";
@@ -161,18 +170,26 @@ in stdenv.mkDerivation (self: {
   ] ++ optionalDefault hostPlatform.isLinux [
     glib-networking
     libayatana-appindicator
+    libcanberra-gtk3
     webkitgtk
+    gst-plugins-base
+    # If other gstreamer stuff is here, this is needed so GLib doesn't assert-fail.
+    gst-plugins-good
+    # Needed for playing video attachments with subtitles.
+    gst-plugins-bad
   ] ++ optionalDefault hostPlatform.isDarwin [
     darwin.DarwinTools
     darwin.apple_sdk.frameworks.WebKit
   ];
+
+  cinnyWeb = self.passthru.cinny-web;
 
   # Replace the empty submodule with a symlink to cinny-web as built above.
   # The Tauri prebuild script normally tries to run `npm run build` in here,
   # but we patched that out above (see patches), so this can be immutable.
   preBuild = ''
     rmdir cinny
-    ln -sv "${self.passthru.cinny-web}/lib/node_modules/cinny" ./
+    ln -sv "$cinnyWeb/lib/node_modules/cinny" ./
   '';
 
   # On Linux we ask Tauri to create a debian bundle,
