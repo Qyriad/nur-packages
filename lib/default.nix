@@ -60,6 +60,9 @@
     }).url;
   });
 
+  /** Join a list of string-like values with forward slashes. */
+  joinPaths = lib.strings.concatStringsSep "/";
+
 in {
-  inherit isAvailableDerivation optionalDefault mkPlatformPredicates callWith callWith' mkHeadFetch;
+  inherit isAvailableDerivation optionalDefault mkPlatformPredicates callWith callWith' mkHeadFetch joinPaths;
 }
