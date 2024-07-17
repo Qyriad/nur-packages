@@ -26,13 +26,13 @@
   inherit (stdenv) hostPlatform buildPlatform;
 in stdenv.mkDerivation (self: {
   pname = "cyme";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-iDwH4gSpt1XkwMBj0Ut26c9PpsHcxFrRE6VuBNhpIHk=";
+    hash = "sha256-Rq7ykD6L+DrDNz+d++ztv+fmoSSNCoeC1YfXiIJiXzM=";
   };
 
   cargoDeps = importCargoLock {
