@@ -7,9 +7,12 @@
   cargo,
   nix-update-script,
   testers,
-}: let
-  inherit (rustPlatform) importCargoLock cargoSetupHook cargoBuildHook cargoInstallHook;
-in stdenv.mkDerivation (self: {
+}: lib.callWith' rustPlatform ({
+  importCargoLock,
+  cargoSetupHook,
+  cargoBuildHook,
+  cargoInstallHook,
+}: stdenv.mkDerivation (self: {
   pname = "otree";
   version = "0.2.0";
 
@@ -56,4 +59,4 @@ in stdenv.mkDerivation (self: {
     sourceProvanence = with lib.sourceTypes; [ fromSource ];
     mainProgram = "otree";
   };
-})
+}))

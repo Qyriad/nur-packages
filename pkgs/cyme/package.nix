@@ -81,6 +81,7 @@ in stdenv.mkDerivation (self: {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion { package = self.finalPackage; };
+    fromHead = lib.mkHeadFetch { self = self.finalPackage; };
   };
 
   meta = {
