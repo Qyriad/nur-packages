@@ -32,7 +32,9 @@
       path = lib.joinPaths [ self.src "Cargo.lock" ];
       name = "Cargo.lock";
     };
-    outputHashes = {
+    # Mini hack. fromHead uses an eval fetch and so src isn't a derivation, and right
+    # after upstream tagged a release they removed tui-tree-widget as a git dependency.
+    outputHashes = lib.optionalDefault (lib.isDerivation self.src) {
       "tui-tree-widget-0.20.0" = "sha256-/uLp63J4FoMT1rMC9cv49JAX3SuPvFWPtvdS8pspsck=";
     };
   };
