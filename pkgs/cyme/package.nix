@@ -10,7 +10,9 @@
   udev,
   nix-update-script,
   testers,
-}: lib.callWith' rustPlatform ({
+}: lib.callWith [ darwin rustPlatform ] ({
+  libiconv,
+  DarwinTools,
   importCargoLock,
   cargoSetupHook,
   cargoBuildHook,
@@ -55,7 +57,7 @@ in stdenv.mkDerivation (self: {
     installShellFiles
     pkg-config
   ] ++ optionalDarwin [
-    darwin.DarwinTools
+    DarwinTools
   ];
 
   buildInputs = [
@@ -63,7 +65,7 @@ in stdenv.mkDerivation (self: {
   ] ++ optionalLinux [
     udev
   ] ++ optionalDarwin [
-    darwin.libiconv
+    libiconv
   ];
 
   postInstall = lib.optionalDefault (buildPlatform.canExecute hostPlatform) ''
@@ -92,7 +94,7 @@ in stdenv.mkDerivation (self: {
     license = with lib.licenses; [ gpl3Plus ];
     sourceProvanence = with lib.sourceTypes; [ fromSource ];
     # lol with doesn't shadow.
-    platforms = with lib.platforms; lib.platforms.darwin ++ linux ++ windows;
+    platforms = lib.platforms.darwin ++ (with lib.platforms; linux ++ windows);
     mainProgram = "cyme";
   };
 }))
