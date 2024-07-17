@@ -47,6 +47,19 @@
     finalFrom = foldAttrList fromList;
   in callWith finalFrom f;
 
+  /** Uses an eval-time impure fetch to attempt to build a package derivation
+   * from the latest version of its source. Probably won't work a lot of the time!
+   */
+  mkHeadFetch = {
+    self,
+    headRef ? "main",
+  }: self.overrideAttrs (prev: {
+    version = prev.version + "-HEAD";
+    src = fetchTarball (prev.src.override {
+      rev = "refs/heads/${headRef}";
+    }).url;
+  });
+
 in {
-  inherit isAvailableDerivation optionalDefault mkPlatformPredicates callWith callWith';
+  inherit isAvailableDerivation optionalDefault mkPlatformPredicates callWith callWith' mkHeadFetch;
 }
