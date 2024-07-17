@@ -45,7 +45,7 @@
   callWith = fromList: f: let
     foldAttrList = lib.foldl lib.mergeAttrs { };
     finalFrom = foldAttrList fromList;
-  in callWith finalFrom f;
+  in callWith' finalFrom f;
 
   /** Uses an eval-time impure fetch to attempt to build a package derivation
    * from the latest version of its source. Probably won't work a lot of the time!
