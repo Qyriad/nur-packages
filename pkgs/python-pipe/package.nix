@@ -8,14 +8,14 @@ let
   inherit (python3.pkgs) buildPythonPackage setuptools wheel;
 
   pname = "pipe";
-  version = "2.0";
+  version = "2.2";
 in
   buildPythonPackage {
     inherit pname version;
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-oc8/KfmFdrfmVSIxFCvHEejdMkUTosRSX8aMM/R/q60=";
+      sha256 = "sha256-aiUxmOO8VC/68KQiI3ZYa86Fg7J6ndvCz7qlVMBJIw0=";
     };
 
     format = "pyproject";
