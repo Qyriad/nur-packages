@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  darwin,
   rustPlatform,
   rustc,
   cargo,
+  libiconv,
   nix-update-script,
   testers,
 }: lib.callWith' rustPlatform ({
@@ -12,7 +14,11 @@
   cargoSetupHook,
   cargoBuildHook,
   cargoInstallHook,
-}: stdenv.mkDerivation (self: {
+}: let
+  inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
+    optionalDarwin
+  ;
+in stdenv.mkDerivation (self: {
   pname = "otree";
   version = "0.2.0";
 
@@ -45,6 +51,11 @@
     cargoInstallHook
     cargo
     rustc
+  ];
+
+  buildInputs = optionalDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.IOKit
   ];
 
   passthru = {
