@@ -30,7 +30,7 @@
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalLinux optionalDarwin;
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
   inherit (nodePackages) npm node-gyp;
-  inherit (rustPlatform) importCargoLock cargoSetupHook;
+  inherit (rustPlatform) fetchCargoTarball cargoSetupHook;
   inherit (gst_all_1) gstreamer gst-vaapi gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad;
   gst-plugins-good' = gst-plugins-good.override {
     gtkSupport = true;
@@ -137,11 +137,10 @@ in stdenv.mkDerivation (self: {
   # cargoSetupHook arguments
   cargoRoot = "src-tauri";
   cargoBuildType = "release";
-  cargoDeps = importCargoLock {
-    lockFile = builtins.path {
-      path = self.src + "/src-tauri/Cargo.lock";
-      name = "Cargo.lock";
-    };
+  cargoDeps = fetchCargoTarball {
+    name = "${self.finalPackage.name}-cargo-deps";
+    src = lib.joinPaths [ self.src "src-tauri" ];
+    hash = "sha256-xg0Q7dJIz2xODceZNCdtG7jjouUj9L6M6YhJNk6jYE4=";
   };
 
   # Normally this would be done by cargoBuildHook. Since we're using tauri
