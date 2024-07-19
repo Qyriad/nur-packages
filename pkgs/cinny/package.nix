@@ -27,10 +27,14 @@
 }: let
   inherit (lib) optionalDefault;
   inherit (stdenv) hostPlatform;
+  inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalLinux optionalDarwin;
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
   inherit (nodePackages) npm node-gyp;
   inherit (rustPlatform) importCargoLock cargoSetupHook;
   inherit (gst_all_1) gstreamer gst-vaapi gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad;
+  gst-plugins-good' = gst-plugins-good.override {
+    gtkSupport = true;
+  };
 
   # Fixes NodeJS running out of JavaScript heap while building on lower-memory machines.
   NODE_OPTIONS = "--max-old-space-size=4096";
@@ -117,8 +121,7 @@ in stdenv.mkDerivation (self: {
   };
 
   patches = [
-    # src-tauri/tauri.conf
-    # the preBuild script specified in src-tauri/tauri.conf, expecting to be able to modify the
+    # The preBuild script specified in src-tauri/tauri.conf, expecting to be able to modify the
     # cinny-web directory, unconditionally runs the build commands for cinny-web. We've already
     # built cinny-web, so let's just patch that out.
     ./immutable-cinny-web.patch
@@ -167,17 +170,17 @@ in stdenv.mkDerivation (self: {
     gtk3
     libsoup
     openssl
-  ] ++ optionalDefault hostPlatform.isLinux [
+  ] ++ optionalLinux [
     glib-networking
     libayatana-appindicator
     libcanberra-gtk3
     webkitgtk
     gst-plugins-base
     # If other gstreamer stuff is here, this is needed so GLib doesn't assert-fail.
-    gst-plugins-good
+    gst-plugins-good'
     # Needed for playing video attachments with subtitles.
     gst-plugins-bad
-  ] ++ optionalDefault hostPlatform.isDarwin [
+  ] ++ optionalDarwin [
     darwin.DarwinTools
     darwin.apple_sdk.frameworks.WebKit
   ];
@@ -202,9 +205,9 @@ in stdenv.mkDerivation (self: {
 
   installPhase = ''
     runHook preInstall
-  '' + optionalDefault hostPlatform.isLinux ''
+  '' + optionalLinux ''
     mv -v "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/deb/"*"/data/usr" "$out"
-  '' + optionalDefault hostPlatform.isDarwin ''
+  '' + optionalDarwin ''
     mkdir -p "$out/Applications"
     cp -r "$cargoRoot/target/$rustHostPlatformSpec/release/bundle/macos/Cinny.app" "$out/Applications/"
     mkdir -p "$out/bin"
@@ -214,12 +217,12 @@ in stdenv.mkDerivation (self: {
   '';
 
   # These aren't detected by the normal fixup phase and must be added manually.
-  runtimeDependencies = optionalDefault stdenv.hostPlatform.isLinux [
+  runtimeDependencies = optionalLinux [
     libayatana-appindicator
   ];
 
   # This has to be postFixup (rather than preFixup) or wrapGApps will nullify this.
-  postFixup = optionalDefault stdenv.hostPlatform.isLinux ''
+  postFixup = optionalLinux ''
     patchelf --add-rpath "${lib.makeLibraryPath self.runtimeDependencies}" "$out/bin/.cinny-wrapped"
   '';
 
