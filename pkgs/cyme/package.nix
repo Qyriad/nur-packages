@@ -28,6 +28,9 @@ in stdenv.mkDerivation (self: {
   pname = "cyme";
   version = "1.8.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
