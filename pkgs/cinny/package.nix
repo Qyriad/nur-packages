@@ -37,7 +37,7 @@
 
 in stdenv.mkDerivation (self: {
   pname = "cinny-desktop";
-  version = "3.2.1";
+  version = "4.0.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -47,7 +47,7 @@ in stdenv.mkDerivation (self: {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-++S1QM58ousi9wERE3HNNyqKAI+aNsaNcbTe1G9c+3A=";
+    hash = "sha256-05T/2e5+st+vGQuO8lRw6KWz3+Qiqd14dCPvayyz5mo=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ in stdenv.mkDerivation (self: {
   env.npmDeps = fetchNpmDeps {
     name = "${self.finalPackage.name}-npm-deps";
     inherit (self) src;
-    hash = "sha256-lIUaP9NR+NdOzHwf3BFsuFCzOKKuefuGuN/DILwn+EI=";
+    hash = "sha256-KbTK0pcSdqkjZPIAhMCQ4ubPZLd+AhuFPZJyLVqbugA=";
   };
 
   # cargoSetupHook arguments
@@ -70,7 +70,7 @@ in stdenv.mkDerivation (self: {
   cargoDeps = fetchCargoTarball {
     name = "${self.finalPackage.name}-cargo-deps";
     src = lib.joinPaths [ self.src "src-tauri" ];
-    hash = "sha256-xg0Q7dJIz2xODceZNCdtG7jjouUj9L6M6YhJNk6jYE4=";
+    hash = "sha256-szlYASTbtyFlGsci0YwbEJ+ZDXTer1KeZvxRY5MXyrE=";
   };
 
   # Normally this would be done by cargoBuildHook. Since we're using tauri
@@ -121,7 +121,8 @@ in stdenv.mkDerivation (self: {
   # but we patched that out above (see patches), so this can be immutable.
   preBuild = ''
     rmdir cinny
-    ln -sv "$cinnyWeb/lib/node_modules/cinny" ./
+    cp -r "$cinnyWeb/lib/node_modules/cinny" ./
+    chmod u+w "./cinny/config.json"
   '';
 
   # On Linux we ask Tauri to create a debian bundle,
