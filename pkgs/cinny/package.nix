@@ -1,21 +1,19 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   darwin,
   makeWrapper,
   wrapGAppsHook,
   fetchFromGitHub,
   fetchNpmDeps,
-  python3,
   nodejs,
-  nodePackages,
   npmHooks,
   rust,
   rustPlatform,
   rustc,
   cargo,
   pkg-config,
+  cinny-web,
   gtk3,
   glib-networking,
   libayatana-appindicator,
@@ -25,85 +23,17 @@
   libcanberra-gtk3,
   webkitgtk,
 }: let
-  inherit (lib) optionalDefault;
   inherit (stdenv) hostPlatform;
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalLinux optionalDarwin;
-  inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
-  inherit (nodePackages) npm node-gyp;
+  inherit (npmHooks) npmConfigHook;
   inherit (rustPlatform) fetchCargoTarball cargoSetupHook;
-  inherit (gst_all_1) gstreamer gst-vaapi gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad;
+  inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad;
   gst-plugins-good' = gst-plugins-good.override {
     gtkSupport = true;
   };
 
   # Fixes NodeJS running out of JavaScript heap while building on lower-memory machines.
   NODE_OPTIONS = "--max-old-space-size=4096";
-
-  cinny-web = stdenvNoCC.mkDerivation (self: {
-
-    pname = "cinny-web";
-    version = "3.2.0";
-
-    strictDeps = true;
-    __structuredAttrs = true;
-
-    src = fetchFromGitHub {
-      name = "cinny-web-source";
-      owner = "cinnyapp";
-      repo = "cinny";
-      rev = "refs/tags/v${self.version}";
-      hash = "sha256-wAa7y2mXPkXAfirRSFqwZYIJK0CKDzZG8ULzXzr4zZ4=";
-    };
-
-    patches = [
-      # Fixes logspam about viteSvgLoader (a hack in the Cinny repo around Vite not supporting inline SVG)
-      # not generating a sourcemap for the stuff it modifies.
-      ./vite-svg-no-sourcemap.patch
-    ];
-
-    # npmConfigHook arguments.
-
-    # npmConfigHook has broken structured attrs support lol.
-    env.npmDeps = fetchNpmDeps {
-      name = "${self.finalPackage.name}-npm-deps";
-      inherit (self) src;
-      hash = "sha256-dVdylvclUIHvF5syVumdxkXR4bG1FA4LOYg3GmnNzXE=";
-    };
-
-    npmRebuildFlags = [
-      "--ignore-scripts"
-    ];
-
-    # npmBuildHook arguments.
-    npmBuildScript = "build";
-
-    # npmInstallHook arguments.
-    # This is needed for cinny-desktop below.
-    dontNpmPrune = true;
-
-    nativeBuildInputs = [
-      nodejs
-      node-gyp
-      npm
-      npmConfigHook
-      npmBuildHook
-      npmInstallHook
-      python3
-    ];
-
-    env.NODE_OPTIONS = NODE_OPTIONS;
-
-    postInstall = ''
-      # Include vite's artifacts, which are placed in ./dist.
-      cp -r ./dist "$out/lib/node_modules/cinny/"
-    '';
-
-    meta = {
-      description = "Yet another Matrix client (web)";
-      homepage = "https://cinny.in";
-      license = lib.licenses.agpl3Only;
-    };
-  });
 
 in stdenv.mkDerivation (self: {
   pname = "cinny-desktop";
