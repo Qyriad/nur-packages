@@ -11,8 +11,6 @@
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
   inherit (nodePackages) npm node-gyp;
 
-  NODE_OPTIONS = "--max-old-space-size=4096";
-
 in stdenvNoCC.mkDerivation (self: {
   pname = "cinny-web";
   version = "4.0.3";
@@ -60,7 +58,7 @@ in stdenvNoCC.mkDerivation (self: {
     python3
   ];
 
-  env.NODE_OPTIONS = NODE_OPTIONS;
+  env.NODE_OPTIONS = "--max-old-space-size=4096";
 
   postInstall = ''
     # Include vite's artifacts, which are placed in ./dist.
@@ -70,6 +68,7 @@ in stdenvNoCC.mkDerivation (self: {
   meta = {
     description = "Yet another Matrix client (web)";
     homepage = "https://cinny.in";
+    changelog = "https://github.com/cinnyapp/cinny/releases/tag/v${self.version}";
     license = lib.licenses.agpl3Only;
   };
 })

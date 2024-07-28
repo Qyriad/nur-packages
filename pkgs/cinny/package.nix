@@ -164,6 +164,7 @@ in stdenv.mkDerivation (self: {
     mainProgram = "cinny";
     description = "Yet another Matrix client (desktop)";
     homepage = "https://cinny.in";
+    changelog = "https://github.com/cinnyapp/cinny-desktop/releases/tag/v${self.version}";
     license = lib.licenses.agpl3Only;
   };
 })
