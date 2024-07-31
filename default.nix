@@ -16,7 +16,10 @@ let
   });
 
   # Finally, make our recursive scope, which contains packages auto-discovered
-  # from `./pkgs`, as well as our extended `lib`.
+  # from `./pkgs`, as well as our extended `lib`, meaning those will all be
+  # usable in things `callPackage`d in this scope, and, since we're using
+  # `pkgs` as our parent scope, things from `pkgs` will also be available in
+  # the same way.
 in lib.makeScope pkgs.newScope (self: makePackages self // {
   lib = lib';
 })
