@@ -64,5 +64,13 @@
   joinPaths = lib.strings.concatStringsSep "/";
 
 in {
-  inherit isAvailableDerivation optionalDefault mkPlatformPredicates callWith callWith' mkHeadFetch joinPaths;
+  inherit
+    isAvailableDerivation
+    optionalDefault
+    mkPlatformPredicates
+    callWith
+    callWith'
+    mkHeadFetch
+    joinPaths
+  ;
 }
