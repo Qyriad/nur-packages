@@ -27,12 +27,24 @@
   /** Turns every isFoo predicate on a stdenv platform into a partial application of
    * of `optionalDefault`, with a name of the form `optionalFoo`.
    */
-  mkPlatformPredicates = plat: let
+  mkPlatformPredicates' = plat: let
     platPredicates = lib.filterAttrs (lib.const startsWith "is") plat;
   in lib.flip lib.mapAttrs' platPredicates (name: value: {
     name = "optional${lib.removePrefix "is" name}";
     value = optionalDefault value;
   });
+
+  mkPlatformPredicates = plat: let
+    platPredicates = lib.filterAttrs (lib.const startsWith "is") plat;
+  in platPredicates |> lib.mapAttrs' (name: value: {
+    name = "optional${lib.removePrefix "is" name}";
+    value = optionalDefault value;
+  });
+
+  mkPlatformGetters = plat: {
+    getLibrary = drv: name:
+      "${lib.getLib drv}/lib/lib${name}${plat.extensions.library}";
+  };
 
   # A reimplementation of lib.callPackageWith tht doesn't lib.mkOverrideable the result.
   autocallWith = import ./autocall-with.nix { inherit lib; };
@@ -63,6 +75,23 @@
   /** Join a list of string-like values with forward slashes. */
   joinPaths = lib.strings.concatStringsSep "/";
 
+  /**
+  f: should be a function that accepts two arguments and returns a list to be
+  concatenated with the accumulator.
+  */
+  foldlAttrsToList = f: attrset:
+    lib.foldlAttrs (acc: name: value:
+      assert lib.isList acc;
+      acc ++ (f name value)
+    ) [ ] attrset;
+
+  foldlAttrsToList' = lib.flip foldlAttrsToList;
+
+  apply = argList: f:
+    lib.foldl' (acc: item: acc item) f argList;
+
+  applyTo = lib.flip apply;
+
 in {
   inherit
     isAvailableDerivation
@@ -72,5 +101,10 @@ in {
     callWith'
     mkHeadFetch
     joinPaths
+    mkPlatformGetters
+    foldlAttrsToList
+    foldlAttrsToList'
+    apply
+    applyTo
   ;
 }

@@ -22,4 +22,6 @@ let
   # the same way.
 in lib.makeScope pkgs.newScope (self: makePackages self // {
   lib = lib';
+
+  mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
 })
