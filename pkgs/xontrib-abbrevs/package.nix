@@ -12,6 +12,7 @@ let
     wheel
     poetry-core
     prompt-toolkit
+    setuptools-scm
   ;
 
   # Compatibility with NixOS/nixpkgs#282368 (a30ae78435b7c481233601eea523b9340ca0760f).
@@ -36,17 +37,17 @@ let
     python3.pkgs.buildPythonApplication pythonArgs;
 
   pname = "xontrib-abbrevs";
-  version = "0.0.1";
+  version = "0.1.0";
 in
   buildPythonPackage {
     inherit pname version;
 
     src = fetchFromGitHub {
+      name = "${pname}-source";
       owner = "xonsh";
       repo = "xontrib-abbrevs";
-      rev = version;
-      sha256 = "sha256-DrZRIU5mzu8RUzm0jak/Eo12wbvWYusJpmqgIAVwe00=";
-      name = "${pname}-source";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-JxH5b2ey99tvHXSUreU5r6fS8nko4RrS/1c8psNbJNc=";
     };
 
     format = "pyproject";
@@ -55,6 +56,7 @@ in
       setuptools
       wheel
       poetry-core
+      setuptools-scm
     ];
 
     nativeCheckInputs = [
