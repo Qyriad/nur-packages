@@ -8,6 +8,7 @@
   nix-update-script,
   testers,
 }: lib.callWith [ darwin rustPlatform ] ({
+  apple_sdk,
   libiconv,
   DarwinTools,
   fetchCargoTarball,
@@ -55,6 +56,7 @@ in stdenv.mkDerivation (self: {
 
   buildInputs = optionalDarwin [
     libiconv
+    apple_sdk.IOKit
   ];
 
   passthru = {
