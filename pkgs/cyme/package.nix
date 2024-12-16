@@ -96,7 +96,8 @@ in stdenv.mkDerivation (self: {
     license = with lib.licenses; [ gpl3Plus ];
     sourceProvanence = with lib.sourceTypes; [ fromSource ];
     # lol with doesn't shadow.
-    platforms = lib.platforms.darwin ++ (with lib.platforms; linux ++ windows);
+    #platforms = lib.platforms.darwin ++ (with lib.platforms; linux ++ windows);
+    platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };
     mainProgram = "cyme";
   };
 }))
