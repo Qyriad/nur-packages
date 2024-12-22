@@ -26,4 +26,5 @@ in lib.makeScope pkgs.newScope (self: makePackages self // {
   mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
 
   fetchGoModules = self.callPackage ./helpers/fetch-go-deps.nix { };
+  goHooks = self.callPackage ./helpers/go-hooks/package.nix { };
 })
