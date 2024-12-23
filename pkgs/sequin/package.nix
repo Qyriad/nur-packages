@@ -3,12 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchGoModules,
-  go,
   goHooks,
-}: lib.callWith' goHooks ({
-  goConfigureHook,
-  goBuildHook,
-  goInstallHook,
 }: stdenv.mkDerivation (self: {
   pname = "sequin";
   version = "0.3.0";
@@ -29,15 +24,10 @@
     hash = "sha256-LehOqSahbF3Nqm0/bJ0Q3mR0ds8FEXaLEvGLwzPdvU4=";
   };
 
-  nativeBuildInputs = [
-    go
-    goConfigureHook
-    goBuildHook
-    goInstallHook
-  ];
+  nativeBuildInputs = goHooks.asList;
 
   passthru = {
-    fromHEad = lib.mkHeadFetch { self = self.finalPackage; };
+    fromHead = lib.mkHeadFetch { self = self.finalPackage; };
   };
 
   meta = {
@@ -46,7 +36,7 @@
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
     sourceProvanence = with lib.sourceTypes; [ fromSource ];
-    platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };
+    #platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };
     mainProgram = "sequin";
   };
-}))
+})
