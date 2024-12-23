@@ -97,7 +97,7 @@ in stdenv.mkDerivation (self: {
     sourceProvanence = with lib.sourceTypes; [ fromSource ];
     # lol with doesn't shadow.
     #platforms = lib.platforms.darwin ++ (with lib.platforms; linux ++ windows);
-    platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };
+    #platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };
     mainProgram = "cyme";
   };
 }))
