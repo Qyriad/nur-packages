@@ -1,12 +1,10 @@
 {
-  pkgs,
   lib,
   stdenv,
   rustPlatform,
   fetchFromGitHub,
   writeShellScriptBin,
   mkAbsoluteDylibsHook,
-  autoPatchelfHook,
   nasm,
   cargo-about,
   wayland,
@@ -30,6 +28,9 @@
 }: let
   inherit (lib.mkPlatformGetters stdenv.hostPlatform)
     getLibrary
+  ;
+  inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
+    optionalLinux
   ;
 in stdenv.mkDerivation (self: {
   pname = "simp";
@@ -80,24 +81,30 @@ in stdenv.mkDerivation (self: {
     cargoSetupHook
     cargoBuildHook
     cargoInstallHook
-    self.absoluteDylibsHook
     self.fakeGit
     cargo-about
     nasm
+  ] ++ optionalLinux [
+    self.absoluteDylibsHook
   ];
 
   buildInputs = [
-    wayland
-    libxkbcommon
     dav1d
     libheif
     gdk-pixbuf
     libglvnd
-    mesa.drivers
     vulkan-loader
     zlib
     zstd
     xz
+  ] ++ optionalLinux [
+    wayland
+    libxkbcommon
+    mesa.drivers
     udev
   ];
+
+  meta = {
+    mainProgram = "simp";
+  };
 }))
