@@ -13,7 +13,7 @@
 
 in stdenvNoCC.mkDerivation (self: {
   pname = "cinny-web";
-  version = "3.2.0";
+  version = "4.2.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -23,14 +23,8 @@ in stdenvNoCC.mkDerivation (self: {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-wAa7y2mXPkXAfirRSFqwZYIJK0CKDzZG8ULzXzr4zZ4=";
+    hash = "sha256-BoUQURCfEu5kocMm8T25cVl8hgZGxcxrMzQZOl2fAbY=";
   };
-
-  patches = [
-    # Fixes logspam about viteSvgLoader (a hack in the Cinny repo around Vite not supporting inline SVG)
-    # not generating a sourcemap for the stuff it modifies.
-    ./vite-svg-no-sourcemap.patch
-  ];
 
   # npmConfigHook arguments.
 
@@ -38,7 +32,7 @@ in stdenvNoCC.mkDerivation (self: {
   env.npmDeps = fetchNpmDeps {
     name = "${self.finalPackage.name}-npm-deps";
     inherit (self) src;
-    hash = "sha256-dVdylvclUIHvF5syVumdxkXR4bG1FA4LOYg3GmnNzXE=";
+    hash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
   };
 
   npmRebuildFlags = [
