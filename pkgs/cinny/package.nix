@@ -37,7 +37,7 @@
 
 in stdenv.mkDerivation (self: {
   pname = "cinny-desktop";
-  version = "3.2.1";
+  version = "4.2.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -47,7 +47,7 @@ in stdenv.mkDerivation (self: {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-++S1QM58ousi9wERE3HNNyqKAI+aNsaNcbTe1G9c+3A=";
+    hash = "sha256-yNGzgkZXz/VroGGnZFqo5n2v3cE6/tvpQv5U4p27row=";
   };
 
   patches = [
@@ -69,7 +69,8 @@ in stdenv.mkDerivation (self: {
   cargoBuildType = "release";
   cargoDeps = fetchCargoTarball {
     name = "${self.finalPackage.name}-cargo-deps";
-    src = lib.joinPaths [ self.src "src-tauri" ];
+    #src = lib.joinPaths [ self.src "src-tauri" ];
+    src = self.src + "/src-tauri";
     hash = "sha256-xg0Q7dJIz2xODceZNCdtG7jjouUj9L6M6YhJNk6jYE4=";
   };
 
