@@ -10,14 +10,8 @@
   hash,
   GO111MODULE ? "on",
   GOTOOLCHAIN ? "local",
-}: let
-
-  expandBashArray = name: let
-    quote = s: ''"${s}"'';
-
-  in quote "\${${name}[@]}";
-
-in stdenvNoCC.mkDerivation (self: {
+  deleteVendor ? false,
+}: stdenvNoCC.mkDerivation (self: {
   name = "${name}-go-modules";
 
   strictDeps = true;
@@ -25,12 +19,16 @@ in stdenvNoCC.mkDerivation (self: {
 
   inherit src;
 
+  inherit deleteVendor;
+
   env = {
     inherit (go) GOOS GOARCH;
     inherit GO111MODULE GOTOOLCHAIN;
   };
 
   nativeBuildInputs = [
+    # Sets buildPhase for us.
+    ./fetch-go-deps-build-phase.sh
     go
     git
     cacert
@@ -49,20 +47,6 @@ in stdenvNoCC.mkDerivation (self: {
     export GOPATH="$TMPDIR/go"
 
     runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    if [[ -d "vendor" ]]; then
-      echo "$name: vendor folder exists, please set 'vendorHash = null;'"
-      exit 10
-    fi
-
-    go mod vendor ${expandBashArray "goModVendorFlags"};
-
-    mkdir -p vendor
-
-    runHook postBuild
   '';
 
   installPhase = ''
