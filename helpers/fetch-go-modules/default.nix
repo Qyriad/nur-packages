@@ -28,7 +28,7 @@
 
   nativeBuildInputs = [
     # Sets buildPhase for us.
-    ./fetch-go-deps-build-phase.sh
+    ./build-phase.sh
     go
     git
     cacert
