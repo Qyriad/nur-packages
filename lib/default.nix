@@ -65,7 +65,8 @@
   mkHeadFetch = {
     self,
     headRef ? "main",
-  }: self.overrideAttrs (prev: {
+    extraAttrs ? lib.const { },
+  }: self.overrideAttrs (final: prev: extraAttrs final // {
     version = prev.version + "-HEAD";
     src = fetchTarball (prev.src.override {
       rev = "refs/heads/${headRef}";
