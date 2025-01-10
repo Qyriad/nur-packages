@@ -23,6 +23,18 @@ let
 in lib.makeScope pkgs.newScope (self: makePackages self // {
   lib = lib';
 
+  # For exploration purposes.
+  nurLib = import ./lib { inherit lib; };
+
+  # For exploration purposes.
+  helpers = lib.dontRecurseIntoAttrs {
+    inherit (self)
+      mkAbsoluteDylibsHook
+      fetchGoModules
+      goHooks
+    ;
+  };
+
   mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
 
   fetchGoModules = self.callPackage ./helpers/fetch-go-modules { };
