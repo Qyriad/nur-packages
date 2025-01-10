@@ -10,7 +10,7 @@
   nix-update-script,
   testers,
 }: lib.callWith' rustPlatform ({
-  importCargoLock,
+  fetchCargoTarball,
   cargoSetupHook,
   cargoBuildHook,
   cargoInstallHook,
@@ -20,7 +20,7 @@
   ;
 in stdenv.mkDerivation (self: {
   pname = "otree";
-  version = "0.2.0";
+  version = "0.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -29,20 +29,14 @@ in stdenv.mkDerivation (self: {
     owner = "fioncat";
     repo = "otree";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-M6xmz7aK+NNZUDN8NJCUEODwotJ9VeY3bsueFpwjjjs=";
+    hash = "sha256-WvoiTu6erNI5Cb9PSoHgL6+coIGWLe46pJVXBZHOLTE=";
   };
 
   cargoBuildType = "release";
-  cargoDeps = importCargoLock {
-    lockFile = builtins.path {
-      path = lib.joinPaths [ self.src "Cargo.lock" ];
-      name = "Cargo.lock";
-    };
-    # Mini hack. fromHead uses an eval fetch and so src isn't a derivation, and right
-    # after upstream tagged a release they removed tui-tree-widget as a git dependency.
-    outputHashes = lib.optionalDefault (lib.isDerivation self.src) {
-      "tui-tree-widget-0.20.0" = "sha256-/uLp63J4FoMT1rMC9cv49JAX3SuPvFWPtvdS8pspsck=";
-    };
+  cargoDeps = fetchCargoTarball {
+    inherit (self) src;
+    name = "${self.finalPackage.name}-cargo-deps";
+    hash = "sha256-CzDpwCcV7Bae192oiR1ELBTvfEYJU1RAYb25rJksskg=";
   };
 
   nativeBuildInputs = [
