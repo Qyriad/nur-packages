@@ -7,7 +7,7 @@
   testers,
   git,
 }: lib.callWith' rustPlatform ({
-  fetchCargoTarball,
+  fetchCargoVendor,
   importCargoLock,
   cargoSetupHook,
   cargoBuildHook,
@@ -32,10 +32,10 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-F7AlDuvRYCMhOXyzg9/oTukAEaDJENG0ZEhIlNe+Cic=";
   };
 
-  cargoDeps = fetchCargoTarball {
+  cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-FjWJ0Es+xU3HQCjNvtKw3w1zJzvd2dkwpjOcCkDTv1A=";
+    hash = "sha256-zQLmiutRYJzrr6Ir3nC4CebuwHPM00Gc4O0gpwjFBWo=";
   };
   cargoBuildType = "release";
   cargoCheckType = "test";
