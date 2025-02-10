@@ -13,7 +13,7 @@
 }: lib.callWith [ darwin rustPlatform ] ({
   libiconv,
   DarwinTools,
-  fetchCargoTarball,
+  fetchCargoVendor,
   cargoSetupHook,
   cargoBuildHook,
   cargoCheckHook,
@@ -38,10 +38,10 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-Rq7ykD6L+DrDNz+d++ztv+fmoSSNCoeC1YfXiIJiXzM=";
   };
 
-  cargoDeps = fetchCargoTarball {
+  cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-2EIvWipN+ohOo0fGWvRvvnMHpI0YsjZRIrQclFid/XM=";
+    hash = "sha256-rmwGLDpw+q6AnFSnz81Jxqj1GwePhGkQYb5F5R563VQ=";
   };
   cargoBuildType = "release";
   cargoBuildFeatures = [
