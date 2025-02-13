@@ -13,7 +13,7 @@
 
 in stdenvNoCC.mkDerivation (self: {
   pname = "cinny-web";
-  version = "4.2.3";
+  version = "4.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ in stdenvNoCC.mkDerivation (self: {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-BoUQURCfEu5kocMm8T25cVl8hgZGxcxrMzQZOl2fAbY=";
+    hash = "sha256-cRsjzIq8uFipyYYmxK4JzmG3Ba/0NaScyiebGqoZJFE=";
   };
 
   # npmConfigHook arguments.
@@ -32,7 +32,7 @@ in stdenvNoCC.mkDerivation (self: {
   env.npmDeps = fetchNpmDeps {
     name = "${self.finalPackage.name}-npm-deps";
     inherit (self) src;
-    hash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
+    hash = "sha256-ZmeXZN9sW17y4aIeIthvs4YiFF77xabeVXGwr6O49lQ=";
   };
 
   npmRebuildFlags = [

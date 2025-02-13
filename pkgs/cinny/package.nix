@@ -26,7 +26,7 @@
   inherit (stdenv) hostPlatform;
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalLinux optionalDarwin;
   inherit (npmHooks) npmConfigHook;
-  inherit (rustPlatform) fetchCargoTarball cargoSetupHook;
+  inherit (rustPlatform) fetchCargoVendor cargoSetupHook;
   inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad;
   gst-plugins-good' = gst-plugins-good.override {
     gtkSupport = true;
@@ -61,17 +61,16 @@ in stdenv.mkDerivation (self: {
   env.npmDeps = fetchNpmDeps {
     name = "${self.finalPackage.name}-npm-deps";
     inherit (self) src;
-    hash = "sha256-lIUaP9NR+NdOzHwf3BFsuFCzOKKuefuGuN/DILwn+EI=";
+    hash = "sha256-06AbhW+6xzUjnPh5cejTLt9eJPgRLVYyyN39tiT7zXs=";
   };
 
   # cargoSetupHook arguments
   cargoRoot = "src-tauri";
   cargoBuildType = "release";
-  cargoDeps = fetchCargoTarball {
+  cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
-    #src = lib.joinPaths [ self.src "src-tauri" ];
-    src = self.src + "/src-tauri";
-    hash = "sha256-xg0Q7dJIz2xODceZNCdtG7jjouUj9L6M6YhJNk6jYE4=";
+    src = lib.joinPaths [ self.src "src-tauri" ];
+    hash = "sha256-79MO2JaOBKVfiE7OLFR3kobnE2yH5g44mRt2TKIEfxA=";
   };
 
   # Normally this would be done by cargoBuildHook. Since we're using tauri
@@ -122,14 +121,18 @@ in stdenv.mkDerivation (self: {
   # but we patched that out above (see patches), so this can be immutable.
   preBuild = ''
     rmdir cinny
-    ln -sv "$cinnyWeb/lib/node_modules/cinny" ./
+    #ln -sv "$cinnyWeb/lib/node_modules/cinny" ./
+    cp -r "$cinnyWeb/lib/node_modules/cinny" ./
+    chmod +w cinny
+    ln -svrf ./config.json ./cinny/config.json
   '';
 
   # On Linux we ask Tauri to create a debian bundle,
   # which we'll yoink the files from in installPhase.
   buildPhase = ''
     runHook preBuild
-    npm run tauri -- build --bundles "$cinnyBundle" --target "$rustHostPlatformSpec"
+    export PATH="$PWD/node_modules/.bin:$PATH"
+    tauri build --bundles "$cinnyBundle" --target "$rustHostPlatformSpec"
     runHook postBuild
   '';
 
@@ -154,6 +157,10 @@ in stdenv.mkDerivation (self: {
   # This has to be postFixup (rather than preFixup) or wrapGApps will nullify this.
   postFixup = optionalLinux ''
     patchelf --add-rpath "${lib.makeLibraryPath self.runtimeDependencies}" "$out/bin/.cinny-wrapped"
+
+    wrapProgram "$out/bin/cinny" \
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
+      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
   '';
 
   passthru = {
