@@ -10,7 +10,7 @@
   nix-update-script,
   testers,
 }: lib.callWith' rustPlatform ({
-  fetchCargoTarball,
+  fetchCargoVendor,
   cargoSetupHook,
   cargoBuildHook,
   cargoInstallHook,
@@ -33,10 +33,10 @@ in stdenv.mkDerivation (self: {
   };
 
   cargoBuildType = "release";
-  cargoDeps = fetchCargoTarball {
+  cargoDeps = fetchCargoVendor {
     inherit (self) src;
     name = "${self.finalPackage.name}-cargo-deps";
-    hash = "sha256-CzDpwCcV7Bae192oiR1ELBTvfEYJU1RAYb25rJksskg=";
+    hash = "sha256-tgw1R1UmXAHcrQFsY4i4efGCXQW3m0PVYdFSK2q+NUk=";
   };
 
   nativeBuildInputs = [
