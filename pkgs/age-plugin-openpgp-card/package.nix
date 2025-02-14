@@ -6,7 +6,7 @@
   pkg-config,
   pcsclite,
 }: lib.callWith [ rustPlatform ] ({
-  fetchCargoTarball,
+  fetchCargoVendor,
   cargoSetupHook,
   cargoBuildHook,
   cargoCheckHook,
@@ -37,10 +37,10 @@
     pcsclite
   ];
 
-  cargoDeps = fetchCargoTarball {
+  cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-3Qw9VU8c1HQcuZcUVexZbUTeSkJcAkpdJNyb5uQZl/M=";
+    hash = "sha256-YZGrEO6SOS0Kir+1d8shf54420cYjvcfKYS+T2NlEug=";
   };
   cargoBuildType = "release";
 
