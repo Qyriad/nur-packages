@@ -8,28 +8,27 @@
     self,
     nixpkgs,
     flake-utils,
-  }: flake-utils.lib.eachDefaultSystem (system: let
+  }: let
+    lib = import (nixpkgs + "/lib");
+    nurLib = import ./lib { inherit lib; };
+  in {
+    # Export our 'nurLib' as a system-independent output.
+    lib = nurLib;
+  } // flake-utils.lib.eachDefaultSystem (system: let
 
     pkgs = import nixpkgs { inherit system; };
-    inherit (pkgs) lib;
 
-    nurPackages = import ./default.nix {
-      inherit pkgs;
-    };
-
-    nurLib = import ./lib { inherit (pkgs) lib; };
-    isAvailableDerivation = nurLib.isAvailableDerivation pkgs.stdenv.hostPlatform;
-
-    # We need to filter out attrsets that aren't derivations,
-    # like the functors added by callPackage.
-    # And then we also want to filter out packages that aren't available
-    # on the system we're evaluating for.
-    packages = lib.filterAttrs (lib.const isAvailableDerivation) nurPackages;
+    nurPackages = import ./default.nix { inherit pkgs; };
+    # Just the user-facing packages, and only ones that are available on this platform.
+    packages = nurPackages.availablePackages;
 
   in {
     packages = packages // {
       default = pkgs.linkFarmFromDrvs "qyriad-nur" (lib.attrValues packages);
     };
     checks = self.packages.${system};
+
+    # Everything, from user-facing packages to hooks to functions.
+    legacyPackages = nurPackages;
   }); # outputs
 }

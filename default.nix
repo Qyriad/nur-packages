@@ -35,6 +35,11 @@ in lib.makeScope pkgs.newScope (self: makePackages self // {
     ;
   };
 
+  # For exploration purposes.
+  availablePackages = let
+    isAvailable = lib'.isAvailableDerivation pkgs.stdenv.hostPlatform;
+  in lib.filterAttrs (lib.const isAvailable) (makePackages self);
+
   mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
 
   fetchGoModules = self.callPackage ./helpers/fetch-go-modules { };
