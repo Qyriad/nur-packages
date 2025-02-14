@@ -93,6 +93,14 @@
 
   applyTo = lib.flip apply;
 
+
+  isScope = attrs: lib.all lib.const [
+    (lib.isFunction attrs.callPackage or null)
+    (lib.isFunction attrs.newScope or null)
+    (lib.isFunction attrs.overrideScope or null)
+    (lib.isFunction attrs.packages or null)
+  ];
+
 in {
   inherit
     isAvailableDerivation
@@ -107,5 +115,6 @@ in {
     foldlAttrsToList'
     apply
     applyTo
+    isScope
   ;
 }
