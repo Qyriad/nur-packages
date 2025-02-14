@@ -4,7 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
 }: lib.callWith' rustPlatform ({
-  fetchCargoTarball,
+  fetchCargoVendor,
   cargoSetupHook,
   cargoBuildHook,
   cargoCheckHook,
@@ -23,10 +23,10 @@
     hash = "sha256-07fBScwJc7vmGIkKVMuatz8EMq5wc5ISpLPt7FTIR6g=";
   };
 
-  cargoDeps = fetchCargoTarball {
+  cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-pjhMQBIhvSkvHS3p12J93tUDHEPkRSih6DKAFslNq6E=";
+    hash = "sha256-mL1n4fDbr8SAyVOLk5wyYhjbh0mWqLXPx0xWXu/4Wp8=";
   };
   cargoBuildType = "release";
 
@@ -41,7 +41,7 @@
     homepage = "https://github.com/davidlattimore/wild";
     description = "A linker with the goal of being very fast for iterative development";
     maintainers = with lib.maintainers; [ qyriad ];
-    license = with lib.licenses; [ mit /* apache */ ];
+    license = with lib.licenses; [ mit asl20 ];
     platforms = lib.platforms.linux;
     mainProgram = "wild";
   };
