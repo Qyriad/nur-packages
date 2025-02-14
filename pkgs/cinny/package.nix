@@ -17,11 +17,11 @@
   gtk3,
   glib-networking,
   libayatana-appindicator,
-  libsoup,
+  libsoup_2_4,
   openssl,
   gst_all_1,
   libcanberra-gtk3,
-  webkitgtk,
+  webkitgtk_4_0,
 }: let
   inherit (stdenv) hostPlatform;
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalLinux optionalDarwin;
@@ -37,7 +37,7 @@
 
 in stdenv.mkDerivation (self: {
   pname = "cinny-desktop";
-  version = "4.2.3";
+  version = "4.3.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -47,7 +47,7 @@ in stdenv.mkDerivation (self: {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-yNGzgkZXz/VroGGnZFqo5n2v3cE6/tvpQv5U4p27row=";
+    hash = "sha256-lVBKzajxsQ33zC6NhRLMbWK81GxCbIQPtSR61yJHUL4=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ in stdenv.mkDerivation (self: {
   env.npmDeps = fetchNpmDeps {
     name = "${self.finalPackage.name}-npm-deps";
     inherit (self) src;
-    hash = "sha256-06AbhW+6xzUjnPh5cejTLt9eJPgRLVYyyN39tiT7zXs=";
+    hash = "sha256-jd7iPwfW35M03mIgH+v5xlZ45shzBQQR99Vy+gKSVp8=";
   };
 
   # cargoSetupHook arguments
@@ -70,7 +70,7 @@ in stdenv.mkDerivation (self: {
   cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     src = lib.joinPaths [ self.src "src-tauri" ];
-    hash = "sha256-79MO2JaOBKVfiE7OLFR3kobnE2yH5g44mRt2TKIEfxA=";
+    hash = "sha256-a2IyJ5a11cxgHpb2WRDxVF+aoL8kNnjBNwaQpgT3goo=";
   };
 
   # Normally this would be done by cargoBuildHook. Since we're using tauri
@@ -97,13 +97,13 @@ in stdenv.mkDerivation (self: {
 
   buildInputs = [
     gtk3
-    libsoup
+    libsoup_2_4
     openssl
   ] ++ optionalLinux [
     glib-networking
     libayatana-appindicator
     libcanberra-gtk3
-    webkitgtk
+    webkitgtk_4_0
     gst-plugins-base
     # If other gstreamer stuff is here, this is needed so GLib doesn't assert-fail.
     gst-plugins-good'
