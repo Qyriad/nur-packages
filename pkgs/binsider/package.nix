@@ -5,7 +5,7 @@
   rustPlatform,
   libiconv,
 }: lib.callWith' rustPlatform ({
-  fetchCargoTarball,
+  fetchCargoVendor,
   cargoSetupHook,
   cargoBuildHook,
   cargoCheckHook,
@@ -28,10 +28,10 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-+QgbSpiDKPTVdSm0teEab1O6OJZKEDpC2ZIZ728e69Y=";
   };
 
-  cargoDeps = fetchCargoTarball {
+  cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-+2dxeW91RqrZSpfTS636lszhI9siO46RH7qzOmwDJug=";
+    hash = "sha256-kxNE/3ToI1fv8RWVuIEdyBw7ozr+TRTf4yWvTK9kDp8=";
   };
   cargoBuildType = "release";
 
