@@ -88,11 +88,12 @@
 
   foldlAttrsToList' = lib.flip foldlAttrsToList;
 
+  /** Splat a list as function application arguments. */
   apply = argList: f:
     lib.foldl' (acc: item: acc item) f argList;
 
-  applyTo = lib.flip apply;
-
+  /** Given a function to apply to, splat a list as application arguments. */
+  applyTo = f: argList: apply argList f;
 
   isScope = attrs: lib.all lib.const [
     (lib.isFunction attrs.callPackage or null)
