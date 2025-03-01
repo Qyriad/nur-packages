@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
+  cargo,
   nix-update-script,
   testers,
 }: lib.callWith [ darwin rustPlatform ] ({
@@ -44,6 +45,7 @@ in stdenv.mkDerivation (self: {
   cargoCheckType = "test";
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoCheckHook

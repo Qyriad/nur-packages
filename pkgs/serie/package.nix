@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cargo,
   libiconv,
   testers,
   git,
@@ -41,6 +42,7 @@ in stdenv.mkDerivation (self: {
   cargoCheckType = "test";
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoCheckHook

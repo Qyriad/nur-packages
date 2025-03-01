@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
+  cargo,
   installShellFiles,
   libusb1,
   udev,
@@ -52,6 +53,7 @@ in stdenv.mkDerivation (self: {
   ];
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoCheckHook

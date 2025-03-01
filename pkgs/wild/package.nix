@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cargo,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
   cargoSetupHook,
@@ -31,6 +32,7 @@
   cargoBuildType = "release";
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoCheckHook

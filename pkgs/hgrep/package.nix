@@ -4,6 +4,7 @@
   fetchFromGitHub,
   darwin,
   rustPlatform,
+  cargo,
 }: lib.callWith [ darwin rustPlatform ] ({
   libiconv,
   fetchCargoVendor,
@@ -37,6 +38,7 @@ in stdenv.mkDerivation (self: {
   };
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoInstallHook

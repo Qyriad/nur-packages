@@ -2,6 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
+  cargo,
   fetchFromGitHub,
   writeShellScriptBin,
   mkAbsoluteDylibsHook,
@@ -78,6 +79,7 @@ in stdenv.mkDerivation (self: {
   };
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoInstallHook

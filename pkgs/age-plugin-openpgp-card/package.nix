@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cargo,
   pkg-config,
   pcsclite,
 }: lib.callWith [ rustPlatform ] ({
@@ -26,6 +27,7 @@
   };
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoCheckHook

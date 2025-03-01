@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cargo,
   libiconv,
   testers,
 }: lib.callWith' rustPlatform ({
@@ -34,6 +35,7 @@ in stdenv.mkDerivation (self: {
   };
 
   nativeBuildInputs = [
+    cargo
     cargoSetupHook
     cargoBuildHook
     cargoInstallHook
