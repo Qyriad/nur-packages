@@ -6,7 +6,7 @@
   goHooks,
 }: stdenv.mkDerivation (self: {
   pname = "sequin";
-  version = "0.3.0";
+  version = "0.3.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -15,13 +15,13 @@
     owner = "charmbracelet";
     repo = "sequin";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-pGZ7QmmPIpXrRcfkbEbTZzHXHtqPwU8Cju9Q2xtSqvw=";
+    hash = "sha256-rszK2UZ3Eq9g+Di1lncDQIT4TlUcWZEu1SU2aE2uFHY=";
   };
 
   goModules = fetchGoModules {
     inherit (self.finalPackage) name;
     inherit (self) src;
-    hash = "sha256-LehOqSahbF3Nqm0/bJ0Q3mR0ds8FEXaLEvGLwzPdvU4=";
+    hash = "sha256-mpmGd6liBzz9XPcB00ZhHaQzTid6lURD5I3EvehXsA8=";
   };
 
   nativeBuildInputs = goHooks.asList;
