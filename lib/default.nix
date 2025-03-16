@@ -95,7 +95,7 @@
   /** Given a function to apply to, splat a list as application arguments. */
   applyTo = f: argList: apply argList f;
 
-  isScope = attrs: lib.all lib.const [
+  isScope = attrs: lib.all (value: value == true) [
     (lib.isFunction attrs.callPackage or null)
     (lib.isFunction attrs.newScope or null)
     (lib.isFunction attrs.overrideScope or null)
