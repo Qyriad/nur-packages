@@ -4,7 +4,7 @@
   fetchFromGitHub,
   rustHooks,
   rustPlatform,
-  rustc,
+  cargo,
   zlib,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
@@ -31,7 +31,7 @@
   };
 
   nativeBuildInputs = rustHooks.asList ++ [
-    rustc
+    cargo
   ];
 
   buildInputs = [
