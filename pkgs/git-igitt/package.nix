@@ -2,15 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  rustHooks,
   rustPlatform,
   rustc,
   zlib,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
 }: stdenv.mkDerivation (self: {
   pname = "git-igitt";
   version = "0.1.18";
@@ -32,15 +29,8 @@
     hash = "sha256-ndxxkYMFHAX6uourCyUpvJYcZCXQ5X2CMX4jTJmNRiQ=";
   };
 
-  cargoBuildType = "release";
-  cargoCheckType = "test";
-
-  nativeBuildInputs = [
+  nativeBuildInputs = rustHooks.asList ++ [
     rustc
-    cargoSetupHook
-    cargoBuildHook
-    cargoCheckHook
-    cargoInstallHook
   ];
 
   buildInputs = [
