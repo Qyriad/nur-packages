@@ -30,6 +30,7 @@ in discoveredPackages // {
       mkAbsoluteDylibsHook
       fetchGoModules
       goHooks
+      rustHooks
     ;
   };
 
@@ -42,4 +43,5 @@ in discoveredPackages // {
 
   fetchGoModules = self.callPackage ./helpers/fetch-go-modules { };
   goHooks = self.callPackage ./helpers/go-hooks/package.nix { };
+  rustHooks = self.callPackage ./helpers/rust-hooks/package.nix { };
 })
