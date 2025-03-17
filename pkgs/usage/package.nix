@@ -15,7 +15,7 @@
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
 in stdenv.mkDerivation (self: {
   pname = "usage";
-  version = "0.3.0";
+  version = "2.0.5";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -24,13 +24,13 @@ in stdenv.mkDerivation (self: {
     owner = "jdx";
     repo = "usage";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-zjQjFrNaFgpCCuwogbNTNMHKzDDzwRNmzUMMOREzZSk=";
+    hash = "sha256-No/BDBW/NRnF81UOuAMrAs4cXEdzEAxnmkn67mReUcM=";
   };
 
   cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-gwix1wBieQEqOaitY7VQUlM9NvdFecrHrvztq2gmgBo=";
+    hash = "sha256-W/CuXzwacarxgVv12TMVfo7Fr9qKJ7aZIO8xf4SygNA=";
   };
 
   cargoBuildType = "release";
