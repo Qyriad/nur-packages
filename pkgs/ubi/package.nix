@@ -51,6 +51,7 @@ in stdenv.mkDerivation (self: {
   passthru = {
     fromHead = lib.mkHeadFetch {
       self = self.finalPackage;
+      headRef = "master";
       extraAttrs = self: {
         # Use IFD to get the latest Cargo dependencies too.
         cargoDeps = importCargoLock {
