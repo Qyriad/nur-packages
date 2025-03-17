@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  rustHooks,
   rustPlatform,
   cargo,
   fetchFromGitHub,
@@ -22,10 +23,6 @@
   zstd,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
 }: let
   inherit (lib.mkPlatformGetters stdenv.hostPlatform)
     getLibrary
@@ -35,7 +32,7 @@
   ;
 in stdenv.mkDerivation (self: {
   pname = "simp";
-  version = "3.6.1";
+  version = "3.9.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -44,7 +41,7 @@ in stdenv.mkDerivation (self: {
     owner = "Kl4rry";
     repo = "simp";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-iLBTZdAWVeaGErfFbzZ9z0sQWYM0Vfa9wAA9O18Itfk=";
+    hash = "sha256-G2xA5UPRMpz2XVyWFzJvU4bNmpEYfOmKIEEmSeF3EiM=";
   };
 
   # simp's build.rs calls `git rev-parse`. We'll just fake it.
@@ -60,12 +57,12 @@ in stdenv.mkDerivation (self: {
   cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-geNFprvJB1+mb9ycj6yFmqE3rfqKWJNrZVBZc+pfYs0=";
+    hash = "sha256-j2bP2mrfm59W7DlFh6HNHaNmlKlVup07ttmXzgPLMfM=";
   };
-  cargoBuildType = "release";
 
-  absoluteDylibsHook = mkAbsoluteDylibsHook {
+  absoluteDylibsHook = lib.optionalDrvAttr stdenv.isLinux (mkAbsoluteDylibsHook {
     inherit (self.finalPackage) name;
+    # Wow, 7 months later and this is some of the wildest Nix code we've written.
     runtimeDependenciesFor."$out/bin/simp" = map (lib.applyTo getLibrary) [
       [ wayland "wayland-client" ]
       [ libxkbcommon "xkbcommon" ]
@@ -76,13 +73,10 @@ in stdenv.mkDerivation (self: {
       [ zstd "zstd" ]
       [ xz "lzma" ]
     ];
-  };
+  });
 
-  nativeBuildInputs = [
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    cargoSetupHook
-    cargoBuildHook
-    cargoInstallHook
     self.fakeGit
     cargo-about
     nasm
