@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  rustHooks,
   rustPlatform,
   cargo,
   libiconv,
@@ -10,10 +11,6 @@
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
   importCargoLock,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
 }: let
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
     optionalDarwin
@@ -38,15 +35,9 @@ in stdenv.mkDerivation (self: {
     inherit (self) src;
     hash = "sha256-NbBF747sSxmjlTbcYknNZFFsaIVZ6+wHhjMJ6akg4BU=";
   };
-  cargoBuildType = "release";
-  cargoCheckType = "test";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    cargoSetupHook
-    cargoBuildHook
-    cargoCheckHook
-    cargoInstallHook
   ];
 
   nativeCheckInputs = [
