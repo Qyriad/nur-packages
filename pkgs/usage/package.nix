@@ -2,15 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  rustHooks,
   rustPlatform,
   cargo,
   libiconv,
+  testers,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
 }: let
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
 in stdenv.mkDerivation (self: {
@@ -33,14 +31,8 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-W/CuXzwacarxgVv12TMVfo7Fr9qKJ7aZIO8xf4SygNA=";
   };
 
-  cargoBuildType = "release";
-
-  nativeBuildInputs = [
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    cargoSetupHook
-    cargoBuildHook
-    cargoCheckHook
-    cargoInstallHook
   ];
 
   buildInputs = optionalDarwin [
@@ -49,6 +41,7 @@ in stdenv.mkDerivation (self: {
 
   passthru = {
     fromHead = lib.mkHeadFetch { self = self.finalPackage; };
+    tests.version = testers.testVersion { package = self.finalPackage; };
   };
 
   meta = {
