@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
+  rustHooks,
   cargo,
   installShellFiles,
   libusb1,
@@ -15,10 +16,6 @@
   libiconv,
   DarwinTools,
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
 }: let
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
     optionalLinux
@@ -44,7 +41,6 @@ in stdenv.mkDerivation (self: {
     inherit (self) src;
     hash = "sha256-LwBTDBrsigt8H6PFuuGndiMlj5d8v68dyHipVYOGKVk=";
   };
-  cargoBuildType = "release";
   cargoBuildFeatures = [
     "libusb"
     "udev"
@@ -52,12 +48,8 @@ in stdenv.mkDerivation (self: {
     "cli_generate"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    cargoSetupHook
-    cargoBuildHook
-    cargoCheckHook
-    cargoInstallHook
     installShellFiles
     pkg-config
   ] ++ optionalDarwin [
