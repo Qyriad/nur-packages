@@ -17,7 +17,7 @@
     ;
 in stdenv.mkDerivation (self: {
   pname = "binsider";
-  version = "0.1.0";
+  version = "0.2.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -26,13 +26,13 @@ in stdenv.mkDerivation (self: {
     owner = "orhun";
     repo = "binsider";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-+QgbSpiDKPTVdSm0teEab1O6OJZKEDpC2ZIZ728e69Y=";
+    hash = "sha256-FNaYMp+vrFIziBzZ8//+ppq7kwRjBJypqsxg42XwdEs=";
   };
 
   cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-kxNE/3ToI1fv8RWVuIEdyBw7ozr+TRTf4yWvTK9kDp8=";
+    hash = "sha256-ZoZbhmUeC63IZ5kNuACfRaCsOicZNUAGYABSpCkUCXA=";
   };
   cargoBuildType = "release";
 
