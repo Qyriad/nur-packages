@@ -9,7 +9,7 @@ let
   inherit (python3.pkgs) buildPythonPackage setuptools;
 
   pname = "xonsh-direnv";
-  version = "1.6.2";
+  version = "1.6.5";
 in
   buildPythonPackage {
     inherit pname version;
@@ -18,7 +18,7 @@ in
       owner = "74th";
       repo = "xonsh-direnv";
       rev = version;
-      sha256 = "sha256-bp1mK+YO9htEQcRSD5wJkAZtQKK2t3IOW7Kdc6b8Lb0=";
+      sha256 = "sha256-huBJ7WknVCk+WgZaXHlL+Y1sqsn6TYqMP29/fsUPSyU=";
       name = "${pname}-source";
     };
 
