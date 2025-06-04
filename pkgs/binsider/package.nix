@@ -5,12 +5,11 @@
   rustPlatform,
   libiconv,
   cargo,
+  rustHooks,
+  testers,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
+  importCargoLock,
 }: let
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
     optionalDarwin
@@ -34,17 +33,23 @@ in stdenv.mkDerivation (self: {
     inherit (self) src;
     hash = "sha256-ZoZbhmUeC63IZ5kNuACfRaCsOicZNUAGYABSpCkUCXA=";
   };
-  cargoBuildType = "release";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    cargoSetupHook
-    cargoBuildHook
-    cargoCheckHook
-    cargoInstallHook
   ] ++ optionalDarwin [
     libiconv
   ];
+
+  passthru.tests = testers.testVersion { package = self.finalPackage; };
+  passthru.fromHead = lib.mkHeadFetch {
+    self = self.finalPackage;
+    extraAttrs = self: {
+      cargoDeps = importCargoLock {
+        lockFile = self.src + "/Cargo.lock";
+        allowBuiltinFetchGit = true;
+      };
+    };
+  };
 
   meta = {
     homepage = "https://binsider.dev";
