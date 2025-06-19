@@ -32,7 +32,7 @@ in discoveredPackages // {
   nurLib = import ./lib { inherit lib; };
 
   # For exploration purposes.
-  helpers = lib.dontRecurseIntoAttrs {
+  helpers = {
     inherit (self)
       mkAbsoluteDylibsHook
       fetchGoModules
