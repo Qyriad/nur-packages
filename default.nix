@@ -38,7 +38,7 @@ in discoveredPackages // {
       fetchGoModules
       goHooks
       rustHooks
-      pythonScope
+      pythonScopes
     ;
   };
 
