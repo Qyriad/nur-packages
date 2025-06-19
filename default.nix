@@ -18,6 +18,13 @@
     directory = ./pkgs;
   };
 
+  pythonScopes = pkgs.pythonInterpreters
+  |> lib.filterAttrs (name: python: let
+    res = builtins.tryEval (lib.isDerivation python && python.isPy3);
+    hasScope = lib.hasAttr "${name}Packages" pkgs;
+  in if res.success then res.value && hasScope else false)
+  |> lib.mapAttrs (pyAttr: python: pkgs."${pyAttr}Packages");
+
 in discoveredPackages // {
   lib = lib';
 
@@ -31,6 +38,7 @@ in discoveredPackages // {
       fetchGoModules
       goHooks
       rustHooks
+      pythonScope
     ;
   };
 
@@ -38,6 +46,8 @@ in discoveredPackages // {
   availablePackages = let
     isAvailable = lib'.isAvailableDerivation pkgs.stdenv.hostPlatform;
   in lib.filterAttrs (lib.const isAvailable) discoveredPackages;
+
+  inherit pythonScopes;
 
   mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
 
