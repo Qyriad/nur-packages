@@ -14,5 +14,5 @@ function cargoDefaultsHook()
 }
 
 if [[ -z "${dontSetCargoDefaults:-}" ]]; then
-	postUnpackHooks+=(cargoDefaultsHook)
+	appendToVar postUnpackHooks cargoDefaultsHook
 fi
