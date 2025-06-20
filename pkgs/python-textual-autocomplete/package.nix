@@ -54,7 +54,7 @@ in stdenv.mkDerivation (self: {
     description = "Python library for creating dropdown autocompletion menus in Textual applications";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 }))
 

@@ -40,7 +40,7 @@
     description = "All in one solution for creating and tracking chapter markers in OBS";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ gpl2 ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.all;
   };
 })

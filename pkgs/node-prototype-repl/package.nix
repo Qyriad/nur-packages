@@ -62,7 +62,7 @@ in stdenv.mkDerivation (self: {
     description = "Prototype for an improved NodeJS REPL";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "node-prototype-repl";
   };
 }))

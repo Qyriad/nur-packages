@@ -34,7 +34,7 @@
     description = "Logs for humans to read";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "humanlog";
   };
 })

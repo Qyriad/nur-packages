@@ -67,7 +67,7 @@ in stdenv.mkDerivation (self: {
     description = "A rich git commit graph in your terminal, like magic 📚";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "serie";
   };
 }))

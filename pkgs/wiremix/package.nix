@@ -64,7 +64,7 @@ in stdenv.mkDerivation (self: {
     description = "A simple TUI mixer for PipeWire";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ asl20 mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.linux;
     mainProgram = "wiremix";
   };

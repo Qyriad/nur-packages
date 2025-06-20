@@ -70,7 +70,7 @@ in stdenv.mkDerivation (self: {
     description = "Process interactive kill";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     # lol with doesn't shadow.
     mainProgram = "pik";
   };

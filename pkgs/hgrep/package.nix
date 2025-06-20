@@ -59,7 +59,7 @@ in stdenv.mkDerivation (self: {
     description = "Grep with human-friendly search results";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     # Seems broken on current Nixpkgs for aarch64-apple-darwin?
     #platforms = lib.attrValues { inherit (lib.platforms) all; };
     mainProgram = "hgrep";

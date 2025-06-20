@@ -35,7 +35,7 @@
     description = "Human-readable ANSI sequences";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     #platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };
     mainProgram = "sequin";
   };

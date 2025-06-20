@@ -49,7 +49,7 @@ in stdenv.mkDerivation (self: {
     description = "A tool for CLI specifications";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.all;
     mainProgram = "usage";
   };

@@ -63,7 +63,7 @@ in stdenv.mkDerivation (self: {
     description = "Command line tool to view objects (JSON/YAML/TOML) in a TUI tree widget";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "otree";
   };
 }))

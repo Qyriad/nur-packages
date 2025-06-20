@@ -55,7 +55,7 @@
     description = "Interactive, cross-platform Git terminal application with clear git graphs arranged for your branching model";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "git-igitt";
   };
 }))

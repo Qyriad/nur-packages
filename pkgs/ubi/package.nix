@@ -68,7 +68,7 @@ in stdenv.mkDerivation (self: {
     description = "Universal binary installer";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit asl20 ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "ubi";
   };
 }))

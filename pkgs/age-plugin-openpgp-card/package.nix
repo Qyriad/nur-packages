@@ -55,7 +55,7 @@
     description = "Age plugin for using ed255519 on OpenPGP Card devices (Yubikeys, Nitrokeys)";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit asl20 ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "age-plugin-openpgp-card";
   };
 }))

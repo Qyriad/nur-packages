@@ -88,7 +88,7 @@ in stdenv.mkDerivation (self: {
     longDescription = "List system USB buses and devices; a lib and modern cross-platform lsusb that attempts to maintain compatibility with, but also add new features";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ gpl3Plus ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     # lol with doesn't shadow.
     #platforms = lib.platforms.darwin ++ (with lib.platforms; linux ++ windows);
     #platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };

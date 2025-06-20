@@ -48,7 +48,7 @@ in stdenv.mkDerivation (self: {
     description = "Query package information from Cargo.toml files in a script-friendly way";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit asl20 ];
-    sourceProvanence = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "cargo-get";
   };
 }))
