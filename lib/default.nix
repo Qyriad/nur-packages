@@ -59,6 +59,8 @@
     finalFrom = foldAttrList fromList;
   in callWith' finalFrom f;
 
+  suffixName = pkg: suffix: "${pkg.pname}-${suffix}-${pkg.version}";
+
   /** Uses an eval-time impure fetch to attempt to build a package derivation
    * from the latest version of its source. Probably won't work a lot of the time!
    */
@@ -109,6 +111,7 @@ in {
     mkPlatformPredicates
     callWith
     callWith'
+    suffixName
     mkHeadFetch
     joinPaths
     mkPlatformGetters
