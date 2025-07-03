@@ -36,6 +36,14 @@
 in discoveredPackages // {
   lib = lib';
 
+  # Equivalent to setting `config.fetchedSourceNameDefault` but just for this scope.
+  repoRevToNameMaybe = lib.repoRevToName "full";
+  # Defined in terms of `repoRevToNameMaybe`.
+  fetchFromGitHub = self.callPackage pkgs.fetchFromGitHub.override { };
+  # Defined in terms of `fetchFromGitHub`.
+  fetchFromGitea = self.callPackage pkgs.fetchFromGitea.override { };
+  # TODO: override for other fetchers.
+
   # For exploration purposes.
   nurLib = import ./lib { inherit lib; };
 
