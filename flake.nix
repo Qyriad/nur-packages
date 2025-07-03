@@ -18,17 +18,20 @@
 
     pkgs = import nixpkgs { inherit system; };
 
-    nurPackages = import ./default.nix { inherit pkgs; };
+    nurScope = import ./default.nix { inherit pkgs; };
+    # Get the packages without the scopeyness (.overrideScope, .callPackage, etc).
+    nurPackages = nurScope.packages nurScope;
+
     # Just the user-facing packages, and only ones that are available on this platform.
     packages = nurPackages.availablePackages;
 
   in {
     packages = packages // {
-      default = pkgs.linkFarmFromDrvs "qyriad-nur" (lib.attrValues packages);
+      default = pkgs.linkFarmFromDrvs "qyriad-nur-all" (lib.attrValues packages);
     };
     checks = self.packages.${system};
 
     # Everything, from user-facing packages to hooks to functions.
     legacyPackages = nurPackages;
-  }); # outputs
+  });
 }
