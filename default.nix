@@ -25,6 +25,14 @@
   in (lib'.tryResOr res false) && hasScope)
   |> lib.mapAttrs (pyAttr: python: pkgs."${pyAttr}Packages");
 
+  # TODO: static?
+  validStdenvs = pkgs
+  |> lib.filterAttrs (name: _: lib.strings.hasSuffix "Stdenv" name)
+  |> lib.filterAttrs (_: stdenv: let
+    isStdenv = lib.isAttrs stdenv && stdenv ? mkDerivation;
+    canInstantiate = stdenv.outPath != null;
+  in lib'.tryResOr (builtins.tryEval (isStdenv && canInstantiate)) false);
+
 in discoveredPackages // {
   lib = lib';
 
@@ -39,6 +47,7 @@ in discoveredPackages // {
       goHooks
       rustHooks
       pythonScopes
+      validStdenvs
     ;
   };
 
@@ -48,6 +57,7 @@ in discoveredPackages // {
   in lib.filterAttrs (lib.const isAvailable) discoveredPackages;
 
   inherit pythonScopes;
+  inherit validStdenvs;
 
   mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
 
