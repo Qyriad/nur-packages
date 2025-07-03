@@ -16,7 +16,7 @@
     lib = nurLib;
   } // flake-utils.lib.eachDefaultSystem (system: let
 
-    pkgs = import nixpkgs { inherit system; };
+    pkgs = import nixpkgs { inherit system; config = import ./nixpkgs-config.nix; };
 
     nurScope = import ./default.nix { inherit pkgs; };
     # Get the packages without the scopeyness (.overrideScope, .callPackage, etc).

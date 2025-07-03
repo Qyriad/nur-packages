@@ -1,5 +1,5 @@
 {
-  pkgs ? import <nixpkgs> { },
+  pkgs ? import <nixpkgs> { config = import ./nixpkgs-config.nix; },
   lib ? pkgs.lib,
 }: lib.makeScope pkgs.newScope (self: let
   # Make our recursive scope, which contains packages auto-discovered
