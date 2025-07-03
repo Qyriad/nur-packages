@@ -11,6 +11,11 @@
     (drv.meta.broken or null != true)
   ];
 
+  /** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
+   * If the `tryEval` succeeded, return its value. Otherwise, return `fallback`.
+   */
+  tryResOr = { success, value }: fallback: if success then value else fallback;
+
   startsWith = needle: heystack: (lib.match "^(${lib.escapeRegex heystack}).*$") != null;
 
   optionalDefault = cond: valueIfTrue: let
@@ -107,6 +112,7 @@
 in {
   inherit
     isAvailableDerivation
+    tryResOr
     optionalDefault
     mkPlatformPredicates
     callWith

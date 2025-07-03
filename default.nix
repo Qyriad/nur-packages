@@ -22,7 +22,7 @@
   |> lib.filterAttrs (name: python: let
     res = builtins.tryEval (lib.isDerivation python && python.isPy3);
     hasScope = lib.hasAttr "${name}Packages" pkgs;
-  in if res.success then res.value && hasScope else false)
+  in (lib'.tryResOr res false) && hasScope)
   |> lib.mapAttrs (pyAttr: python: pkgs."${pyAttr}Packages");
 
 in discoveredPackages // {
