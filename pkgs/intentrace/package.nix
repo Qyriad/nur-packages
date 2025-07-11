@@ -18,7 +18,7 @@
   ;
 in stdenv.mkDerivation (self: {
   pname = "intentrace";
-  version = "0.10.3";
+  version = "0.10.4";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -27,13 +27,13 @@ in stdenv.mkDerivation (self: {
     owner = "sectordistrict";
     repo = "intentrace";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-mCMARX6y9thgYJpDRFnWGZJupdk+EhVaBGbwABYYjNA=";
+    hash = "sha256-zVRH6uLdBXI6VTu/R3pTNCjfx25089bYYTJZdvZIFck=";
   };
 
   cargoDeps = fetchCargoVendor {
     name = "${self.finalPackage.name}-cargo-deps";
     inherit (self) src;
-    hash = "sha256-BZ+P6UT9bBuAX9zyZCA+fI2pUtV8b98oPcQDwJV5HC8=";
+    hash = "sha256-1n0fXOPVktqY/H/fPCgl0rA9xZM8QRXvZQgTadfwymo=";
   };
   cargoBuildType = "release";
 
