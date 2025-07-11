@@ -13,7 +13,7 @@
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
 in stdenv.mkDerivation (self: {
   pname = "cargo-get";
-  version = "1.2.0";
+  version = "1.4.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,13 +22,13 @@ in stdenv.mkDerivation (self: {
     owner = "nicolaiunrein";
     repo = "cargo-get";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-9OCAKQobpcAl5uqyVSEvlHHaaQQF8YWpGqu8ijfuSMs=";
+    hash = "sha256-HqSZZ2wfS33lAXVzDjoL2gpcYZP/LtYM63ruDHdcHiY=";
   };
 
   cargoDeps = fetchCargoVendor {
     inherit (self) src;
     name = "${self.finalPackage.name}-cargo-deps";
-    hash = "sha256-l4FmI9O/zY5gXsLDKvlyXP6JH5+fJZfnFlRDrGcg5i8=";
+    hash = "sha256-vDqpDZziWjrU9WSH1cWvJZwRtwNIAO/sJl2XnkLS0Ss=";
   };
 
   nativeBuildInputs = rustHooks.asList ++ [
