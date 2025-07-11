@@ -4,12 +4,11 @@
   fetchFromGitHub,
   fetchNpmDeps,
   nodejs,
-  nodePackages,
+  node-gyp,
   npmHooks,
   python3,
 }: let
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
-  inherit (nodePackages) npm node-gyp;
 
 in stdenvNoCC.mkDerivation (self: {
   pname = "cinny-web";
@@ -51,7 +50,6 @@ in stdenvNoCC.mkDerivation (self: {
   nativeBuildInputs = [
     nodejs
     node-gyp
-    npm
     npmConfigHook
     npmBuildHook
     npmInstallHook

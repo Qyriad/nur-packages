@@ -3,7 +3,7 @@
   stdenv,
   darwin,
   makeWrapper,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   fetchFromGitHub,
   fetchNpmDeps,
   nodejs,
@@ -85,7 +85,7 @@ in stdenv.mkDerivation (self: {
   env.NODE_OPTIONS = NODE_OPTIONS;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     npmConfigHook
     cargoSetupHook
     makeWrapper
