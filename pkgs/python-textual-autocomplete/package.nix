@@ -16,7 +16,7 @@
   stdenv = stdenvNoCC;
 in stdenv.mkDerivation (self: {
   pname = "${python3.pythonAttr}-textual-autocomplete";
-  version = "3.0.0a13";
+  version = "4.0.4";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -25,7 +25,7 @@ in stdenv.mkDerivation (self: {
   src = fetchPypi {
     pname = "textual_autocomplete";
     inherit (self) version;
-    hash = "sha256-21pK6VbdfW3s5T9/aV6X8qt1gZ3Za4ocBk7Flms6sRM=";
+    hash = "sha256-CWmYe5ClPB91dT3+OtLH6g2XS1g53CoAotMywAAFeHE=";
   };
 
   outputs = [ "out" "dist" ];
