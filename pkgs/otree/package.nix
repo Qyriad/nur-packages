@@ -20,7 +20,7 @@
   ;
 in stdenv.mkDerivation (self: {
   pname = "otree";
-  version = "0.3.1";
+  version = "0.4.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -29,14 +29,14 @@ in stdenv.mkDerivation (self: {
     owner = "fioncat";
     repo = "otree";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-CYobQppNsTg53a/+jVL8kqzfNnTVwW7VTgT+amW+lns=";
+    hash = "sha256-1p7Iep61m0mtaSiBj1T9d/wwzVGzXYOvbPv8isjhwjM=";
   };
 
   cargoBuildType = "release";
   cargoDeps = fetchCargoVendor {
     inherit (self) src;
     name = "${self.finalPackage.name}-cargo-deps";
-    hash = "sha256-DFfJ/DvmZ458Ur6F3Od4RAku70rPmUBANJsuvbP4Bi0=";
+    hash = "sha256-xHy6/zx5V51KOM+Hxmumr9o0hcO9tTlG1DJdfBrYSmE=";
   };
 
   nativeBuildInputs = [
