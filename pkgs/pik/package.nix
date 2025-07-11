@@ -4,19 +4,14 @@
   darwin,
   apple-sdk,
   fetchFromGitHub,
-  pkg-config,
   rustPlatform,
+  rustHooks,
   cargo,
-  nix-update-script,
-  testers,
+  versionCheckHook,
 }: lib.callWith [ darwin rustPlatform ] ({
   libiconv,
   DarwinTools,
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
 }: let
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
     optionalDarwin
@@ -27,7 +22,9 @@ in stdenv.mkDerivation (self: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
   doCheck = true;
+  doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "jacek-kurlit";
@@ -41,15 +38,11 @@ in stdenv.mkDerivation (self: {
     inherit (self) src;
     hash = "sha256-333MHDuHYKlTUXSm2C19ZRPXeEGDxbQEImdsleUt1QU=";
   };
-  cargoBuildType = "release";
-  cargoCheckType = "test";
 
-  nativeBuildInputs = [
+  versionCheckProgramArg = "--version";
+
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    cargoSetupHook
-    cargoBuildHook
-    cargoCheckHook
-    cargoInstallHook
   ] ++ optionalDarwin [
     DarwinTools
   ];
@@ -59,9 +52,11 @@ in stdenv.mkDerivation (self: {
     apple-sdk.IOKit
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = self.finalPackage; };
     fromHead = lib.mkHeadFetch { self = self.finalPackage; };
   };
 
