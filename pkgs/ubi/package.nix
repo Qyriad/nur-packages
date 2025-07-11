@@ -6,7 +6,7 @@
   rustPlatform,
   cargo,
   libiconv,
-  testers,
+  versionCheckHook,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
   importCargoLock,
@@ -21,6 +21,9 @@ in stdenv.mkDerivation (self: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  doCheck = true;
+  doInstallCheck = true;
+
   src = fetchFromGitHub {
     owner = "houseabsolute";
     repo = "ubi";
@@ -34,7 +37,8 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-dpqFkbuprX72n1ZP28pnpql8Igg48ThfsCQGVzZ07ow=";
   };
 
-  doCheck = true;
+  versionCheckProgramArg = "--version";
+
   # The integration tests seem to have to preconditions.
   cargoTestFlags = [ "--lib" ];
   __darwinAllowLocalNetworking = self.finalPackage.doCheck;
@@ -46,6 +50,10 @@ in stdenv.mkDerivation (self: {
 
   buildInputs = optionalDarwin [
     libiconv
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   passthru = {
@@ -60,7 +68,6 @@ in stdenv.mkDerivation (self: {
         };
       };
     };
-    tests.version = testers.testVersion { package = self.finalPackage; };
   };
 
   meta = {
