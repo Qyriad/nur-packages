@@ -8,7 +8,7 @@
   cargo,
   libclang,
   pipewire,
-  testers,
+  versionCheckHook,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
   importCargoLock,
@@ -22,6 +22,9 @@ in stdenv.mkDerivation (self: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  doCheck = true;
+  doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "tsowell";
@@ -38,6 +41,8 @@ in stdenv.mkDerivation (self: {
 
   env.LIBCLANG_PATH = (lib.getLib libclang) + "/lib";
 
+  versionCheckProgramArg = "--version";
+
   nativeBuildInputs = rustHooks.asList ++ [
     cargo
     pkg-config
@@ -48,7 +53,10 @@ in stdenv.mkDerivation (self: {
     libclang
   ];
 
-  passthru.tests.version = testers.testVersion { package = self.finalPackage; };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru.fromHead = lib.mkHeadFetch {
     self = self.finalPackage;
     extraAttrs = self: {
