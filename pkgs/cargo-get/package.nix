@@ -6,7 +6,7 @@
   rustPlatform,
   cargo,
   libiconv,
-  testers,
+  versionCheckHook,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
 }: let
@@ -17,6 +17,9 @@ in stdenv.mkDerivation (self: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  doCheck = true;
+  doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "nicolaiunrein";
@@ -31,6 +34,8 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-vDqpDZziWjrU9WSH1cWvJZwRtwNIAO/sJl2XnkLS0Ss=";
   };
 
+  versionCheckProgramArg = "--version";
+
   nativeBuildInputs = rustHooks.asList ++ [
     cargo
   ];
@@ -39,8 +44,15 @@ in stdenv.mkDerivation (self: {
     libiconv
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
-    tests.version = testers.testVersion { package = self.finalPackage; };
+    fromHead = lib.mkHeadFetch {
+      self = self.finalPackage;
+      headRef = "master";
+    };
   };
 
   meta = {
