@@ -5,6 +5,7 @@
   fetchFromGitHub,
   rustPlatform,
   cargo,
+  versionCheckHook,
 }: lib.callWith [ darwin rustPlatform ] ({
   libiconv,
   fetchCargoVendor,
@@ -23,6 +24,9 @@ in stdenv.mkDerivation (self: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  doCheck = true;
+  doInstallCheck = true;
+
   src = fetchFromGitHub {
     owner = "sectordistrict";
     repo = "intentrace";
@@ -36,6 +40,9 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-1n0fXOPVktqY/H/fPCgl0rA9xZM8QRXvZQgTadfwymo=";
   };
   cargoBuildType = "release";
+  cargoCheckType = "test";
+
+  versionCheckProgramArg = "--version";
 
   nativeBuildInputs = [
     cargo
@@ -47,6 +54,10 @@ in stdenv.mkDerivation (self: {
 
   buildInputs = optionalDarwin [
     libiconv
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   passthru = {
