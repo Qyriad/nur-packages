@@ -3,13 +3,11 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  rustHooks,
   cargo,
+  versionCheckHook,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
 }: stdenv.mkDerivation (self: {
   pname = "wild";
   version = "0.5.0";
@@ -29,14 +27,15 @@
     inherit (self) src;
     hash = "sha256-dXIYJfjz6okiLJuX4ZHu0Ft2/9XDjCrvvl/eqeuvBkU=";
   };
-  cargoBuildType = "release";
 
-  nativeBuildInputs = [
+  versionCheckProgramArg = "--version";
+
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    cargoSetupHook
-    cargoBuildHook
-    cargoCheckHook
-    cargoInstallHook
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   meta = {
