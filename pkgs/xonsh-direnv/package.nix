@@ -22,6 +22,8 @@ in
       name = "${pname}-source";
     };
 
+    format = "pyproject";
+
     nativeBuildInputs = [
       setuptools
     ];
