@@ -4,16 +4,13 @@
   fetchFromGitHub,
   darwin,
   rustPlatform,
-  rustc,
+  rustHooks,
   cargo,
   libiconv,
   nix-update-script,
-  testers,
+  versionCheckHook,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
-  cargoSetupHook,
-  cargoBuildHook,
-  cargoInstallHook,
 }: let
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
     optionalDarwin
@@ -25,6 +22,9 @@ in stdenv.mkDerivation (self: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  doCheck = true;
+  doInstallCheck = true;
+
   src = fetchFromGitHub {
     owner = "fioncat";
     repo = "otree";
@@ -32,19 +32,16 @@ in stdenv.mkDerivation (self: {
     hash = "sha256-1p7Iep61m0mtaSiBj1T9d/wwzVGzXYOvbPv8isjhwjM=";
   };
 
-  cargoBuildType = "release";
   cargoDeps = fetchCargoVendor {
     inherit (self) src;
     name = "${self.finalPackage.name}-cargo-deps";
     hash = "sha256-xHy6/zx5V51KOM+Hxmumr9o0hcO9tTlG1DJdfBrYSmE=";
   };
 
-  nativeBuildInputs = [
-    cargoSetupHook
-    cargoBuildHook
-    cargoInstallHook
+  versionCheckProgramArg = "--version";
+
+  nativeBuildInputs = rustHooks.asList ++ [
     cargo
-    rustc
   ];
 
   buildInputs = optionalDarwin [
@@ -52,9 +49,12 @@ in stdenv.mkDerivation (self: {
     darwin.apple_sdk.frameworks.IOKit
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = self.finalPackage; };
     fromHead = lib.mkHeadFetch { self = self.finalPackage; };
   };
 
