@@ -8,7 +8,7 @@
   libiconv,
   testers,
 }: lib.callWith' rustPlatform ({
-  fetchCargoTarball,
+  fetchCargoVendor,
   importCargoLock,
 }: let
   inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
@@ -16,7 +16,7 @@
   ;
 in stdenv.mkDerivation (self: {
   pname = "ubi";
-  version = "0.6.0";
+  version = "0.7.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -25,20 +25,20 @@ in stdenv.mkDerivation (self: {
     owner = "houseabsolute";
     repo = "ubi";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-hvwK8yIDXg5SlBrV+Rl8MgbKlIhDVt87ANcdJahptyA=";
+    hash = "sha256-yrlEa6K2+hxYQPJ1Ppvs2LEZDsG3mBt6tpMcriuGuZU=";
   };
 
-  cargoDeps = fetchCargoTarball {
-    name = "${self.finalPackage.name}-cargo-deps";
+  cargoDeps = fetchCargoVendor {
+    name = "${self.pname}-cargo-deps-${self.version}";
     inherit (self) src;
-    hash = "sha256-N9f1XWLp3CzpUEed3rODEr/uyd4RrRwLkZp7HAJdbf4=";
+    hash = "sha256-dpqFkbuprX72n1ZP28pnpql8Igg48ThfsCQGVzZ07ow=";
   };
 
   doCheck = true;
   # The integration tests seem to have to preconditions.
   cargoTestFlags = [ "--lib" ];
   __darwinAllowLocalNetworking = self.finalPackage.doCheck;
-  __noChroot = self.finalPackage.doCheck;
+  __noChroot = stdenv.buildPlatform.isDarwin && self.finalPackage.doCheck;
 
   nativeBuildInputs = rustHooks.asList ++ [
     cargo
