@@ -1,6 +1,8 @@
 {
   lib ? import <nixpkgs/lib>,
 }: let
+  inherit (lib) typeOf;
+
   /**
     Return true if and only if `drv` is a derivation which is available on the
     given platform and not broken.
@@ -10,6 +12,10 @@
     (lib.meta.availableOn hostPlatform drv)
     (drv.meta.broken or null != true)
   ];
+
+  isEvalableDerivation = drv: let
+    res = builtins.tryEval (drv.outPath or (throw ""));
+  in res.success && lib.isDerivation drv;
 
   /** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
    * If the `tryEval` succeeded, return its value. Otherwise, return `fallback`.
@@ -24,7 +30,7 @@
       set = lib.optionalAttrs;
       string = lib.optionalString;
     };
-    valueType = builtins.typeOf valueIfTrue;
+    valueType = typeOf valueIfTrue;
     fn = fnByType.${valueType}
       or (throw "no known lib.optional-type function for type: ${valueType}");
   in fn cond valueIfTrue;
@@ -48,7 +54,17 @@
 
   mkPlatformGetters = plat: {
     getLibrary = drv: name:
+      assert lib.isDerivation drv;
+      assert lib.isString name;
       "${lib.getLib drv}/lib/lib${name}${plat.extensions.library}";
+    getSharedLibrary = drv: name:
+      assert lib.isDerivation drv;
+      assert lib.isString name;
+      "${lib.getLib drv}/lib/lib${name}${plat.extensions.sharedLibrary}";
+    getStaticLibrary = drv: name:
+      assert lib.isDerivation drv;
+      assert lib.isString name;
+      "${lib.getLib drv}/lib/lib${name}${plat.extensions.staticLibrary}";
   };
 
   # A reimplementation of lib.callPackageWith tht doesn't lib.mkOverrideable the result.
@@ -113,6 +129,7 @@
 in {
   inherit
     isAvailableDerivation
+    isEvalableDerivation
     tryResOr
     optionalDefault
     mkPlatformPredicates
