@@ -3,20 +3,6 @@
 }: let
   inherit (lib) typeOf;
 
-  /**
-    Return true if and only if `drv` is a derivation which is available on the
-    given platform and not broken.
-  */
-  isAvailableDerivation = hostPlatform: drv: lib.all lib.trivial.id [
-    (lib.isDerivation drv)
-    (lib.meta.availableOn hostPlatform drv)
-    (drv.meta.broken or null != true)
-  ];
-
-  isEvalableDerivation = drv: let
-    res = builtins.tryEval (drv.outPath or (throw ""));
-  in res.success && lib.isDerivation drv;
-
   /** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
    * If the `tryEval` succeeded, return its value. Otherwise, return `fallback`.
    */
@@ -119,17 +105,8 @@
   /** Given a function to apply to, splat a list as application arguments. */
   applyTo = f: argList: apply argList f;
 
-  isScope = attrs: lib.all (value: value == true) [
-    (lib.isFunction attrs.callPackage or null)
-    (lib.isFunction attrs.newScope or null)
-    (lib.isFunction attrs.overrideScope or null)
-    (lib.isFunction attrs.packages or null)
-  ];
-
 in {
   inherit
-    isAvailableDerivation
-    isEvalableDerivation
     tryResOr
     optionalDefault
     mkPlatformPredicates
@@ -143,6 +120,7 @@ in {
     foldlAttrsToList'
     apply
     applyTo
-    isScope
   ;
 }
+# pub use ./derivations.nix::*;
+// import ./derivations.nix { }
