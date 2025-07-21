@@ -96,7 +96,7 @@ in stdenv.mkDerivation (self: {
   ] ++ optionalLinux [
     wayland
     libxkbcommon
-    mesa.drivers
+    mesa
     udev
   ];
 
