@@ -126,4 +126,5 @@ in lib.makeExtensible (self: {
   ;
   # pub use ./derivations.nix::*;
 } // import ./derivations.nix { inherit lib self; }
+  // import ./fixed-points.nix { inherit lib self; }
 )
