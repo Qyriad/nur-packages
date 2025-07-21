@@ -7,7 +7,6 @@
   nodePackages,
   npmHooks,
 }: lib.callWith [ npmHooks nodePackages ] ({
-  npm,
   npmConfigHook,
   npmBuildHook,
   npmInstallHook,
@@ -51,7 +50,6 @@ in stdenv.mkDerivation (self: {
 
   nativeBuildInputs = [
     nodejs
-    npm
     npmConfigHook
     npmBuildHook
     npmInstallHook
