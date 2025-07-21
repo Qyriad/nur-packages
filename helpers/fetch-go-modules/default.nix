@@ -11,6 +11,7 @@
   GO111MODULE ? "on",
   GOTOOLCHAIN ? "local",
   deleteVendor ? false,
+  drvAttrs ? { },
 }: stdenvNoCC.mkDerivation (self: {
   name = "${name}-go-modules";
 
@@ -62,4 +63,4 @@
   outputHashMode = "recursive";
   outputHash = hash;
   outputHashAlgo = if self.outputHash == "" then "sha256" else null;
-}))
+} // drvAttrs))
