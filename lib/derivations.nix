@@ -1,5 +1,6 @@
 {
-  lib ? import ./default.nix { },
+  lib ? import <nixpkgs/lib>,
+  self ? import ./default.nix { inherit lib; },
 }: let
 
   /**

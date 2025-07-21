@@ -8,9 +8,7 @@
   # `pkgs` as our parent scope, things from `pkgs` will also be available in
   # the same way.
 
-  lib' = lib.extend (final: prev: import ./lib {
-    lib = final;
-  });
+  lib' = lib // import ./lib { inherit lib; };
 
   # Uses `self` as the scope to `callPackage` everything in `./pkgs`.
   discoveredPackages = lib.packagesFromDirectoryRecursive {

@@ -1,6 +1,7 @@
 {
   lib ? import <nixpkgs/lib>,
 }: let
+
   inherit (lib) typeOf;
 
   /** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
@@ -105,7 +106,9 @@
   /** Given a function to apply to, splat a list as application arguments. */
   applyTo = f: argList: apply argList f;
 
-in {
+  foldToList = list: f: lib.foldl' f [ ] list;
+
+in lib.makeExtensible (self: {
   inherit
     tryResOr
     optionalDefault
@@ -121,6 +124,6 @@ in {
     apply
     applyTo
   ;
-}
-# pub use ./derivations.nix::*;
-// import ./derivations.nix { }
+  # pub use ./derivations.nix::*;
+} // import ./derivations.nix { inherit lib self; }
+)
