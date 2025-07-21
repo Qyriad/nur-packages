@@ -13,6 +13,9 @@ in
   buildPythonPackage {
     inherit pname version;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     src = fetchPypi {
       inherit pname version;
       sha256 = "sha256-aiUxmOO8VC/68KQiI3ZYa86Fg7J6ndvCz7qlVMBJIw0=";
