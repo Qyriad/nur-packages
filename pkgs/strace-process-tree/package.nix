@@ -18,6 +18,9 @@ in
   buildPythonApplication {
     inherit pname version;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     src = fetchFromGitHub {
       owner = "mgedmin";
       repo = "strace-process-tree";
