@@ -85,7 +85,7 @@
   });
 
   /** Join a list of string-like values with forward slashes. */
-  joinPaths = lib.strings.concatStringsSep "/";
+  joinPaths = list: lib.strings.concatStringsSep "/" list;
 
   /**
   f: should be a function that accepts two arguments and returns a list to be
