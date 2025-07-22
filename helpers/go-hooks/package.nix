@@ -16,7 +16,7 @@
   # Abuse some laziness so you can add `nativeBuildInputs = goHooks.asList` to conveniently
   # apply all the Go hooks at once.
   asList = [
-    # We repeat `goHooks.` instead of the `attrValues` trick to preserve hook order.
+    # We repeat `self.` instead of the `attrValues` trick to preserve hook order.
     # It *probably* doesn't matter, but just to be on the safe side...
     self.goConfigureHook
     self.goBuildHook
