@@ -108,6 +108,23 @@
 
   foldToList = list: f: lib.foldl' f [ ] list;
 
+  /** Fallable alternative to <nixpkgs> syntax.
+   * Returns the path if found, or null if not.
+   */
+  tryLookupPath = lookupPath: let
+    # This covers both pure evaluation mode and the path not being in nixPath.
+    tried = builtins.tryEval (
+      builtins.findFile builtins.nixPath lookupPath
+    );
+  in tryResOr tried null;
+
+  /** Fallable alternative to <nixpkgs> syntax.
+   * Returns the path if found, or `fallback` if not.
+   */
+  lookupPathOr = lookupPath: fallback: let
+    tried = tryLookupPath lookupPath;
+  in if tried != null then tried else fallback;
+
 in lib.makeExtensible (self: {
   inherit
     tryResOr
@@ -123,6 +140,8 @@ in lib.makeExtensible (self: {
     foldlAttrsToList'
     apply
     applyTo
+    tryLookupPath
+    lookupPathOr
   ;
   # pub use ./derivations.nix::*;
 } // import ./derivations.nix { inherit lib self; }
