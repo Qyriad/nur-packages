@@ -21,10 +21,16 @@ in lib.makeScope pkgs.newScope (self: let
   # `pkgs` as our parent scope, things from `pkgs` will also be available in
   # the same way.
 
-  lib' = lib // import ./lib { inherit lib; };
+  # Pull our scope's `lib`, which contains both `pkgs.lib` as well as our
+  # extensions from `./lib`, into this `let` scope, for convenience.
+  # The actual place our scope's `lib` comes from is below.
+  # Note that this let-binding `lib` shadows `lib ? pkgs.lib` from above.
+  inherit (self) lib;
 
-  # Uses `self` as the scope to `callPackage` everything in `./pkgs`.
-  discoveredPackages = lib.packagesFromDirectoryRecursive {
+  # NOTE: this one has to be `pkgs.lib`, not `self.lib`, to not
+  # cause infinite recursion.
+  discoveredPackages = pkgs.lib.packagesFromDirectoryRecursive {
+    # Uses `self` as the scope to `callPackage` everything in `./pkgs`.
     callPackage = self.callPackage;
     directory = ./pkgs;
   };
@@ -35,10 +41,14 @@ in lib.makeScope pkgs.newScope (self: let
   |> lib.filterAttrs (_: stdenv: let
     isStdenv = lib.isAttrs stdenv && stdenv ? mkDerivation;
     canInstantiate = stdenv.outPath != null;
-  in lib'.tryResOr (builtins.tryEval (isStdenv && canInstantiate)) false);
+  in lib.tryResOr (tryEval (isStdenv && canInstantiate)) false);
 
 in discoveredPackages // {
-  lib = lib';
+
+  # Here is where our scope's `lib` actually comes from.
+  # It's already in scope as `lib` at this point, thanks to laziness,
+  # but this is where it's defined.
+  lib = pkgs.lib // import ./lib { lib = pkgs.lib; };
 
   # Equivalent to setting `config.fetchedSourceNameDefault` but just for this scope.
   repoRevToNameMaybe = lib.repoRevToName "full";
@@ -65,7 +75,7 @@ in discoveredPackages // {
 
   # For exploration purposes.
   availablePackages = let
-    isAvailable = lib'.isAvailableDerivation pkgs.stdenv.hostPlatform;
+    isAvailable = lib.isAvailableDerivation pkgs.stdenv.hostPlatform;
   in lib.filterAttrs (lib.const isAvailable) discoveredPackages;
 
   /** * An attrset of `pythonXYPackages`-like scopes in Nixpkgs,
