@@ -54,6 +54,75 @@
       "${lib.getLib drv}/lib/lib${name}${plat.extensions.staticLibrary}";
   };
 
+  importCall = functionOrFile: if lib.isFunction functionOrFile then
+    functionOrFile
+  else
+    import functionOrFile
+  ;
+
+  /** Invokes `scope.callPackage f explicitArgs`, but takes a callback
+   * to modify the result.
+   *
+   * - `f` is a `package.nix`-style function (or path to a function), whose
+   * call will be hooked.
+   *
+   * - `scope` is a "scope" attrset, whose `callPackage` attr will be used
+   * to hook and call `f`.
+   *
+   * - `explicitArgs` is an optional attrset used to add or override
+   * arguments from `scope`.
+   *
+   * - `hook` should be a function of the form `hook = f: args: …`.
+   * It is called with the same function `scope.callPackage` will call as `f`,
+   * and the arguments `scope.callPackage` will pass it as `args`.
+   */
+  hookCallPackage = {
+    f,
+    scope,
+    explicitArgs ? { },
+    hook,
+  }: let
+    # Create a function that callPackage will inspect as having the same arguments as `f`,
+    # but instead of returning what `f` returns, it'll call `hook` with the resolved function
+    # and the arguments that `scope.callPackage` would give it, and then return an attrset with
+    # `__hookResult` set to the return value of that hook call.
+    # After `scope.callPackage mirrored explicitArgs`, we'll get the attrset containing
+    # `__hookResult`, which will also have `.override` and `.overrideDerivation`, added
+    # by `lib.mkOverrideable`. We extract out `__hookResult` to bypass that mechanism.
+    # This is more robust than doing something like `removeAttrs`, since
+    # 1) `hook` could return something other than an attrset, and
+    # 2) `hook` could return an attrset that already *has* `.override`/`.overrideDerivation`.
+    mirrorFrom = importCall f;
+    applyHook = args: {
+      __hookResult = hook mirrorFrom args;
+    };
+    mirrored = lib.mirrorFunctionArgs mirrorFrom applyHook;
+  in (scope.callPackage mirrored explicitArgs).__hookResult;
+
+  /** Gets the "effective arguments" if `f` were called with `scope.callPackage f explicitArgs`. */
+  getCallPackageArgs = {
+    f,
+    scope,
+    explicitArgs ? { },
+  }: hookCallPackage {
+    inherit f scope explicitArgs;
+    hook = lib.const lib.id;
+  };
+
+  /** Calls `scope.callPackage f explicitArgs`, but bypasses `lib.mkOverrideable`.
+   * Unlike `autocallWith`, this uses the entire resolution logic from `scope`.
+   *
+   * That means that `scope` must be a *scope* attrset, with a `callPackage` attr.
+   */
+  cleanCallPackage = {
+    f,
+    scope,
+    explicitArgs ? { },
+  }: hookCallPackage {
+    inherit f scope explicitArgs;
+    hook = lib.id;
+  };
+
   # A reimplementation of lib.callPackageWith tht doesn't lib.mkOverrideable the result.
   autocallWith = import ./autocall-with.nix { inherit lib; };
 
@@ -130,6 +199,10 @@ in lib.makeExtensible (self: {
     tryResOr
     optionalDefault
     mkPlatformPredicates
+    importCall
+    hookCallPackage
+    getCallPackageArgs
+    cleanCallPackage
     callWith
     callWith'
     suffixName
