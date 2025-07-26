@@ -3,8 +3,10 @@
   newScope,
   makeSetupHook,
   rustPlatform,
+  clippy,
 }: lib.recurseIntoAttrs (lib.makeScope newScope (self: {
   # FIXME: does that lib.recurseIntoAttrs do anything?
+  # 2025/06/18: yes it does! Tested with `nix search`.
 
   # Allow the rustPlatform used to make and re-export these hooks to be accessed as
   # `rustHooks.rustPlatform`.
@@ -30,6 +32,14 @@
   cargoDefaultsHook = makeSetupHook {
     name = "cargo-defaults-hook";
   } ./cargo-defaults-hook.sh;
+
+  /**
+    Arguments:
+      doCargoClippy: set to non-empty to run Clippy and fail the builder if there are Clippy lints.
+  */
+  cargoClippyPhase = makeSetupHook {
+    name = "cargo-clippy-hook";
+  } ./cargo-clippy-phase.sh;
 
   inherit (rustPlatform)
     cargoSetupHook
