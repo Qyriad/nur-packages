@@ -75,11 +75,10 @@ in discoveredPackages // {
    * At the time of this writing, that comes out to: pypy310, pypy311, python310,
    * python311, python312, python313, and python314.
    */
-  pythonScopes = _: pkgs.pythonInterpreters
-  |> lib.filterAttrs (name: _: lib.hasAttr "${name}Packages" pkgs)
-  |> lib.filterAttrs (_: py: lib'.tryResOr (tryEval (lib.isDerivation py)) false)
-  |> lib.filterAttrs (_: py: lib'.tryResOr (tryEval py.isPy3) false)
-  |> lib.mapAttrs (pyAttr: python: pkgs."${pyAttr}Packages");
+  pythonScopes = self.lib.cleanCallPackage {
+    f = ./helpers/python-scopes.nix;
+    scope = self;
+  };
 
   inherit validStdenvs;
 
