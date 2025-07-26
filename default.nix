@@ -16,13 +16,6 @@
     directory = ./pkgs;
   };
 
-  pythonScopes = pkgs.pythonInterpreters
-  |> lib.filterAttrs (name: python: let
-    res = builtins.tryEval (lib.isDerivation python && python.isPy3);
-    hasScope = lib.hasAttr "${name}Packages" pkgs;
-  in (lib'.tryResOr res false) && hasScope)
-  |> lib.mapAttrs (pyAttr: python: pkgs."${pyAttr}Packages");
-
   # TODO: static?
   validStdenvs = pkgs
   |> lib.filterAttrs (name: _: lib.strings.hasSuffix "Stdenv" name)
@@ -62,7 +55,19 @@ in discoveredPackages // {
     isAvailable = lib'.isAvailableDerivation pkgs.stdenv.hostPlatform;
   in lib.filterAttrs (lib.const isAvailable) discoveredPackages;
 
-  inherit pythonScopes;
+  /** * An attrset of `pythonXYPackages`-like scopes in Nixpkgs,
+   * (named without the `Packages` part)
+   * including only scopes that successfully evaluate.
+   *
+   * At the time of this writing, that comes out to: pypy310, pypy311, python310,
+   * python311, python312, python313, and python314.
+   */
+  pythonScopes = _: pkgs.pythonInterpreters
+  |> lib.filterAttrs (name: _: lib.hasAttr "${name}Packages" pkgs)
+  |> lib.filterAttrs (_: py: lib'.tryResOr (tryEval (lib.isDerivation py)) false)
+  |> lib.filterAttrs (_: py: lib'.tryResOr (tryEval py.isPy3) false)
+  |> lib.mapAttrs (pyAttr: python: pkgs."${pyAttr}Packages");
+
   inherit validStdenvs;
 
   mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
