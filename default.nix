@@ -1,7 +1,20 @@
 {
   pkgs ? import <nixpkgs> { config = import ./nixpkgs-config.nix; },
   lib ? pkgs.lib,
-}: lib.makeScope pkgs.newScope (self: let
+}: let
+  inherit (builtins) tryEval;
+
+  requireStructuredAttrs = name: drv:
+    lib.warnIf (drv.__structuredAttrs or false || drv.allowUnstructuredAttrs or false)
+      "missing structuredAttrs for package ${name} (${drv.name}})"
+    drv
+  ;
+
+  seqScopeAvailablePackages = f: scope: let
+    inherit (scope.packages scope) availablePackages;
+  in lib.seq (lib.mapAttrs f availablePackages) scope;
+
+in lib.makeScope pkgs.newScope (self: let
   # Make our recursive scope, which contains packages auto-discovered
   # from `./pkgs`, as well as our extended `lib`, meaning those will all be
   # usable in things `callPackage`d in this scope, and, since we're using
@@ -76,3 +89,6 @@ in discoveredPackages // {
   goHooks = self.callPackage ./helpers/go-hooks/package.nix { };
   rustHooks = self.callPackage ./helpers/rust-hooks/package.nix { };
 })
+# Final checks and lints.
+|> (scope: lib.deepSeq scope.nurLib scope)
+|> seqScopeAvailablePackages requireStructuredAttrs
