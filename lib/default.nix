@@ -188,6 +188,21 @@
     tried = tryLookupPath lookupPath;
   in if tried != null then tried else fallback;
 
+  /** Shortcut for `builtins.parseFlakeRef` into `builtins.fetchTree`.
+   *
+   * - `flakeRef` is a flakeref either in URL-like syntax or attrset representation.
+   * See `nix3-flake(1)` for what that means.
+   */
+  fetchFlakeRef = flakeRef: let
+    parsed = if lib.isStringLike flakeRef then
+      flakeRef
+      |> toString
+      |> builtins.parseFlakeRef
+    else if lib.isAttrs flakeRef then
+      flakeRef
+    else throw "fetchFlakeRef: invalid argument type ${typeOf flakeRef}";
+  in builtins.fetchTree parsed;
+
 in lib.makeExtensible (self: {
   inherit
     tryResOr
@@ -209,6 +224,7 @@ in lib.makeExtensible (self: {
     applyTo
     tryLookupPath
     lookupPathOr
+    fetchFlakeRef
   ;
   # pub use ./derivations.nix::*;
 } // import ./derivations.nix { inherit lib self; }
