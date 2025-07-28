@@ -188,16 +188,15 @@
     tried = tryLookupPath lookupPath;
   in if tried != null then tried else fallback;
 
-  /** Shortcut for `builtins.parseFlakeRef` into `builtins.fetchTree`.
+  /**
+   * Shortcut for `builtins.parseFlakeRef` into `builtins.fetchTree`.
    *
    * - `flakeRef` is a flakeref either in URL-like syntax or attrset representation.
    * See `nix3-flake(1)` for what that means.
    */
   fetchFlakeRef = flakeRef: let
     parsed = if lib.isStringLike flakeRef then
-      flakeRef
-      |> toString
-      |> builtins.parseFlakeRef
+      builtins.parseFlakeRef (toString flakeRef)
     else if lib.isAttrs flakeRef then
       flakeRef
     else throw "fetchFlakeRef: invalid argument type ${typeOf flakeRef}";
