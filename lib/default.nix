@@ -25,14 +25,8 @@
   /** Turns every isFoo predicate on a stdenv platform into a partial application of
    * of `optionalDefault`, with a name of the form `optionalFoo`.
    */
-  mkPlatformPredicates' = plat: let
-    platPredicates = lib.filterAttrs (lib.const startsWith "is") plat;
-  in lib.flip lib.mapAttrs' platPredicates (name: value: {
-    name = "optional${lib.removePrefix "is" name}";
-    value = optionalDefault value;
-  });
-
   mkPlatformPredicates = plat: let
+    # All the `hostPlatform.isLinux`-like attrs.
     platPredicates = lib.filterAttrs (lib.const startsWith "is") plat;
   in platPredicates |> lib.mapAttrs' (name: value: {
     name = "optional${lib.removePrefix "is" name}";
