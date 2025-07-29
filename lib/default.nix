@@ -1,10 +1,18 @@
 {
   lib ? import <nixpkgs/lib>,
-}: let
+}: lib.makeExtensible (self: let
+  inherit (builtins) typeOf;
 
-  inherit (lib) typeOf;
+  childExports = [
+    ./derivations.nix
+    ./fixed-points.nix
+  ]
+  |> lib.map (file: import file { inherit lib self; })
+  |> lib.mergeAttrsList;
 
+in childExports // {
   /** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
+   *
    * If the `tryEval` succeeded, return its value. Otherwise, return `fallback`.
    */
   tryResOr = { success, value }: fallback: if success then value else fallback;
@@ -27,10 +35,10 @@
    */
   mkPlatformPredicates = plat: let
     # All the `hostPlatform.isLinux`-like attrs.
-    platPredicates = lib.filterAttrs (lib.const startsWith "is") plat;
+    platPredicates = lib.filterAttrs (lib.const self.startsWith "is") plat;
   in platPredicates |> lib.mapAttrs' (name: value: {
     name = "optional${lib.removePrefix "is" name}";
-    value = optionalDefault value;
+    value = self.optionalDefault value;
   });
 
   mkPlatformGetters = plat: {
@@ -86,7 +94,7 @@
     # This is more robust than doing something like `removeAttrs`, since
     # 1) `hook` could return something other than an attrset, and
     # 2) `hook` could return an attrset that already *has* `.override`/`.overrideDerivation`.
-    mirrorFrom = importCall f;
+    mirrorFrom = self.importCall f;
     applyHook = args: {
       __hookResult = hook mirrorFrom args;
     };
@@ -98,7 +106,7 @@
     f,
     scope,
     explicitArgs ? { },
-  }: hookCallPackage {
+  }: self.hookCallPackage {
     inherit f scope explicitArgs;
     hook = lib.const lib.id;
   };
@@ -112,7 +120,7 @@
     f,
     scope,
     explicitArgs ? { },
-  }: hookCallPackage {
+  }: self.hookCallPackage {
     inherit f scope explicitArgs;
     hook = lib.id;
   };
@@ -121,14 +129,14 @@
   autocallWith = import ./autocall-with.nix { inherit lib; };
 
   # Autocall with no explicit args. Handy for inline destructring.
-  callWith' = from: f: autocallWith from f { };
+  callWith' = from: f: self.autocallWith from f { };
 
   # Autocall with no explicit args, from a list of attrsets.
   # Handy for inline destructuring.
   callWith = fromList: f: let
     foldAttrList = lib.foldl lib.mergeAttrs { };
     finalFrom = foldAttrList fromList;
-  in callWith' finalFrom f;
+  in self.callWith' finalFrom f;
 
   suffixName = pkg: suffix: "${pkg.pname}-${suffix}-${pkg.version}";
 
@@ -160,14 +168,14 @@
       acc ++ (f name value)
     ) [ ] attrset;
 
-  foldlAttrsToList' = lib.flip foldlAttrsToList;
+  foldlAttrsToList' = lib.flip self.foldlAttrsToList;
 
   /** Splat a list as function application arguments. */
   apply = argList: f:
     lib.foldl' (acc: item: acc item) f argList;
 
   /** Given a function to apply to, splat a list as application arguments. */
-  applyTo = f: argList: apply argList f;
+  applyTo = f: argList: self.apply argList f;
 
   foldToList = list: f: lib.foldl' f [ ] list;
 
@@ -179,13 +187,13 @@
     tried = builtins.tryEval (
       builtins.findFile builtins.nixPath lookupPath
     );
-  in tryResOr tried null;
+  in self.tryResOr tried null;
 
   /** Fallable alternative to <nixpkgs> syntax.
    * Returns the path if found, or `fallback` if not.
    */
   lookupPathOr = lookupPath: fallback: let
-    tried = tryLookupPath lookupPath;
+    tried = self.tryLookupPath lookupPath;
   in if tried != null then tried else fallback;
 
   /** Ensure a flakeref is in its attrset representation, converting a
@@ -203,38 +211,8 @@
    * - `flakeRef` is a flakeref either in URL-like syntax or attrset representation.
    * See `nix3-flake(1)` for what that means.
    */
-  fetchFlakeRef = flakeRef: let
-    parsed = if lib.isStringLike flakeRef then
-      builtins.parseFlakeRef (toString flakeRef)
-    else if lib.isAttrs flakeRef then
-      flakeRef
-    else throw "fetchFlakeRef: invalid argument type ${typeOf flakeRef}";
-  in builtins.fetchTree parsed;
-
-in lib.makeExtensible (self: {
-  inherit
-    tryResOr
-    optionalDefault
-    mkPlatformPredicates
-    importCall
-    hookCallPackage
-    getCallPackageArgs
-    cleanCallPackage
-    callWith
-    callWith'
-    suffixName
-    mkHeadFetch
-    joinPaths
-    mkPlatformGetters
-    foldlAttrsToList
-    foldlAttrsToList'
-    apply
-    applyTo
-    tryLookupPath
-    lookupPathOr
-    fetchFlakeRef
-  ;
-  # pub use ./derivations.nix::*;
-} // import ./derivations.nix { inherit lib self; }
-  // import ./fixed-points.nix { inherit lib self; }
-)
+  fetchFlakeRef = flakeRef: lib.pipe flakeRef [
+    self.explodeFlakeRef
+    builtins.fetchTree
+  ];
+})
