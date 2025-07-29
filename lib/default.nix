@@ -188,6 +188,15 @@
     tried = tryLookupPath lookupPath;
   in if tried != null then tried else fallback;
 
+  /** Ensure a flakeref is in its attrset representation, converting a
+   * URL-like flakeref to its attrset form if need be.
+   */
+  explodeFlakeRef = flakeRef: if lib.isStringLike flakeRef then
+    builtins.parseFlakeRef (toString flakeRef)
+  else if lib.isAttrs flakeRef then
+    flakeRef
+  else throw "normalizeFlakeRef: invalid argument type ${typeOf flakeRef}";
+
   /**
    * Shortcut for `builtins.parseFlakeRef` into `builtins.fetchTree`.
    *
