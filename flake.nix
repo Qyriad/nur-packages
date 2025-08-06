@@ -29,7 +29,10 @@
     packages = packages // {
       default = pkgs.linkFarmFromDrvs "qyriad-nur-all" (lib.attrValues packages);
     };
-    checks = self.packages.${system};
+
+    checks = {
+      packages = self.packages.${system}.default;
+    };
 
     # Everything, from user-facing packages to hooks to functions.
     legacyPackages = nurPackages;
