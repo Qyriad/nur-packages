@@ -14,4 +14,4 @@ function makeDylibsAbsolute()
 	)
 }
 
-postFixup+=(makeDylibsAbsolute)
+postFixupHooks+=(makeDylibsAbsolute)
