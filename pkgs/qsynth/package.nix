@@ -42,11 +42,9 @@
     pkg-config
   ];
 
-  inherit fluidsynth;
-
   buildInputs = [
     alsa-lib
-    self.fluidsynth
+    fluidsynth
     libjack2
     qtbase
     qttools
