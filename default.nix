@@ -15,6 +15,12 @@
     drv
   ;
 
+  requireStrictDeps = name: drv:
+    lib.warnIf (drv.strictDeps or false || drv.allowUnstrictDeps or false)
+      "missing strictDeps for package ${name} (${drv.name})"
+    drv
+  ;
+
   seqScopeAvailablePackagesImpl = f: scope: let
     inherit (scope.packages scope) availablePackages;
   in lib.seq (lib.mapAttrs f availablePackages) scope;
@@ -118,3 +124,4 @@ in discoveredPackages // {
 # Final checks and lints.
 |> (scope: lib.deepSeq scope.nurLib scope)
 |> seqScopeAvailablePackages requireStructuredAttrs
+|> seqScopeAvailablePackages requireStrictDeps
