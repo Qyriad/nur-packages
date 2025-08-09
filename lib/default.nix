@@ -217,4 +217,10 @@ in childExports // {
     self.explodeFlakeRef
     builtins.fetchTree
   ];
+
+  mkOptionalFeaturesDesc = {
+    ...
+  } @ attrs: attrs
+  |> lib.mapAttrsToList (name: value: if value != null then "with ${name}" else "without ${name}")
+  |> lib.concatStringsSep (", ");
 })
