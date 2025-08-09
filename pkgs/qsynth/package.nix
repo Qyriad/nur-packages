@@ -65,8 +65,27 @@
   # Works fine without.
   dontWrapQtApps = true;
 
+  # This should probably be in `meta` but Nixpkgs doesn't have a way to
+  # add more attributes that `config.checkMeta = true;` will recognize.
+  passthru.optionalFeatures = {
+    inherit
+      libsysprof-capture
+      libsndfile
+      pipewire
+      flac
+      libogg
+      libvorbis
+      libopus
+      libmpg123
+      libpulseaudio
+    ;
+  };
+
   meta = {
     description = "Fluidsynth GUI";
+    longDescription = self.finalPackage.meta.description
+    + "\n\nOptional features: "
+    + lib.mkOptionalFeaturesDesc self.finalPackage.optionalFeatures;
     mainProgram = "qsynth";
     homepage = "https://sourceforge.net/projects/qsynth";
     license = with lib.licenses; [ gpl2Plus] ;
