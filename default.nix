@@ -2,6 +2,11 @@
   pkgs ? import <nixpkgs> { config = import ./nixpkgs-config.nix; },
   lib ? pkgs.lib,
 }: let
+  # We take `lib` for overlay friendliness.
+  # If we are instantiated in a Nixpkgs overlay, then `pkgs` can be `final`,
+  # but we MUST have access to a `lib` from `prev` for some specific cases
+  # to avoid angering the infinite recursion gods.
+  passedLib = lib;
   inherit (builtins) tryEval;
 
   requireStructuredAttrs = name: drv:
@@ -10,9 +15,16 @@
     drv
   ;
 
-  seqScopeAvailablePackages = f: scope: let
+  seqScopeAvailablePackagesImpl = f: scope: let
     inherit (scope.packages scope) availablePackages;
   in lib.seq (lib.mapAttrs f availablePackages) scope;
+
+  # Overlay-friendliness.
+  seqScopeAvailablePackages = if pkgs ? qpkgs then (
+      lib.const lib.id
+  ) else (
+    seqScopeAvailablePackagesImpl
+  );
 
 in lib.makeScope pkgs.newScope (self: let
   # Make our recursive scope, which contains packages auto-discovered
@@ -27,9 +39,11 @@ in lib.makeScope pkgs.newScope (self: let
   # Note that this let-binding `lib` shadows `lib ? pkgs.lib` from above.
   inherit (self) lib;
 
-  # NOTE: this one has to be `pkgs.lib`, not `self.lib`, to not
+  # NOTE: this one has to be `passedLib`, not `self.lib`, to not
   # cause infinite recursion.
-  discoveredPackages = pkgs.lib.packagesFromDirectoryRecursive {
+  # Technically if we're not instantiated in an overlay then it could
+  # be `pkgs.lib`, but if `pkgs` is `final` then that too will blow up.
+  discoveredPackages = passedLib.packagesFromDirectoryRecursive {
     # Uses `self` as the scope to `callPackage` everything in `./pkgs`.
     callPackage = self.callPackage;
     directory = ./pkgs;
@@ -48,7 +62,11 @@ in discoveredPackages // {
   # Here is where our scope's `lib` actually comes from.
   # It's already in scope as `lib` at this point, thanks to laziness,
   # but this is where it's defined.
-  lib = pkgs.lib // import ./lib { lib = pkgs.lib; };
+  # This is also another case where we must use `prev.lib`.
+  lib = passedLib // self.nurLib;
+
+  # Same as `lib`, but *only* our additions.
+  nurLib = import ./lib { lib = passedLib; };
 
   # Equivalent to setting `config.fetchedSourceNameDefault` but just for this scope.
   repoRevToNameMaybe = lib.repoRevToName "full";
@@ -57,9 +75,6 @@ in discoveredPackages // {
   # Defined in terms of `fetchFromGitHub`.
   fetchFromGitea = self.callPackage pkgs.fetchFromGitea.override { };
   # TODO: override for other fetchers.
-
-  # For exploration purposes.
-  nurLib = import ./lib { inherit lib; };
 
   # For exploration purposes.
   helpers = {
