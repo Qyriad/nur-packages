@@ -64,6 +64,7 @@ in discoveredPackages // {
   # For exploration purposes.
   helpers = {
     inherit (self)
+      runCommandMinimal
       mkAbsoluteDylibsHook
       fetchGoModules
       goHooks
@@ -92,6 +93,7 @@ in discoveredPackages // {
 
   inherit validStdenvs;
 
+  runCommandMinimal = self.callPackage ./helpers/run-command-minimal.nix { };
   mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
 
   fetchGoModules = self.callPackage ./helpers/fetch-go-modules { };
