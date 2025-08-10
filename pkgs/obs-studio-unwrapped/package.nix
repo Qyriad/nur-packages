@@ -10,14 +10,15 @@
     getLibrary;
 in obs-studio.overrideAttrs (final: prev: {
   dontWrapQtApps = stdenv.hostPlatform.isLinux;
+  dontWrapGApps = true;
 
   absoluteDylibsHook = mkAbsoluteDylibsHook {
     inherit (final.finalPackage) name;
     runtimeDependenciesFor."$out/bin/obs" = [
-      (getLibrary libGL "libGL")
-      (getLibrary libvlc "libvlc")
+      (getLibrary libGL "GL")
+      (getLibrary libvlc "vlc")
       "$out/lib/libobs-opengl.so"
-      "$out/lib/obs-plugins-decklink.so"
+      "$out/lib/obs-plugins/decklink.so"
     ];
   };
 
