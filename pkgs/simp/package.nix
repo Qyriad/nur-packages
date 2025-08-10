@@ -63,7 +63,7 @@ in stdenv.mkDerivation (self: {
   absoluteDylibsHook = lib.optionalDrvAttr stdenv.isLinux (mkAbsoluteDylibsHook {
     inherit (self.finalPackage) name;
     # Wow, 7 months later and this is some of the wildest Nix code we've written.
-    runtimeDependenciesFor."$out/bin/simp" = map (lib.applyTo getLibrary) [
+    runtimeDependenciesFor."$out/bin/simp" = map (lib.splatTo getLibrary) [
       [ wayland "wayland-client" ]
       [ libxkbcommon "xkbcommon" ]
       [ libglvnd "GL" ]

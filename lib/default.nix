@@ -173,11 +173,10 @@ in childExports // {
   foldlAttrsToList' = lib.flip self.foldlAttrsToList;
 
   /** Splat a list as function application arguments. */
-  apply = argList: f:
-    lib.foldl' (acc: item: acc item) f argList;
+  splat = argList: f: lib.foldl' (acc: item: acc item) f argList;
 
   /** Given a function to apply to, splat a list as application arguments. */
-  applyTo = f: argList: self.apply argList f;
+  splatTo = f: argList: lib.foldl' (acc: item: acc item) f argList;
 
   foldToList = list: f: lib.foldl' f [ ] list;
 
