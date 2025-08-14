@@ -74,6 +74,12 @@ in discoveredPackages // {
   # Same as `lib`, but *only* our additions.
   nurLib = import ./lib { lib = passedLib; };
 
+  /** qpkgs stdlib, in contrast with `lib`, is for functions tied to `pkgs`. */
+  stdlib = import ./stdlib {
+    qpkgs = self;
+    inherit (self) lib;
+  };
+
   # Equivalent to setting `config.fetchedSourceNameDefault` but just for this scope.
   repoRevToNameMaybe = lib.repoRevToName "full";
   # Defined in terms of `repoRevToNameMaybe`.
