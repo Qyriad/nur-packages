@@ -56,6 +56,7 @@ in stdenv.mkDerivation (self: {
     description = "Analyze ELF binaries like a boss";
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit asl20 ];
+    platforms = lib.platforms.linux;
     mainProgram = "binsider";
   };
 }))
