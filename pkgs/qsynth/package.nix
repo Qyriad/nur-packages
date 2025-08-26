@@ -22,6 +22,7 @@
 }: lib.callWith' qt6Packages ({
   qtbase,
   qttools,
+  qtsvg,
 }: stdenv.mkDerivation (self: {
   pname = "qsynth";
   version = "1.0.3";
@@ -48,6 +49,7 @@
     libjack2
     qtbase
     qttools
+    qtsvg
     libsysprof-capture
     libsndfile
     pipewire
