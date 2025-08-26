@@ -44,11 +44,6 @@ in stdenv.mkDerivation (self: {
     cargo
   ];
 
-  buildInputs = optionalDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.IOKit
-  ];
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
