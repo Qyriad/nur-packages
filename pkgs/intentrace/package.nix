@@ -64,6 +64,7 @@ in stdenv.mkDerivation (self: {
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = lib.platforms.linux;
     mainProgram = "intentrace";
   };
 }))
