@@ -32,6 +32,9 @@ in childExports // {
       or (throw "no known lib.optional-type function for type: ${valueType}");
   in fn cond valueIfTrue;
 
+  /** Same as `lib.optionalDrvAttr` but a better name. */
+  orNull = cond: valueIfTrue: if cond then valueIfTrue else null;
+
   /** Turns every isFoo predicate on a stdenv platform into a partial application of
    * of `optionalDefault`, with a name of the form `optionalFoo`.
    */
