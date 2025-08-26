@@ -41,6 +41,6 @@
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ gpl2 ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    platforms = lib.platforms.all;
+    platforms = obs-studio.meta.platforms;
   };
 })
