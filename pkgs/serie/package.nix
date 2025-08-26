@@ -68,6 +68,8 @@ in stdenv.mkDerivation (self: {
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    # Technically it's rustc version we care about here but whatever.
+    broken = lib.versionOlder cargo.version "1.87.0";
     mainProgram = "serie";
   };
 }))
