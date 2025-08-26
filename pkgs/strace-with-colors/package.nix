@@ -1,15 +1,24 @@
 {
   strace,
-  fetchpatch2,
+  fetchFromGitHub,
 }:
 
 # Strace patched to have colored output.
 strace.overrideAttrs (final: prev: {
   # Based on the patch from https://github.com/xfgusta/strace-with-colors
-  colorPatch = fetchpatch2 {
-    url = "https://raw.githubusercontent.com/Qyriad/strace-with-colors/v6.3-2/strace-with-colors.patch";
-    hash = "sha256-PxzYx6BbiZfXgqlpQUWNugEvBulIXBHmo9eJp0+ylMI=";
+  colorPatches = fetchFromGitHub {
+    owner = "Qyriad";
+    repo = "strace-with-colors";
+    tag = "v6.16";
+    hash = "sha256-AqyafSyGnTB0qCP4PkGIhKi0jmQyr3y2FpCnZ5obpNw=";
   };
+
+  # Support NixOS 25.11 and 25.05.
+  # I'm going to regret this aren't I.
+  "colorPatch_6.15" = final.colorPatches + "/strace-with-colors_v6.15.patch";
+  "colorPatch_6.16" = final.colorPatches + "/strace-with-colors_v6.16.patch";
+  colorPatch = final."colorPatch_${final.version}";
+
   patches = prev.patches or [ ] ++ [ final.colorPatch ];
 
   passthru.allowUnstructuredAttrs = true;
