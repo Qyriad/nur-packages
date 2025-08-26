@@ -26,6 +26,8 @@ in stdenv.mkDerivation (self: {
   doCheck = true;
   doInstallCheck = true;
 
+  __darwinAllowLocalNetworking = self.finalPackage.doCheck;
+
   src = fetchFromGitHub {
     owner = "jacek-kurlit";
     repo = "pik";
