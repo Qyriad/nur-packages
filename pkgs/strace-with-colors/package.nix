@@ -1,4 +1,5 @@
 {
+  lib,
   strace,
   fetchFromGitHub,
 }:
@@ -17,7 +18,11 @@ strace.overrideAttrs (final: prev: {
   # I'm going to regret this aren't I.
   "colorPatch_6.15" = final.colorPatches + "/strace-with-colors_v6.15.patch";
   "colorPatch_6.16" = final.colorPatches + "/strace-with-colors_v6.16.patch";
-  colorPatch = final."colorPatch_${final.version}";
+  colorPatch = if lib.versionOlder final.version "6.16" then (
+    final."colorPatch_6.15"
+  ) else (
+    final."colorPatch_6.16"
+  );
 
   patches = prev.patches or [ ] ++ [ final.colorPatch ];
 
