@@ -109,9 +109,6 @@ in stdenv.mkDerivation (self: {
     gst-plugins-good'
     # Needed for playing video attachments with subtitles.
     gst-plugins-bad
-  ] ++ optionalDarwin [
-    darwin.DarwinTools
-    darwin.apple_sdk.frameworks.WebKit
   ];
 
   cinnyWeb = self.passthru.cinny-web;

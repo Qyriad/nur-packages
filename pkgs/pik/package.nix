@@ -49,11 +49,6 @@ in stdenv.mkDerivation (self: {
     DarwinTools
   ];
 
-  buildInputs = optionalDarwin [
-    libiconv
-    apple-sdk.IOKit
-  ];
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
