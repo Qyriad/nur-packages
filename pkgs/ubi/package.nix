@@ -76,6 +76,7 @@ in stdenv.mkDerivation (self: {
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit asl20 ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    broken = lib.versionOlder cargo.version "1.85";
     mainProgram = "ubi";
   };
 }))

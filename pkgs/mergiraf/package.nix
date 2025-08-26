@@ -68,6 +68,8 @@ in stdenv.mkDerivation (self: {
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ gpl3Only ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    # Rust 2024 edition was stablized in Rust 1.85.
+    broken = lib.versionOlder cargo.version "1.85.0";
     mainProgram = "mergiraf";
   };
 }))

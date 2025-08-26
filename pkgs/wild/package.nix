@@ -44,6 +44,8 @@
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit asl20 ];
     platforms = lib.platforms.linux;
+    # Rust 2024 edition was stablized in Rust 1.85.
+    broken = lib.versionOlder cargo.version "1.85.0";
     mainProgram = "wild";
   };
 }))
