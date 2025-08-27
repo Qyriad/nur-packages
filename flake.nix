@@ -12,41 +12,50 @@
       url = "github:NixOS/nixpkgs/release-24.11";
       flake = false;
     };
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = {
     self,
     nixpkgs,
-    flake-utils,
     nixpkgs-25_05,
     nixpkgs-24_11,
   }: let
     lib = import (nixpkgs + "/lib");
     nurLib = import ./lib { inherit lib; };
+    inherit (lib.systems) flakeExposed;
+    forAllSystems = lib.genAttrs flakeExposed;
+
+    genForNixpkgs = system: nixpkgs: let
+      pkgs = import nixpkgs { inherit system; config = import ./nixpkgs-config.nix; };
+      nurScope = import ./default.nix { inherit pkgs; };
+
+      # Get the packages without the scopeyness (.overrideScope, .callPackage, etc).
+      nurPackages = nurScope.packages nurScope;
+
+      # Just the user-facing packages, and only ones that are available on this platform.
+      packages = nurPackages.availablePackages;
+
+      farm = pkgs.linkFarmFromDrvs "qyriad-nur-all" (lib.attrValues packages);
+    in {
+      inherit nurPackages farm;
+      packages = packages // {
+        default = farm;
+      };
+    };
+
   in {
     # Export our 'nurLib' as a system-independent output.
     lib = nurLib;
-  } // flake-utils.lib.eachDefaultSystem (system: let
 
-    genForNixpkgs = system: nixpkgs: import ./flake-exports.nix {
-      inherit nixpkgs system;
-    };
+    packages = forAllSystems (system: (genForNixpkgs system nixpkgs).packages);
 
-    inherit (genForNixpkgs system nixpkgs) packages nurPackages farm;
+    # Everything, from user-facing packages to hooks to functions.
+    legacyPackages = forAllSystems (system: (genForNixpkgs system nixpkgs).nurPackages);
 
-  in {
-    packages = packages // {
-      default = farm;
-    };
-
-    checks = {
+    checks = forAllSystems (system: {
       packages = self.packages.${system}.default;
       nixpkgs-25_05 = (genForNixpkgs system nixpkgs-25_05).farm;
       nixpkgs-24_11 = (genForNixpkgs system nixpkgs-24_11).farm;
-    };
-
-    # Everything, from user-facing packages to hooks to functions.
-    legacyPackages = nurPackages;
-  });
+    });
+  };
 }
