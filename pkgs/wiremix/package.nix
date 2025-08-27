@@ -18,7 +18,7 @@
   stdenv = clangStdenv;
 in stdenv.mkDerivation (self: {
   pname = "wiremix";
-  version = "0.5.0";
+  version = "0.7.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -30,18 +30,21 @@ in stdenv.mkDerivation (self: {
     owner = "tsowell";
     repo = "wiremix";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-pEsN7GBPExf/zsCNzzSYjkyGDyOioWmpDFgJkYbrXMI=";
+    hash = "sha256-ppYYOonT/JN0w9U4Oh7lLIpoTovcTExZcnw1PeppP5U=";
   };
 
   cargoDeps = fetchCargoVendor {
-    name = "${self.finalPackage.pname}-cargo-deps-${self.finalPackage.version}";
+    name = lib.suffixName self "cargo-deps";
     inherit (self) src;
-    hash = "sha256-czhPbXkhuwUdwwP2uizU1Ob8t/x0nrJr3rquRO8Zktw=";
+    hash = "sha256-KdpWF6WVOJzKvSjCz+XdCSVxd465R8iOK3aFUnSczvU=";
   };
 
   env.LIBCLANG_PATH = (lib.getLib libclang) + "/lib";
 
   versionCheckProgramArg = "--version";
+
+  # https://docs.rs/vergen-git2/1.0.7/vergen_git2/index.html#environment-variables
+  env.VERGEN_GIT_DESCRIBE = "v${self.version}";
 
   nativeBuildInputs = rustHooks.asList ++ [
     cargo
