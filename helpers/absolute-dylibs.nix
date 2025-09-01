@@ -13,18 +13,22 @@
 }: let
   inherit (stdenvNoCC) hostPlatform;
 
-  runtimeDependenciesFor' = lib.flip lib.mapAttrs runtimeDependenciesFor (name: value:
-    assert lib.isList value;
-    lib.forEach value (item: assert lib.isString item; item)
-  );
+  hookName = "absolute-dylibs-hook-${name}";
 
-  patchDylib = patchTarget: dylibPath: if hostPlatform.isLinux then
-    "patchelf --add-needed \"${dylibPath}\" \"${patchTarget}\""
-  else if hostPlatform.isDarwin then
-    "install_name_tool -add_rpath \"${dylibPath}\" \"${patchTarget}\""
-  else
-    throw "mkAbsoluteDylibsHook: unimplemented platform '${hostPlatform.system}'"
-  ;
+  # Type check.
+  runtimeDependenciesFor' = runtimeDependenciesFor
+  |> lib.mapAttrs (name: value: assert lib.isList value; value)
+  |> lib.mapAttrs (name: lib.map (item: assert lib.isString item; item));
+
+  patchDylib = patchTarget: dylibPath: ''patchForDylib "${dylibPath}" "${patchTarget}"'';
+
+  patchCmd.linux = lib.trim ''
+    patchelf --add-needed "$1" "$2"
+  '';
+
+  patchCmd.darwin = lib.trim ''
+    install_name_tool -add_rpath "$1" "$2"
+  '';
 
   bodyLines = lib.foldlAttrsToList' runtimeDependenciesFor' (patchTarget: dylibPaths:
     assert lib.isString patchTarget;
@@ -33,9 +37,12 @@
   );
 
 in makeSetupHook {
-  name = "absolute-dylibs-hook-${name}";
+  name = hookName;
 
   substitutions = {
     body = lib.concatStringsSep "\n" bodyLines;
+    patchCmdBody = patchCmd.${hostPlatform.parsed.kernel.name};
+
+    inherit hookName;
   };
 } ./absolute-dylibs.sh)
