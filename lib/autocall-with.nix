@@ -43,13 +43,13 @@
     concatStringsSepWithLast = list: sep: lastSep:
       if list == [ ] then ""
       else if lib.length list == 1 then lib.head list
-      else (lib.concatStringsSep sep) + lastSep + (lib.last list);
+      else (lib.concatStringsSep sep list) + lastSep + (lib.last list);
 
     prettySuggestions = suggestions: let
       # Multiple quoted arguments in a row are really hard to visually differentiate.
       commaWithSpace = ", ";
       commaWithConjunction = ", or";
-      concatenated = concatStringsSepWithLast commaWithSpace commaWithConjunction suggestions;
+      concatenated = concatStringsSepWithLast suggestions commaWithSpace commaWithConjunction;
     in lib.optionalString (suggestions != [ ]) ", did you mean ${concatenated}?";
 
     errorForArgName = arg: let
