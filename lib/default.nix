@@ -35,6 +35,9 @@ in childExports // {
   /** Same as `lib.optionalDrvAttr` but a better name. */
   orNull = cond: valueIfTrue: if cond then valueIfTrue else null;
 
+  /** Convert a boolean to a string, using the strings "yes" and "no" */
+  boolToYesNo = b: if b then "yes" else "no";
+
   /** Turns every isFoo predicate on a stdenv platform into a partial application of
    * of `optionalDefault`, with a name of the form `optionalFoo`.
    */
