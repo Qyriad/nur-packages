@@ -7,4 +7,6 @@
 }: lib.makeExtensible (self: {
   # FIXME: can we hack something to make `meta.position` work?
   mkSimpleEnv = qpkgs.callPackage ./mk-simple-env { };
+
+  mkStdenvPretty = qpkgs.callPackage ./mk-stdenv-pretty { };
 })

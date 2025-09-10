@@ -63,7 +63,9 @@ in lib.makeScope pkgs.newScope (self: let
     canInstantiate = stdenv.outPath != null;
   in lib.tryResOr (tryEval (isStdenv && canInstantiate)) false);
 
-in discoveredPackages // {
+  mkPretty = pkg: if pkg ? overrideAttrs then self.stdlib.mkStdenvPretty pkg else pkg;
+
+in (passedLib.mapDerivationAttrset mkPretty discoveredPackages) // {
 
   # Here is where our scope's `lib` actually comes from.
   # It's already in scope as `lib` at this point, thanks to laziness,
