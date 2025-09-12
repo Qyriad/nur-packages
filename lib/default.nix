@@ -11,6 +11,8 @@
   |> lib.mergeAttrsList;
 
 in childExports // {
+  ansi = import ./ansi.nix { inherit lib self; };
+
   /** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
    *
    * If the `tryEval` succeeded, return its value. Otherwise, return `fallback`.
