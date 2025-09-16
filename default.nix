@@ -128,6 +128,8 @@ in (passedLib.mapDerivationAttrset mkPretty discoveredPackages) // {
   fetchGoModules = self.callPackage ./helpers/fetch-go-modules { };
   goHooks = self.callPackage ./helpers/go-hooks/package.nix { };
   rustHooks = self.callPackage ./helpers/rust-hooks/package.nix { };
+  # Experimental.
+  pythonHooks = self.callPackage ./helpers/python-hooks/package.nix { };
 })
 # Final checks and lints.
 |> (scope: lib.deepSeq scope.nurLib scope)
