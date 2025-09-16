@@ -40,6 +40,16 @@ in childExports // {
   /** Convert a boolean to a string, using the strings "yes" and "no" */
   boolToYesNo = b: if b then "yes" else "no";
 
+  attrCount = attrs: attrs |> lib.attrNames |> lib.length;
+
+  /** Extract an attrset of the form { inherit foo; type = bar; } */
+  unpackTypedPair = { type, ... } @ attrs: assert self.attrCount attrs == 2; let
+    withoutType = lib.removeAttrs attrs [ "type" ];
+    value = lib.attrsToList withoutType |> lib.head;
+  in {
+    inherit type value;
+  };
+
   /** Turns every isFoo predicate on a stdenv platform into a partial application of
    * of `optionalDefault`, with a name of the form `optionalFoo`.
    */
