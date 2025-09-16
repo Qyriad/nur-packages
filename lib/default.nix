@@ -190,6 +190,9 @@ in childExports // {
 
   foldlAttrsToList' = lib.flip self.foldlAttrsToList;
 
+  # FIXME: this really needs a better name.
+  concatMapAttrsToAttrs = f: attrs: lib.concatMap f (lib.attrsToList attrs) |> lib.listToAttrs;
+
   /** Splat a list as function application arguments. */
   splat = argList: f: lib.foldl' (acc: item: acc item) f argList;
 
