@@ -1,16 +1,5 @@
 #!/usr/bin/env bash
 
-export ANSI_BOLD="$(printf "\e[1m")"
-export ANSI_FAINT="$(printf "\e[2m")"
-export ANSI_ITALIC="$(printf "\e[3m")"
-export ANSI_RESET="$(printf "\e[0m")"
-export ANSI_RED="$(printf "\e[31m")"
-export ANSI_GREEN="$(printf "\e[32m")"
-export ANSI_YELLOW="$(printf "\e[33m")"
-export ANSI_BLUE="$(printf "\e[34m")"
-export ANSI_MAGENTA="$(printf "\e[35m")"
-export ANSI_CYAN="$(printf "\e[36m")"
-
 function hlBash()
 {
 	if ! command -v "bat" >/dev/null 2>&1; then
