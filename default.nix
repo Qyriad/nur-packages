@@ -53,7 +53,8 @@ in lib.makeScope pkgs.newScope (self: let
     # Uses `self` as the scope to `callPackage` everything in `./pkgs`.
     callPackage = self.callPackage;
     directory = ./pkgs;
-  };
+  }
+  |> passedLib.mapDerivationAttrset mkPretty;
 
   # TODO: static?
   validStdenvs = pkgs
@@ -65,7 +66,7 @@ in lib.makeScope pkgs.newScope (self: let
 
   mkPretty = pkg: if pkg ? overrideAttrs then self.stdlib.mkStdenvPretty pkg else pkg;
 
-in (passedLib.mapDerivationAttrset mkPretty discoveredPackages) // {
+in discoveredPackages // {
 
   # Here is where our scope's `lib` actually comes from.
   # It's already in scope as `lib` at this point, thanks to laziness,
