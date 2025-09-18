@@ -16,7 +16,7 @@
   ;
 in stdenv.mkDerivation (self: {
   pname = "obs-cmd";
-  version = "0.18.4";
+  version = "0.19.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -26,13 +26,13 @@ in stdenv.mkDerivation (self: {
     owner = "grigio";
     repo = "obs-cmd";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-/LgQqxZqxbE8hgip+yl8VVjiRYD+6AblKag2MQo1gDs=";
+    hash = "sha256-a7GUv14iJLrgXu6y5uJalD1cx723aIlPLDPOOoemtIY=";
   };
 
   cargoDeps = fetchCargoVendor {
     name = lib.suffixName self "cargo-deps";
     inherit (self) src;
-    hash = "sha256-ZKHm6N7y5FbDFiK2QfQ+9siexgzrdLpBs5Xikh1SRLo=";
+    hash = "sha256-ZWVNLI900SZhXLMV2/v3WT2eqv+4XofpIgm/f/0eE+U=";
   };
 
   nativeBuildInputs = rustHooks.asList ++ [
@@ -64,6 +64,8 @@ in stdenv.mkDerivation (self: {
     maintainers = with lib.maintainers; [ qyriad ];
     license = with lib.licenses; [ mit ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    # Per their MSRV.
+    broken = lib.versionOlder cargo.version "1.88.0";
     mainProgram = "obs-cmd";
   };
 }))
