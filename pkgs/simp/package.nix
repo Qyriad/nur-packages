@@ -102,5 +102,6 @@ in stdenv.mkDerivation (self: {
 
   meta = {
     mainProgram = "simp";
+    broken = true;
   };
 }))
