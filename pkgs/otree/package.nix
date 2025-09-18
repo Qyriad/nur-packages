@@ -2,20 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  darwin,
   rustPlatform,
   rustHooks,
   cargo,
-  libiconv,
   nix-update-script,
   versionCheckHook,
 }: lib.callWith' rustPlatform ({
   fetchCargoVendor,
-}: let
-  inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
-    optionalDarwin
-  ;
-in stdenv.mkDerivation (self: {
+}: stdenv.mkDerivation (self: {
   pname = "otree";
   version = "0.6.1";
 
