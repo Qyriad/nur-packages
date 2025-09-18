@@ -17,7 +17,7 @@
   ;
 in stdenv.mkDerivation (self: {
   pname = "otree";
-  version = "0.4.0";
+  version = "0.6.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -29,13 +29,13 @@ in stdenv.mkDerivation (self: {
     owner = "fioncat";
     repo = "otree";
     rev = "refs/tags/v${self.version}";
-    hash = "sha256-1p7Iep61m0mtaSiBj1T9d/wwzVGzXYOvbPv8isjhwjM=";
+    hash = "sha256-a160Mi0VZesU3PQOKrgiN/5yxx82xHtjcMazH5o0LJs=";
   };
 
   cargoDeps = fetchCargoVendor {
     inherit (self) src;
     name = "${self.finalPackage.name}-cargo-deps";
-    hash = "sha256-xHy6/zx5V51KOM+Hxmumr9o0hcO9tTlG1DJdfBrYSmE=";
+    hash = "sha256-ZubL48hXyrBg9K64GsLmRZgdFhDWYbYNH2PhwE9qAQ4=";
   };
 
   versionCheckProgramArg = "--version";
