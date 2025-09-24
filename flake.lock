@@ -37,11 +37,11 @@
     "nixpkgs-25_05": {
       "flake": false,
       "locked": {
-        "lastModified": 1758518877,
-        "narHash": "sha256-1K1c6vNr/N1PfM77DqKINXQ/oCxA0W1ZJ80sfNzWu0w=",
+        "lastModified": 1758704479,
+        "narHash": "sha256-lJMRNSucAKYYD13Est3wsEbFh4kMK4DSLFAZEI4GgG8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "033cc13ab4c1a60b3527b242755aa625001ff1f9",
+        "rev": "94e795c07e739e74e43b5d1ee0bd6b9f529ef04c",
         "type": "github"
       },
       "original": {
