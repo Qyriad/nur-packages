@@ -1,5 +1,8 @@
 {
-  pkgs ? import <nixpkgs> { config = import ./nixpkgs-config.nix; },
+  pkgs ? import <nixpkgs> {
+    config = import ./nixpkgs-config.nix // config;
+  },
+  config ? { },
   lib ? pkgs.lib,
 }: let
   # We take `lib` for overlay friendliness.
