@@ -32,7 +32,30 @@
     seqScopeAvailablePackagesImpl
   );
 
-in lib.makeScope pkgs.newScope (self: let
+  /** qpkgs.python3Packages will only be the packages we've added, but
+   * in qpkgs.callPackage ({ python3Packages }: …), `python3Packages` will
+   * be (roughly) `pkgs.python3Packages // qpkgs.python3Packages`.
+   */
+  newMixedScope = autocallFrom: fnToCall: let
+    python3Packages = pkgs.python3Packages.overrideScope (pyFinal: pyPrev:
+      autocallFrom.python3Packages
+    );
+  in lib.callPackageWith (pkgs // autocallFrom // {
+    inherit python3Packages;
+  }) fnToCall;
+
+  mkPyScope = parentScope: f: let
+    parentPackages = parentScope.packages parentScope;
+    selfPyPackages = pkgs.python3Packages // parentPackages.python3Packages // self;
+    self = f self // {
+      newScope = scope: parentScope.newScope (self // scope);
+      callPackage = lib.callPackageWith (pkgs // parentPackages // selfPyPackages);
+      overrideScope = g: mkPyScope parentScope.newScope (passedLib.extends g f);
+      packages = f;
+    };
+  in self;
+
+in lib.makeScope newMixedScope (self: let
   # Make our recursive scope, which contains packages auto-discovered
   # from `./pkgs`, as well as our extended `lib`, meaning those will all be
   # usable in things `callPackage`d in this scope, and, since we're using
@@ -82,6 +105,12 @@ in discoveredPackages // {
     qpkgs = self;
     inherit (self) lib;
   };
+
+  /** A child scope for Python packages. */
+  python3Packages = mkPyScope self (pySelf: passedLib.packagesFromDirectoryRecursive {
+    callPackage = pySelf.callPackage;
+    directory = ./py3pkgs;
+  });
 
   # Equivalent to setting `config.fetchedSourceNameDefault` but just for this scope.
   repoRevToNameMaybe = lib.repoRevToName "full";

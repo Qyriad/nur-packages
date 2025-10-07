@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pythonHooks,
   python3,
-  python3Packages,
-}: lib.callWith' python3Packages ({
   httpx,
   colour,
   pytz,
@@ -39,4 +37,4 @@ in stdenv.mkDerivation (self: {
     maintainers = with lib.maintainers; [ qyriad ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
-}))
+})
