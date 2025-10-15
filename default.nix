@@ -75,7 +75,7 @@ in discoveredPackages // {
   # It's already in scope as `lib` at this point, thanks to laziness,
   # but this is where it's defined.
   # This is also another case where we must use `prev.lib`.
-  lib = passedLib // self.nurLib;
+  lib = passedLib.extend (final: prev: self.nurLib);
 
   # Same as `lib`, but *only* our additions.
   nurLib = import ./lib { lib = passedLib; };
