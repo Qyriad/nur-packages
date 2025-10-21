@@ -69,7 +69,8 @@ in stdenv.mkDerivation (self: {
     license = with lib.licenses; [ gpl3Only ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     # Rust 2024 edition was stablized in Rust 1.85.
-    broken = lib.versionOlder cargo.version "1.85.0";
+    # `let` expressions were stablized in Rust 1.88.
+    broken = lib.versionOlder cargo.version "1.88.0";
     mainProgram = "mergiraf";
   };
 }))
