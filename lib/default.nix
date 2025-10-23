@@ -6,6 +6,7 @@
   childExports = [
     ./derivations.nix
     ./fixed-points.nix
+    ./override-attrs.nix
   ]
   |> lib.map (file: import file { inherit lib self; })
   |> lib.mergeAttrsList;

@@ -57,7 +57,8 @@ in lib.makeScope pkgs.newScope (self: let
     callPackage = self.callPackage;
     directory = ./pkgs;
   }
-  |> passedLib.mapDerivationAttrset mkPretty;
+  |> passedLib.mapDerivationAttrset mkPretty
+  |> passedLib.mapAttrs lib.maybeAppendAttrPath;
 
   # TODO: static?
   validStdenvs = pkgs
@@ -110,7 +111,9 @@ in discoveredPackages // {
   # For exploration purposes.
   availablePackages = let
     isAvailable = lib.isAvailableDerivation pkgs.stdenv.hostPlatform;
-  in lib.filterAttrs (lib.const isAvailable) discoveredPackages;
+  in discoveredPackages
+  |> lib.mapAttrs (_: lib.maybePrependAttrPath "availablePackages")
+  |> lib.filterAttrs (lib.const isAvailable);
 
   /** * An attrset of `pythonXYPackages`-like scopes in Nixpkgs,
    * (named without the `Packages` part)
