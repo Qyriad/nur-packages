@@ -7,8 +7,5 @@
   warnUndeclaredOptions = false;
   allowAliases = false;
   checkMeta = true;
-  permittedInsecurePackages = [
-    "libsoup-2.74.3"
-  ];
   allowUnfree = true;
 }
