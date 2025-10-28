@@ -26,6 +26,5 @@ in pkg: pkg.overrideAttrs (prev: {
 
   postHook = assert !(prev ? postHook); ''
     source "${./post-hook.sh}"
-    NIX_DEBUG=4
   '';
 })

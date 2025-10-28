@@ -17,7 +17,7 @@ function showPhaseHeader()
 		local phasePart
 		phasePart="'${ANSI_CYAN}$realPhase${ANSI_RESET}${ANSI_FAINT}'"
 		fullMsg="$prefixPart${ANSI_RESET}$phasePart${ANSI_RESET}"
-		
+
 	else
 		realPhase="$phase"
 		logCmd="nixTalkativeLog"
@@ -50,3 +50,7 @@ showPhaseFooter()
 	(( M > 0 )) && echo -n "$M minutes "
 	echo "$S seconds"
 }
+
+if [[ -z "${NIX_DEBUG:-}" ]]; then
+	NIX_DEBUG=4
+fi
