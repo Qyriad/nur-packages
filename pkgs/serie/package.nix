@@ -1,75 +1,75 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustHooks,
-  rustPlatform,
-  cargo,
-  libiconv,
-  testers,
-  git,
+	lib,
+	stdenv,
+	fetchFromGitHub,
+	rustHooks,
+	rustPlatform,
+	cargo,
+	libiconv,
+	testers,
+	git,
 }: lib.callWith' rustPlatform ({
-  fetchCargoVendor,
-  importCargoLock,
+	fetchCargoVendor,
+	importCargoLock,
 }: let
-  inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
-    optionalDarwin
-  ;
+	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
+		optionalDarwin
+	;
 in stdenv.mkDerivation (self: {
-  pname = "serie";
-  version = "0.4.7";
+	pname = "serie";
+	version = "0.4.7";
 
-  strictDeps = true;
-  __structuredAttrs = true;
-  doCheck = true;
+	strictDeps = true;
+	__structuredAttrs = true;
+	doCheck = true;
 
-  src = fetchFromGitHub {
-    owner = "lusingander";
-    repo = "serie";
-    rev = "refs/tags/v${self.version}";
-    hash = "sha256-BzawNeRdZ6YfjHwnGzKTJYc6mmRBOADGo86ebKY3xbo=";
-  };
+	src = fetchFromGitHub {
+		owner = "lusingander";
+		repo = "serie";
+		rev = "refs/tags/v${self.version}";
+		hash = "sha256-BzawNeRdZ6YfjHwnGzKTJYc6mmRBOADGo86ebKY3xbo=";
+	};
 
-  cargoDeps = fetchCargoVendor {
-    name = "${self.finalPackage.name}-cargo-deps";
-    inherit (self) src;
-    hash = "sha256-UpJoNfDPugcPXkJR/zBslemnzaA54Mt1Q1BZerryQSs=";
-  };
+	cargoDeps = fetchCargoVendor {
+		name = "${self.finalPackage.name}-cargo-deps";
+		inherit (self) src;
+		hash = "sha256-UpJoNfDPugcPXkJR/zBslemnzaA54Mt1Q1BZerryQSs=";
+	};
 
-  nativeBuildInputs = rustHooks.asList ++ [
-    cargo
-  ];
+	nativeBuildInputs = rustHooks.asList ++ [
+		cargo
+	];
 
-  nativeCheckInputs = [
-    git
-  ];
+	nativeCheckInputs = [
+		git
+	];
 
-  buildInputs = optionalDarwin [
-    libiconv
-  ];
+	buildInputs = optionalDarwin [
+		libiconv
+	];
 
-  passthru = {
-    tests.version = testers.testVersion { package = self.finalPackage; };
-    fromHead = lib.mkHeadFetch {
-      self = self.finalPackage;
-      headRef = "master";
-      extraAttrs = self: {
-        cargoDeps = importCargoLock {
-          lockFile = self.src + "/Cargo.lock";
-          allowBuiltinFetchGit = true;
-        };
-      };
-    };
-  };
+	passthru = {
+		tests.version = testers.testVersion { package = self.finalPackage; };
+		fromHead = lib.mkHeadFetch {
+			self = self.finalPackage;
+			headRef = "master";
+			extraAttrs = self: {
+				cargoDeps = importCargoLock {
+					lockFile = self.src + "/Cargo.lock";
+					allowBuiltinFetchGit = true;
+				};
+			};
+		};
+	};
 
-  meta = {
-    homepage = "https://github.com/lusingander/serie";
-    description = "A rich git commit graph in your terminal, like magic 📚";
-    maintainers = with lib.maintainers; [ qyriad ];
-    license = with lib.licenses; [ mit ];
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    # Technically it's rustc version we care about here but whatever.
-    broken = lib.versionOlder cargo.version "1.87.0";
-    mainProgram = "serie";
-  };
+	meta = {
+		homepage = "https://github.com/lusingander/serie";
+		description = "A rich git commit graph in your terminal, like magic 📚";
+		maintainers = with lib.maintainers; [ qyriad ];
+		license = with lib.licenses; [ mit ];
+		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		# Technically it's rustc version we care about here but whatever.
+		broken = lib.versionOlder cargo.version "1.87.0";
+		mainProgram = "serie";
+	};
 }))

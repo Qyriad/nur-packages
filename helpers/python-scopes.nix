@@ -1,9 +1,9 @@
 {
-  pkgs,
-  lib,
-  pythonInterpreters,
+	pkgs,
+	lib,
+	pythonInterpreters,
 }: let
-  inherit (builtins) tryEval;
+	inherit (builtins) tryEval;
 in pythonInterpreters
 |> lib.filterAttrs (name: _: lib.hasAttr "${name}Packages" pkgs)
 |> lib.filterAttrs (_: py: lib.tryResOr (tryEval (lib.isDerivation py)) false)

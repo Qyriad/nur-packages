@@ -1,66 +1,66 @@
 {
-  stdenvNoCC,
-  lib,
-  go,
-  git,
-  cacert,
+	stdenvNoCC,
+	lib,
+	go,
+	git,
+	cacert,
 }: ({
-  name,
-  src,
-  hash,
-  GO111MODULE ? "on",
-  GOTOOLCHAIN ? "local",
-  deleteVendor ? false,
-  drvAttrs ? { },
+	name,
+	src,
+	hash,
+	GO111MODULE ? "on",
+	GOTOOLCHAIN ? "local",
+	deleteVendor ? false,
+	drvAttrs ? { },
 }: stdenvNoCC.mkDerivation (self: {
-  name = "${name}-go-modules";
+	name = "${name}-go-modules";
 
-  strictDeps = true;
-  __structuredAttrs = true;
+	strictDeps = true;
+	__structuredAttrs = true;
 
-  inherit src;
+	inherit src;
 
-  inherit deleteVendor;
+	inherit deleteVendor;
 
-  env = {
-    inherit (go) GOOS GOARCH;
-    inherit GO111MODULE GOTOOLCHAIN;
-  };
+	env = {
+		inherit (go) GOOS GOARCH;
+		inherit GO111MODULE GOTOOLCHAIN;
+	};
 
-  nativeBuildInputs = [
-    # Sets buildPhase for us.
-    ./build-phase.sh
-    go
-    git
-    cacert
-  ];
+	nativeBuildInputs = [
+		# Sets buildPhase for us.
+		./build-phase.sh
+		go
+		git
+		cacert
+	];
 
-  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND"
-    "SOCKS_SERVER"
-    "GOPROXY"
-  ];
+	impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+		"GIT_PROXY_COMMAND"
+		"SOCKS_SERVER"
+		"GOPROXY"
+	];
 
-  configurePhase = ''
-    runHook preConfigure
+	configurePhase = ''
+		runHook preConfigure
 
-    export GOCACHE="$TMPDIR/go-cache"
-    export GOPATH="$TMPDIR/go"
+		export GOCACHE="$TMPDIR/go-cache"
+		export GOPATH="$TMPDIR/go"
 
-    runHook postConfigure
-  '';
+		runHook postConfigure
+	'';
 
-  installPhase = ''
-    runHook preInstall
+	installPhase = ''
+		runHook preInstall
 
-    cp -r --reflink=auto vendor "$out"
+		cp -r --reflink=auto vendor "$out"
 
-    runHook postInstall
-  '';
+		runHook postInstall
+	'';
 
-  dontFixup = true;
+	dontFixup = true;
 
-  outputHashMode = "recursive";
-  outputHash = hash;
-  outputHashAlgo = if self.outputHash == "" then "sha256" else null;
+	outputHashMode = "recursive";
+	outputHash = hash;
+	outputHashAlgo = if self.outputHash == "" then "sha256" else null;
 } // drvAttrs))
