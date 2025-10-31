@@ -10,7 +10,7 @@
 	qt6Packages,
 }: stdenv.mkDerivation (self: {
 	pname = "obs-chapter-marker-manager";
-	version = "1.1.0";
+	version = "1.2.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -19,7 +19,7 @@
 		owner = "StreamUPTips";
 		repo = "obs-chapter-marker-manager";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-qQSRWLpgJ/IFaBxGzRh9QMA+TXAmVJTOTTcDajQ4/gQ=";
+		hash = "sha256-IDhGiSm1lVADsCRKWYlK62ad6rTapE/W5UMXm/gu+D8=";
 	};
 
 	nativeBuildInputs = [
