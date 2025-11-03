@@ -1,0 +1,27 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4cf65ea..fb07519 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -20,21 +20,21 @@ target_link_libraries(${PROJECT_NAME} PRIVATE OBS::libobs)
+ 
+ if(BUILD_OUT_OF_TREE)
+   find_package(libobs REQUIRED)
+   find_package(obs-frontend-api REQUIRED)
+   target_link_libraries(${PROJECT_NAME} PRIVATE OBS::obs-frontend-api)
+ else()
+   target_link_libraries(${PROJECT_NAME} PRIVATE OBS::frontend-api)
+ endif()
+ 
+ # Qt
+-find_package(Qt6 COMPONENTS Widgets Core)
++find_package(Qt6 COMPONENTS Widgets Core GuiPrivate)
+ if(BUILD_OUT_OF_TREE)
+   if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
+     find_package(Qt6 REQUIRED Gui)
+   endif()
+ endif()
+ target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core Qt::Widgets)
+ 
+ # CURL
+ find_package(CURL REQUIRED)
+ target_link_libraries(${PROJECT_NAME} PRIVATE CURL::libcurl)

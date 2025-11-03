@@ -22,6 +22,11 @@
 		hash = "sha256-IDhGiSm1lVADsCRKWYlK62ad6rTapE/W5UMXm/gu+D8=";
 	};
 
+	# Qt 6.10 requires find_package(Qt6 COMPONENTS GuiPrivate) to target_link_library(Qt::GuiPrivate).
+	patches = lib.optionals (lib.versionAtLeast "6.10.0" qt6Packages.qtbase.version) [
+		./gui-private-qt6.patch
+	];
+
 	nativeBuildInputs = [
 		qt6Packages.wrapQtAppsHook
 		cmake
