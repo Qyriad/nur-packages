@@ -1,10 +1,34 @@
+let
+	allowedModes = [
+		"pkgs"
+		"lib"
+	];
+in
 {
-	pkgs ? import <nixpkgs> {
-		config = import ./nixpkgs-config.nix // config;
-	},
+	/** Cursed: allow `import qyriad-nur { mode = "lib"; }` to get merged lib.
+	 * This is purely because I'm lazy and `lib // (import (qyriad-nur + "/lib") { inherit lib; })`
+	 * is ugly as sin.
+	 */
+	mode ? "pkgs",
+
+	pkgs ? if mode != "pkgs" then null else (
+		import <nixpkgs> {
+			config = import ./nixpkgs-config.nix // config;
+		}
+	),
+
 	config ? { },
-	lib ? pkgs.lib,
-}: let
+	lib ? (
+		if pkgs != null then (
+			pkgs.lib
+		) else (
+			import <nixpkgs/lib>
+		)
+	),
+
+}: assert builtins.elem mode allowedModes; if mode == "lib" then (
+	lib.extend (final: prev: import ./lib { inherit lib; })
+) else let
 	# We take `lib` for overlay friendliness.
 	# If we are instantiated in a Nixpkgs overlay, then `pkgs` can be `final`,
 	# but we MUST have access to a `lib` from `prev` for some specific cases
