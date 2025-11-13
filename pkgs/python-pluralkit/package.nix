@@ -13,7 +13,7 @@
 	stdenv = stdenvNoCC;
 in stdenv.mkDerivation (self: {
 	pname = "python-pluralkit";
-	version = "1.2.1";
+	version = "1.0.0";
 
 	outputs = [ "out" "dist" ];
 
