@@ -18,7 +18,7 @@
 	;
 in stdenv.mkDerivation (self: {
 	pname = "pik";
-	version = "0.25.0";
+	version = "0.27.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -32,13 +32,13 @@ in stdenv.mkDerivation (self: {
 		owner = "jacek-kurlit";
 		repo = "pik";
 		rev = "refs/tags/${self.version}";
-		hash = "sha256-3ZYABdrODJJ9RUlhL7mIu/py3GCIFG3AUXQuol7o1Zs=";
+		hash = "sha256-qpIMm6ivt+v+Un+F03cCtUYMX2dxN/jVGKeCMA20294=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-333MHDuHYKlTUXSm2C19ZRPXeEGDxbQEImdsleUt1QU=";
+		hash = "sha256-ugoXWn2ybdF/HbKqqUQWfNLqtxMdANTn3qnooOYLDKI=";
 	};
 
 	versionCheckProgramArg = "--version";
