@@ -13,7 +13,7 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
 in stdenv.mkDerivation (self: {
 	pname = "usage";
-	version = "2.0.5";
+	version = "2.8.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -22,13 +22,13 @@ in stdenv.mkDerivation (self: {
 		owner = "jdx";
 		repo = "usage";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-No/BDBW/NRnF81UOuAMrAs4cXEdzEAxnmkn67mReUcM=";
+		hash = "sha256-/yDypNQdw6YS1M8YtwjdFyG8Lfh3wKkvVWyH2b/G65o=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-W/CuXzwacarxgVv12TMVfo7Fr9qKJ7aZIO8xf4SygNA=";
+		hash = "sha256-3tSMgTVmoiME/wWE8uHZEjnfeS8Hqbm0DeUaWNgN944=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
@@ -51,6 +51,8 @@ in stdenv.mkDerivation (self: {
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		platforms = lib.platforms.all;
+		# Rust 2024 edition was stablized in Rust 1.85.
+		broken = lib.versionOlder cargo.version "1.85.0";
 		mainProgram = "usage";
 	};
 }))

@@ -64,8 +64,8 @@ in stdenv.mkDerivation (self: {
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		# lol with doesn't shadow.
-		# Rust 2024 edition was stablized in Rust 1.85.
-		broken = lib.versionOlder cargo.version "1.85.0";
+		# Dependency 'sysinfo@0.37.0' requires rustc 1.88.
+		broken = lib.versionOlder cargo.version "1.88";
 		mainProgram = "pik";
 	};
 }))
