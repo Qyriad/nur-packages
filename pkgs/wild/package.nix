@@ -10,7 +10,7 @@
 	fetchCargoVendor,
 }: stdenv.mkDerivation (self: {
 	pname = "wild";
-	version = "0.5.0";
+	version = "0.7.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -19,13 +19,13 @@
 		owner = "davidlattimore";
 		repo = "wild";
 		rev = "refs/tags/${self.version}";
-		hash = "sha256-tVGvSd4aege3xz/CrEl98AwuEJlsM3nVVG0urTSajFQ=";
+		hash = "sha256-x0IZuWjj0LRMj4pu2FVaD8SENm/UVtE1e4rl0EOZZZM=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-dXIYJfjz6okiLJuX4ZHu0Ft2/9XDjCrvvl/eqeuvBkU=";
+		hash = "sha256-5s0qS8y0+EH+R1tgN2W5/+t+GdjbQdRVLlcA2KjpHsE=";
 	};
 
 	versionCheckProgramArg = "--version";
@@ -44,8 +44,8 @@
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit asl20 ];
 		platforms = lib.platforms.linux;
-		# Rust 2024 edition was stablized in Rust 1.85.
-		broken = lib.versionOlder cargo.version "1.85.0";
+    # Wild's MSRV is 1.89.
+		broken = lib.versionOlder cargo.version "1.89";
 		mainProgram = "wild";
 	};
 }))
