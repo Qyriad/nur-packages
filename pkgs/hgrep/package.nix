@@ -18,7 +18,7 @@
 	;
 in stdenv.mkDerivation (self: {
 	pname = "hgrep";
-	version = "0.3.8";
+	version = "0.3.9";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -27,14 +27,14 @@ in stdenv.mkDerivation (self: {
 		owner = "rhysd";
 		repo = "hgrep";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-GcV6tZLhAtBE0/husOqZ3Gib9nXXg7kcxrNp9IK0eTo=";
+		hash = "sha256-xBLpEs0PvYb7sIca9yb3vhi2Bsr1BFqB0jlD+bZT2EI=";
 	};
 
 	cargoBuildType = "release";
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-NxfWY9OoMNASlWE48njuAdTI11JAV+rzjD0OU2cHLsc=";
+		hash = "sha256-TP+PClv7FX3kRBwJ0RAKbKoTKpi7hTZgw/Z/ktFKbwQ=";
 	};
 
 	nativeBuildInputs = [
@@ -62,6 +62,8 @@ in stdenv.mkDerivation (self: {
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		# Seems broken on current Nixpkgs for aarch64-apple-darwin?
 		#platforms = lib.attrValues { inherit (lib.platforms) all; };
+		# Rust 2024 edition was stablized in Rust 1.85.
+		broken = lib.versionOlder cargo.version "1.85.0";
 		mainProgram = "hgrep";
 	};
 }))
