@@ -7,6 +7,7 @@
 		./derivations.nix
 		./fixed-points.nix
 		./override-attrs.nix
+		./strings.nix
 	]
 	|> lib.map (file: import file { inherit lib self; })
 	|> lib.mergeAttrsList;
@@ -34,30 +35,6 @@ in childExports // {
 	;
 
 	notNull = value: value != null;
-
-	splitLines = lib.splitString "\n";
-	joinLines = lib.concatStringsSep "\n";
-
-	/** This is indented for multiline strings in Nix source with tabs,
-	 * but should work for other cases as well.
-	 *
-	 * It's a pretty naïve implementation, but whatever.
-	 */
-	dedent = string: let
-		lines = self.splitLines string;
-		indentation = lines
-		|> lib.map (lib.match "([ \t]*)(.*[^ \t])")
-		# null indicates no leading whitespace was found at all.
-		|> lib.filter self.notNull
-		# Any line that matches will have two capture groups (typed as a list with two items).
-		# The first capture group is the leading whitespace. That's what we care about.
-		|> lib.map lib.head
-		|> self.headOr "";
-	in lines
-	|> lib.map (lib.removePrefix indentation)
-	|> self.joinLines
-	|> lib.removeSuffix "\t"
-	;
 
 	optionalDefault = cond: valueIfTrue: let
 		fnByType = {
