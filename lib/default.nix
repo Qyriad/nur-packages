@@ -3,17 +3,19 @@
 }: lib.makeExtensible (self: let
 	inherit (builtins) typeOf;
 
+	importChild = file: import file { inherit lib self; };
+
 	childExports = [
 		./derivations.nix
 		./fixed-points.nix
 		./override-attrs.nix
 		./strings.nix
 	]
-	|> lib.map (file: import file { inherit lib self; })
+	|> lib.map importChild
 	|> lib.mergeAttrsList;
 
 in childExports // {
-	ansi = import ./ansi.nix { inherit lib self; };
+	ansi = importChild ./ansi.nix;
 
 	/** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
 	 *
