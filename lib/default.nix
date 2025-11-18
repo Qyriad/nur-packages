@@ -237,6 +237,13 @@ in childExports // {
 
 	foldToList = list: f: lib.foldl' f [ ] list;
 
+	removeAttrsCalled = namesToRemove: { ... }@attrs: let
+		names = lib.toList namesToRemove;
+	in (
+		assert lib.all lib.isString names;
+		builtins.removeAttrs attrs names
+	);
+
 	/** Fallable alternative to <nixpkgs> syntax.
 	 * Returns the path if found, or null if not.
 	 */
