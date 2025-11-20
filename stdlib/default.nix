@@ -5,6 +5,8 @@
 	qpkgs ? import ../default.nix { },
 	lib ? qpkgs.lib,
 }: lib.makeExtensible (self: {
+	runCommandMinimal = qpkgs.callPackage ./run-command-minimal { };
+
 	# FIXME: can we hack something to make `meta.position` work?
 	mkSimpleEnv = qpkgs.callPackage ./mk-simple-env { };
 
