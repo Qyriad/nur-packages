@@ -23,7 +23,7 @@
 	};
 
 	# Qt 6.10 requires find_package(Qt6 COMPONENTS GuiPrivate) to target_link_library(Qt::GuiPrivate).
-	patches = lib.optionals (lib.versionAtLeast "6.10.0" qt6Packages.qtbase.version) [
+	patches = [
 		./gui-private-qt6.patch
 	];
 
