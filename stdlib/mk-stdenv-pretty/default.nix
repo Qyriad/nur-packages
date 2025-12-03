@@ -20,9 +20,9 @@ in pkg: pkg.overrideAttrs (prev: {
 	ANSI_MAGENTA = fg.magenta;
 	ANSI_CYAN = fg.cyan;
 
-	preHook = assert !(prev ? preHook); ''
+	preHook = ''
 		source "${./pre-hook.sh}"
-	'';
+	'' + (if prev ? preHook then "\n${prev.preHook}" else "");
 
 	postHook = assert !(prev ? postHook); ''
 		source "${./post-hook.sh}"
