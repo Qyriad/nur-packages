@@ -34,7 +34,6 @@ in
 	# but we MUST have access to a `lib` from `prev` for some specific cases
 	# to avoid angering the infinite recursion gods.
 	passedLib = lib;
-	inherit (builtins) tryEval;
 
 	requireStructuredAttrs = name: drv:
 		lib.warnIf (drv.__structuredAttrs or false || drv.allowUnstructuredAttrs or false)
@@ -84,13 +83,7 @@ in lib.makeScope pkgs.newScope (self: let
 	|> passedLib.mapDerivationAttrset mkPretty
 	|> passedLib.mapAttrs lib.maybeAppendAttrPath;
 
-	# TODO: static?
-	validStdenvs = pkgs
-	|> lib.filterAttrs (name: _: lib.strings.hasSuffix "Stdenv" name)
-	|> lib.filterAttrs (_: stdenv: let
-		isStdenv = lib.isAttrs stdenv && stdenv ? mkDerivation;
-		canInstantiate = stdenv.outPath != null;
-	in lib.tryResOr (tryEval (isStdenv && canInstantiate)) false);
+	validStdenvs = self.stdlib.getStdenvs { };
 
 	mkPretty = pkg: if pkg ? overrideAttrs then self.stdlib.mkStdenvPretty pkg else pkg;
 
@@ -129,6 +122,7 @@ in discoveredPackages // {
 			rustHooks
 			pythonScopes
 			validStdenvs
+			llvmStdenv
 		;
 	};
 
@@ -152,6 +146,8 @@ in discoveredPackages // {
 	};
 
 	inherit validStdenvs;
+
+	stdenv = self.validStdenvs.clangLldStdenv;
 
 	runCommandMinimal = self.callPackage ./helpers/run-command-minimal.nix { };
 	mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
