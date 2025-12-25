@@ -33,6 +33,7 @@
 		description = "a prettier way to inspect network connections";
 		maintainers = with lib.maintainers; [ qyriad ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		broken = lib.versionOlder goHooks.go.version "1.25.0";
 		mainProgram = "snitch";
 	};
 })
