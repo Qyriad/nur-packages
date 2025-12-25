@@ -62,8 +62,7 @@ in stdenv.mkDerivation (self: {
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		# Seems broken on current Nixpkgs for aarch64-apple-darwin?
 		#platforms = lib.attrValues { inherit (lib.platforms) all; };
-		# Rust 2024 edition was stablized in Rust 1.85.
-		broken = lib.versionOlder cargo.version "1.85.0";
+		broken = lib.versionOlder cargo.version "1.88.0";
 		mainProgram = "hgrep";
 	};
 }))
