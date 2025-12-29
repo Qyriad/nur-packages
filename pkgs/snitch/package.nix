@@ -6,7 +6,7 @@
 	goHooks,
 }: stdenv.mkDerivation (self: {
 	pname = "snitch";
-	version = "0.2.0";
+	version = "0.2.2";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -15,7 +15,7 @@
 		owner = "karol-broda";
 		repo = "snitch";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-krZf6bx1CZGgwg7cu2f2dzPYFEU4rM/nZjGtkXgGQkM=";
+		hash = "sha256-SssAiRUfUaDgAoVO2rDacru8e914Wl+4sA4JQ4Mv4eA=";
 	};
 
 	goModules = fetchGoModules {
