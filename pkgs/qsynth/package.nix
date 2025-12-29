@@ -91,5 +91,6 @@
 		license = with lib.licenses; [ gpl2Plus] ;
 		maintainers = with lib.maintainers; [ qyriad ];
 		platforms = lib.platforms.linux;
+		broken = stdenv.cc.libcxx.isLLVM or false;
 	};
 }))

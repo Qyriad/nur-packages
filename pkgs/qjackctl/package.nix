@@ -67,6 +67,7 @@
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		platforms = lib.platforms.linux;
+		broken = stdenv.cc.libcxx.isLLVM or false;
 		mainProgram = "qjackctl";
 	};
 }))
