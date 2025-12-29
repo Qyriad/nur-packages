@@ -10,7 +10,7 @@
 	toplevelStdenvs = pkgs
 	|> lib.filterAttrs (name: _: lib.strings.hasSuffix "Stdenv" name)
 	|> lib.filterAttrs (_: stdenv: let
-		isStdenv = lib.isAttrs stdenv && stdenv ? mkDerivation;
+		isStdenv = lib.isAttrs stdenv && lib.isFunction stdenv.mkDerivation or null;
 		# Many things with stdenv-like names are actually just throws.
 		canInstantiate = stdenv.outPath != null;
 	in lib.tryResOr (tryEval (isStdenv && canInstantiate)) false);
@@ -29,7 +29,7 @@
 		value = stdenvAdapters.makeStatic stdenv;
 	});
 
-in { ... }: lib.mergeAttrsList [
+in { }: lib.mergeAttrsList [
 	baseStdenvs
 	staticStdenvs
 ]

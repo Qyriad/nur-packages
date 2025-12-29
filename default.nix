@@ -71,21 +71,25 @@ in lib.makeScope pkgs.newScope (self: let
 	# Note that this let-binding `lib` shadows `lib ? pkgs.lib` from above.
 	inherit (self) lib;
 
+	inherit (self) stdlib validStdenvs;
+
 	# NOTE: this one has to be `passedLib`, not `self.lib`, to not
 	# cause infinite recursion.
 	# Technically if we're not instantiated in an overlay then it could
 	# be `pkgs.lib`, but if `pkgs` is `final` then that too will blow up.
 	discoveredPackages = passedLib.packagesFromDirectoryRecursive {
 		# Uses `self` as the scope to `callPackage` everything in `./pkgs`.
-		callPackage = self.callPackage;
+		callPackage = p: args: let
+			base = self.callPackage p args;
+			# Use the first stdenv in our list that doesn't make the package broken.
+			preferred = stdlib.pkgByFirstWorkingStdenv self.preferredStdenvs base;
+		in if preferred != null then preferred else base;
 		directory = ./pkgs;
 	}
 	|> passedLib.mapDerivationAttrset mkPretty
 	|> passedLib.mapAttrs lib.maybeAppendAttrPath;
 
-	validStdenvs = self.stdlib.getStdenvs { };
-
-	mkPretty = pkg: if pkg ? overrideAttrs then self.stdlib.mkStdenvPretty pkg else pkg;
+	mkPretty = pkg: if pkg ? overrideAttrs then stdlib.mkStdenvPretty pkg else pkg;
 
 in discoveredPackages // {
 
@@ -145,9 +149,15 @@ in discoveredPackages // {
 		scope = self;
 	};
 
-	inherit validStdenvs;
+	validStdenvs = stdlib.getStdenvs { };
 
-	stdenv = self.validStdenvs.clangLldStdenv;
+	/** Our scope's callPackage will try each of these in order that isn't `meta.broken`. */
+	preferredStdenvs = [
+		validStdenvs.libcxxLldStdenv
+		validStdenvs.clangLldStdenv
+		validStdenvs.clangStdenv
+		validStdenvs.gccStdenv
+	];
 
 	runCommandMinimal = self.callPackage ./helpers/run-command-minimal.nix { };
 	mkAbsoluteDylibsHook = self.callPackage ./helpers/absolute-dylibs.nix { };
