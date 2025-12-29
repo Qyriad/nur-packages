@@ -3,6 +3,12 @@
 	self ? import ./default.nix { inherit lib; },
 }: let
 
+	isEnabledDerivation = { ... }@drv: lib.all lib.trivial.id [
+		(lib.isDerivation drv)
+		(lib.meta.broken or false != true)
+		(drv.meta.disabled or false != true)
+	];
+
 	/**
 		Return true if and only if `drv` is a derivation which is available on the
 		given platform and not broken.
@@ -11,6 +17,7 @@
 		(lib.isDerivation drv)
 		(lib.meta.availableOn hostPlatform drv)
 		(drv.meta.broken or null != true)
+		(drv.meta.disabled or false != true)
 	];
 
 	isEvalableDerivation = drv: let
@@ -27,6 +34,7 @@
 
 in {
 	inherit
+		isEnabledDerivation
 		isAvailableDerivation
 		isEvalableDerivation
 		isScope
