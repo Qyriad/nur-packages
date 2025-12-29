@@ -30,4 +30,7 @@ in {
 	|> self.joinLines
 	|> lib.removeSuffix "\t"
 	;
+
+	/** Returns true if `name` "looks like" a stdenv name. */
+	isStdenvName = name: name == "stdenv" || lib.strings.hasSuffix "Stdenv" name;
 }
