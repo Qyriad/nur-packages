@@ -1,37 +1,39 @@
 {
 	lib,
-	python3,
+	stdenvNoCC,
+	python3Packages,
+	pythonHooks,
 	fetchPypi,
-}:
-
-let
-	inherit (python3.pkgs) buildPythonPackage setuptools wheel;
-
+}: lib.callWith' python3Packages ({
+	python,
+	setuptools,
+	pythonImportsCheckHook,
+}: let
+	stdenv = stdenvNoCC;
+in stdenv.mkDerivation (self: {
 	pname = "pipe";
 	version = "2.2";
-in
-	buildPythonPackage {
-		inherit pname version;
 
-		__structuredAttrs = true;
-		strictDeps = true;
+	__structuredAttrs = true;
+	strictDeps = true;
 
-		src = fetchPypi {
-			inherit pname version;
-			sha256 = "sha256-aiUxmOO8VC/68KQiI3ZYa86Fg7J6ndvCz7qlVMBJIw0=";
-		};
+	doCheck = true;
+	doInstallCheck = true;
 
-		format = "pyproject";
+	outputs = [ "out" "dist" ];
 
-		nativeBuildInputs = [
-				setuptools
-				wheel
-		];
+	src = fetchPypi {
+		inherit (self) pname version;
+		sha256 = "sha256-aiUxmOO8VC/68KQiI3ZYa86Fg7J6ndvCz7qlVMBJIw0=";
+	};
 
-		meta = {
-			description = "A Python library to use infix notiation in Python";
-			homepage = "https://github.com/JulienPalard/Pipe";
-			license = lib.licenses.mit;
-		};
+	nativeBuildInputs = (pythonHooks python).asList ++ [
+		setuptools
+	];
 
-	}
+	meta = {
+		description = "A Python library to use infix notiation in Python";
+		homepage = "https://github.com/JulienPalard/Pipe";
+		license = lib.licenses.mit;
+	};
+}))
