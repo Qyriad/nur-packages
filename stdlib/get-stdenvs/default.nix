@@ -1,6 +1,7 @@
 {
 	pkgs,
 	lib,
+  stdlib,
 	stdenvAdapters,
 	llvmPackages,
 }: let
@@ -16,22 +17,8 @@
 
 	extraStdenvs = {
 		# This one just Isn't provided by Nixpkgs for whatever reason.
-		clangLldStdenv = llvmPackages.stdenv.cc.override {
-			bintools = llvmPackages.bintools;
-		}
-		|> stdenvAdapters.overrideCC llvmPackages.stdenv
-		|> stdenvAdapters.addAttrsToDerivation {
-			mesonFlags = [
-				"-Dc_link_args=-fuse-ld=lld"
-				"-Dcpp_link_args=-fuse-ld=lld"
-			];
-			cmakeFlags = [
-				"-DCMAKE_EXE_LINKER_FLAGS_INIT=-fuse-ld=lld"
-				"-DCMAKE_SHARED_LINKER_FLAGS_INIT=-fuse-ld=lld"
-				"-DCMAKE_STATIC_LINKER_FLAGS_INIT=-fuse-ld=lld"
-				"-DCMAKE_MODULE_LINKER_FLAGS_INIT=-fuse-ld=lld"
-			];
-		};
+		clangLldStdenv = stdlib.mkLldStdenv { stdenv = llvmPackages.stdenv; };
+    libcxxLldStdenv = stdlib.mkLldStdenv { stdenv = llvmPackages.libcxxStdenv; };
 	};
 
 	baseStdenvs = toplevelStdenvs // extraStdenvs;
