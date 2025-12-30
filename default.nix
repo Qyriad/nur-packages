@@ -79,11 +79,12 @@ in lib.makeScope pkgs.newScope (self: let
 	# be `pkgs.lib`, but if `pkgs` is `final` then that too will blow up.
 	discoveredPackages = passedLib.packagesFromDirectoryRecursive {
 		# Uses `self` as the scope to `callPackage` everything in `./pkgs`.
-		callPackage = p: args: let
-			base = self.callPackage p args;
-			# Use the first stdenv in our list that doesn't make the package broken.
-			preferred = stdlib.pkgByFirstWorkingStdenv self.preferredStdenvs base;
-		in if preferred != null then preferred else base;
+		#callPackage = p: args: let
+		#	base = self.callPackage p args;
+		#	# Use the first stdenv in our list that doesn't make the package broken.
+		#	preferred = stdlib.pkgByFirstWorkingStdenv self.preferredStdenvs base;
+		#in if preferred != null then preferred else base;
+		callPackage = self.callPackage;
 		directory = ./pkgs;
 	}
 	|> passedLib.mapDerivationAttrset mkPretty
@@ -150,6 +151,7 @@ in discoveredPackages // {
 	};
 
 	validStdenvs = stdlib.getStdenvs { };
+	stdenv = self.validStdenvs.clangLldStdenv;
 
 	/** Our scope's callPackage will try each of these in order that isn't `meta.broken`. */
 	preferredStdenvs = [
