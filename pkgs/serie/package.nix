@@ -17,7 +17,7 @@
 	;
 in stdenv.mkDerivation (self: {
 	pname = "serie";
-	version = "0.5.3";
+	version = "0.5.7";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -27,13 +27,13 @@ in stdenv.mkDerivation (self: {
 		owner = "lusingander";
 		repo = "serie";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-HzAgPCAHOdxXPwPWPPU9VaNrVJL42TlbYMD/n7AeOH8=";
+		hash = "sha256-JWpqF19rZIw4GyKAzoGYsuCEDJOLDRiHRFJBsguISZ0=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-dRR3Zr2QM1yDDxiKqugwMtz5f5ted0oHSdR47XUTQUc=";
+		hash = "sha256-0pJDz6R/3EJl7K+cuy9ftngvOig/DO52cyUgkdnWa10=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
