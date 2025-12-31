@@ -14,9 +14,11 @@ in
 	pkgs ? if mode != "pkgs" then null else (
 		import <nixpkgs> {
 			config = import ./nixpkgs-config.nix // config;
+			inherit overlays;
 		}
 	),
 
+	overlays ? [ ],
 	config ? { },
 	lib ? (
 		if pkgs != null then (
