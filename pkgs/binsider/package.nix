@@ -16,7 +16,7 @@
 		;
 in stdenv.mkDerivation (self: {
 	pname = "binsider";
-	version = "0.2.1";
+	version = "0.3.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -25,13 +25,13 @@ in stdenv.mkDerivation (self: {
 		owner = "orhun";
 		repo = "binsider";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-FNaYMp+vrFIziBzZ8//+ppq7kwRjBJypqsxg42XwdEs=";
+		hash = "sha256-k40mnDRbvwWJmcT02aVWdwwEiDCuL4hQnvnPitrW8qA=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-ZoZbhmUeC63IZ5kNuACfRaCsOicZNUAGYABSpCkUCXA=";
+		hash = "sha256-hysp7AeYJ153AC0ERcrRzf4ujmM+V9pgAxOvOlG/2aE=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
@@ -57,6 +57,7 @@ in stdenv.mkDerivation (self: {
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit asl20 ];
 		platforms = lib.platforms.linux;
+		broken = lib.versionOlder cargo.version "1.88.0";
 		mainProgram = "binsider";
 	};
 }))
