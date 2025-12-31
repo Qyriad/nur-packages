@@ -24,7 +24,7 @@
 	inherit (stdenv) hostPlatform buildPlatform;
 in stdenv.mkDerivation (self: {
 	pname = "cyme";
-	version = "2.2.7";
+	version = "2.2.8";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -33,13 +33,13 @@ in stdenv.mkDerivation (self: {
 		owner = "tuna-f1sh";
 		repo = "cyme";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-StvkMo9HZzAx3T+dnRQBUZJOC3EOj+ItqO13vW+F/SU=";
+		hash = "sha256-PHYzaynxzKYYNTB/pJVuSZoiN3/zwixjqoxXzbxToVc=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-roLuOVkBSDZ+2bHEcA53CcdtE82EO4/anCvlVHeTC0s=";
+		hash = "sha256-NTsiAW9SLN6vuNtbdrXqtvutnI/2DLCgMjYxG6tTtFM=";
 	};
 	cargoBuildFeatures = [
 		"libusb"
