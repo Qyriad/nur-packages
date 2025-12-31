@@ -11,7 +11,7 @@
 	fetchCargoVendor,
 }: stdenv.mkDerivation (self: {
 	pname = "otree";
-	version = "0.6.2";
+	version = "0.6.3";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -23,13 +23,13 @@
 		owner = "fioncat";
 		repo = "otree";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-A4UY3SRahpxl6xqJuamXlBenemJuvFS6KcHKOXEHDyw=";
+		hash = "sha256-l2hU1a2yfXo8u8wjSmvzL+nzniMQFKvdBhQ0eqqG3tg=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		inherit (self) src;
 		name = "${self.finalPackage.name}-cargo-deps";
-		hash = "sha256-cePX4Uxu7BOsB1JIGAsDfiOLeVAgL+0Lnst4shtpEX4=";
+		hash = "sha256-UyomqesHDaGDEBHVcQMwUI7kH8akOOuyXOL/r4gfiAo=";
 	};
 
 	versionCheckProgramArg = "--version";
