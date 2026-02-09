@@ -17,7 +17,7 @@
 	;
 in stdenv.mkDerivation (self: {
 	pname = "mergiraf";
-	version = "0.16.1";
+	version = "0.16.3";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -28,13 +28,13 @@ in stdenv.mkDerivation (self: {
 		owner = "mergiraf";
 		repo = "mergiraf";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-vKqvVpGyQ9ayebssupiySjJ7R7gn1W8HTlDuGM4d1Ns=";
+		hash = "sha256-KlielG8XxOlS5Np8LZT+GMujWw/7EDOwsZHWVjneV3g=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-vhes4p8e1PW4p5tqqPffAgl3V4dK17+n748VA6Q23lE=";
+		hash = "sha256-F6YtOgcAR4fN33j7Ae4ixhTfNctUfgkV3t1I7XJzHHw=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
