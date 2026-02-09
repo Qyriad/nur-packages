@@ -24,7 +24,7 @@
 	inherit (stdenv) hostPlatform buildPlatform;
 in stdenv.mkDerivation (self: {
 	pname = "cyme";
-	version = "2.2.8";
+	version = "2.2.11";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -33,13 +33,13 @@ in stdenv.mkDerivation (self: {
 		owner = "tuna-f1sh";
 		repo = "cyme";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-PHYzaynxzKYYNTB/pJVuSZoiN3/zwixjqoxXzbxToVc=";
+		hash = "sha256-DRlK7QsZvydC05kHIWLR1a01/Cc+9TZN0Z4hUCfShjQ=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-NTsiAW9SLN6vuNtbdrXqtvutnI/2DLCgMjYxG6tTtFM=";
+		hash = "sha256-vh7VUTI+FKWtwYmcpEeADq/OF69M38yekPySXkFJ5ZA=";
 	};
 	cargoBuildFeatures = [
 		"libusb"
@@ -89,6 +89,7 @@ in stdenv.mkDerivation (self: {
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ gpl3Plus ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		broken = lib.versionOlder cargo.version "1.88.0";
 		# lol with doesn't shadow.
 		#platforms = lib.platforms.darwin ++ (with lib.platforms; linux ++ windows);
 		#platforms = lib.attrValues { inherit (lib.platforms) darwin linux windows; };
