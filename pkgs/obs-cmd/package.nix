@@ -16,7 +16,7 @@
 	;
 in stdenv.mkDerivation (self: {
 	pname = "obs-cmd";
-	version = "0.30.1";
+	version = "0.31.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -26,13 +26,13 @@ in stdenv.mkDerivation (self: {
 		owner = "grigio";
 		repo = "obs-cmd";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-LBnizJnUqTCfAAmVR9piQeQGKvgAvylLwWZ6ARa3HAw=";
+		hash = "sha256-xjtNQZDgo7DIUsoH0PNHbsgE+FSXYnqWXpISdiRqTKw=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-Mb8IS9ahbKIYzlyAWiAFQCjOWRdrFXS/vyEl54OOlYw=";
+		hash = "sha256-yoXwiNkEOj/wDw70wWHmuTyOE8nPaCXFar9FFiKOOAM=";
 	};
 
 	versionCheckProgramArg = "--version";
