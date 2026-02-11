@@ -13,7 +13,7 @@ let
 	;
 
 	pname = "strace-process-tree";
-	version = "1.5.2";
+	version = "1.5.3";
 in
 	buildPythonApplication {
 		inherit pname version;
@@ -25,7 +25,7 @@ in
 			owner = "mgedmin";
 			repo = "strace-process-tree";
 			rev = version;
-			sha256 = "sha256-ozx4TBqgdL69Kw3H29QmIJfP8TOb3bM9gWzCa5bMPcY=";
+			sha256 = "sha256-yya8mL7aRl0KvkhyIRpah8DPLbQ75JX1rutV0/tOVHU=";
 			name = "${pname}-source";
 		};
 
