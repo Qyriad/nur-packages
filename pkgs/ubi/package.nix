@@ -16,7 +16,7 @@
 	;
 in stdenv.mkDerivation (self: {
 	pname = "ubi";
-	version = "0.8.4";
+	version = "0.9.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -28,13 +28,13 @@ in stdenv.mkDerivation (self: {
 		owner = "houseabsolute";
 		repo = "ubi";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-3JemqDa0I8uHni5KM5GW900cDXr2n9rGNdQz8n3WyqI=";
+		hash = "sha256-3+cC1X/Ao7x30UCmwUCz/E6HXaIk2G5EDKhgGUKexaE=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.pname}-cargo-deps-${self.version}";
 		inherit (self) src;
-		hash = "sha256-55mgmDwvfptA/JiKzJjAPo0FxM5UtxS36nKEB+KlU3g=";
+		hash = "sha256-qTzJ3s9tsv30gN3Rz8DJqHhRnQW5svTkWBDkR1ZOlIo=";
 	};
 
 	versionCheckProgramArg = "--version";
