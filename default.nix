@@ -153,7 +153,11 @@ in discoveredPackages // {
 	};
 
 	validStdenvs = stdlib.getStdenvs { };
-	stdenv = self.validStdenvs.clangLldStdenv;
+	stdenv = if pkgs.stdenv.hostPlatform.isDarwin then (
+		self.validStdenvs.clangStdenv
+	) else (
+		self.validStdenvs.clangLldStdenv
+	);
 
 	/** Our scope's callPackage will try each of these in order that isn't `meta.broken`. */
 	preferredStdenvs = [
