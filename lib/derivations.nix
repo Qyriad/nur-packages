@@ -31,6 +31,16 @@
 		(lib.isFunction attrs.packages or null)
 	];
 
+	/** Attempts to recurse into scopes. */
+	mapDerivationAttrsetRecursive = f: assert lib.isFunction f; set: assert lib.isAttrs set; set
+	|> lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (
+			f pkg
+		) else if lib.isFunction pkg.packages or null then (
+			self.mapDerivationAttrsetRecursive f pkg
+		) else (
+			pkg
+		)
+	);
 
 in {
 	inherit
@@ -38,5 +48,6 @@ in {
 		isAvailableDerivation
 		isEvalableDerivation
 		isScope
+		mapDerivationAttrsetRecursive
 	;
 }
