@@ -265,4 +265,17 @@ in childExports // {
 	} @ attrs: attrs
 	|> lib.mapAttrsToList (name: value: if value != null then "with ${name}" else "without ${name}")
 	|> lib.concatStringsSep (", ");
+
+	/** Perform module-system type checking and resolving on a single option value. */
+	typeCheck = loc: option: value:
+		assert lib.isOptionType option;
+		assert lib.isList loc;
+		assert lib.all lib.isString loc;
+	let
+		inlineModule = {
+			inherit value;
+			file = "«inline»";
+		};
+		merged = lib.modules.mergeDefinitions loc option [ inlineModule ];
+	in merged.mergedValue;
 })
