@@ -36,6 +36,11 @@
 	|> lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (
 			f pkg
 		) else if lib.isFunction pkg.packages or null then (
+			# Scopes, like python3Packages, qtPackages, etc
+			self.mapDerivationAttrsetRecursive f pkg
+		) else if (pkg.recurseForDerivations or false) then (
+			# Things that aren't scopes but are other "sets" of packages, like
+			# tree-sitter-grammars, tmuxPlugins
 			self.mapDerivationAttrsetRecursive f pkg
 		) else (
 			pkg
