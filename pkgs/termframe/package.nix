@@ -56,15 +56,12 @@ in {
 		installManPage --name termframe.1 <(termframe --man-page)
 	'';
 
-	passthru.fromHead = lib.mkHeadFetch {
-		inherit self;
-		extraAttrs = self: {
-			cargoDeps = importCargoLock {
-				lockFile = self.src + "/Cargo.lock";
-				allowBuiltinFetchGit = true;
-			};
+	passthru.fromHead = lib.mkHeadFetch' self (self: {
+		cargoDeps = importCargoLock {
+			lockFile = self.src + "/Cargo.lock";
+			allowBuiltinFetchGit = true;
 		};
-	};
+	});
 
 	meta = {
 		homepage = "https://github.com/pamburus/termframe";
