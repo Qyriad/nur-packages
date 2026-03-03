@@ -77,6 +77,8 @@ in stdenv.mkDerivation (self: {
 		license = with lib.licenses; [ asl20 mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		platforms = lib.platforms.linux;
+		# I *think*.
+		broken = lib.versionOlder cargo.version "1.88.0";
 		mainProgram = "wiremix";
 	};
 }))
