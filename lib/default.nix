@@ -191,6 +191,25 @@ in childExports // {
 		}).url;
 	});
 
+	/** Like `mkHeadFetch`, but `extraAttrs` and all arguments are inline.
+	 * Takes the derivation, and an attrset or fixpoint attrset.
+	 */
+	mkHeadFetch' = {
+		overrideAttrs,
+		...
+	}: fpAttrs: overrideAttrs (final: prev: let
+		self = final.finalPackage;
+		headRef = self.headRef or "main";
+		attrs = if lib.isFunction fpAttrs then fpAttrs self else fpAttrs;
+	in attrs // {
+		# We override `name` instead of `version` to not mess up tests.
+		name = prev.name or "${final.pname}-${final.version}" + "-HEAD";
+		src = fetchTarball (prev.src.override {
+			rev = "refs/heads/${headRef}";
+			tag = null;
+		}).url;
+	});
+
 	/** Join a list of string-like values with forward slashes. */
 	joinPaths = list: lib.strings.concatStringsSep "/" list;
 
