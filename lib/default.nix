@@ -187,6 +187,7 @@ in childExports // {
 		name = prev.name or "${final.pname}-${final.version}" + "-HEAD";
 		src = fetchTarball (prev.src.override {
 			rev = "refs/heads/${headRef}";
+			tag = null;
 		}).url;
 	});
 
