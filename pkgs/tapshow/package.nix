@@ -59,6 +59,7 @@ in {
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		broken = lib.versionOlder goHooks.go.version "1.25.5";
+		platforms = lib.platforms.linux;
 		mainProgram = "tapshow";
 	};
 })
