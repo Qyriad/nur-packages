@@ -35,8 +35,14 @@ in {
 	];
 
 	meta = {
+		homepage = "https://codeberg.org/atomdrift/stng";
+		description = "strings(1) for malware analysts - stronger, better, faster";
+		maintainers = with lib.maintainers; [ qyriad ];
+		license = with lib.licenses; [ asl20 ];
+		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		# `unsigned_is_multiple_of` was stablized in 1.87.0.
 		# https://github.com/rust-lang/rust/issues/128101
 		broken = lib.versionOlder cargo.version "1.87.0";
+		mainProgram = "stng";
 	};
 }))
