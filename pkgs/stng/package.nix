@@ -1,7 +1,7 @@
 {
 	lib,
 	stdenv,
-	fetchFromCodeberg,
+	fetchFromGitea,
 	rustPlatform,
 	rustHooks,
 	cargo,
@@ -16,7 +16,8 @@ in {
 	strictDeps = true;
 	__structuredAttrs = true;
 
-	src = fetchFromCodeberg {
+	src = fetchFromGitea {
+		domain = "codeberg.org";
 		owner = "atomdrift";
 		repo = "stng";
 		tag = "v${self.version}";
@@ -32,4 +33,10 @@ in {
 	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
 	];
+
+	meta = {
+		# `unsigned_is_multiple_of` was stablized in 1.87.0.
+		# https://github.com/rust-lang/rust/issues/128101
+		broken = lib.versionOlder cargo.version "1.87.0";
+	};
 }))
