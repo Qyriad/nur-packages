@@ -11,6 +11,7 @@
 	mkSimpleEnv = qpkgs.callPackage ./mk-simple-env { };
 
 	mkStdenvPretty = qpkgs.callPackage ./mk-stdenv-pretty { };
+	stdenvPrettyHooks = qpkgs.callPackage ./mk-stdenv-pretty/hooks.nix { };
 
 	getStdenvs = qpkgs.callPackage ./get-stdenvs { };
 

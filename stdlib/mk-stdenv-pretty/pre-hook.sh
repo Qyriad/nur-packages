@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+ANSI_BOLD="@ANSI_BOLD@"
+ANSI_FAINT="@ANSI_FAINT@"
+ANSI_ITALIC="@ANSI_ITALIC@"
+ANSI_RESET="@ANSI_RESET@"
+ANSI_RED="@ANSI_RED@"
+ANSI_GREEN="@ANSI_GREEN@"
+ANSI_YELLOW="@ANSI_YELLOW@"
+ANSI_BLUE="@ANSI_BLUE@"
+ANSI_MAGENTA="@ANSI_MAGENTA@"
+ANSI_CYAN="@ANSI_CYAN@"
+
 function hlBash()
 {
 	if ! command -v "bat" >/dev/null 2>&1; then
