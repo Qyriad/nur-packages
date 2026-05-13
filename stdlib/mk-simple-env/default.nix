@@ -66,7 +66,10 @@
 			layer.propagatedBuildInputs or [ ]
 			# Use `passthru.propagateForSimpleEnv` if exists
 			layer.propagateForSimpleEnv or [ ]
-		]) |> lib.unique;
+		])
+		|> lib.unique
+		# Skip empty values. Nulls are valid in derivation inputs.
+		|> lib.filter (value: (toString value) != "");
 
 		meta = {
 			description = "Copied trees starting with ${lib.getName self.baseLayer}";
