@@ -61,7 +61,8 @@
 
 		allPaths = lib.foldToList self.layers (acc: layer: lib.concatLists [
 			acc
-			[ layer ]
+			# Use all outputs of the layer, if applicable.
+			(layer.all or [ layer ])
 			# Propagated build inputs are vaguely special.
 			layer.propagatedBuildInputs or [ ]
 			# Use `passthru.propagateForSimpleEnv` if exists
