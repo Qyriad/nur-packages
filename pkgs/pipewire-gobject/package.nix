@@ -8,6 +8,7 @@
 	glib,
 	pipewire,
 	gobject-introspection,
+	gi-docgen,
 }: lib.callWith' python3Packages ({
 	python,
 	stdenv,
@@ -20,6 +21,9 @@ in {
 	strictDeps = true;
 	__structuredAttrs = true;
 
+	# The tests rely on the libraries at the installed paths existing.
+	doInstallCheck = true;
+
 	outputs = [ "out" ];
 
 	src = fetchFromGitHub {
@@ -29,11 +33,21 @@ in {
 		hash = "sha256-dxW06jWAp5olpaTFTBC6TiLpjyhUf9WrhaU+LUc2qV4=";
 	};
 
+	postPatch = ''
+		substituteInPlace "tests/test_gir_metadata.py" \
+			--replace-fail "libpwg-0.1.so.0" "$out/lib/libpwg-0.1.so.0"
+	'';
+
+	pythonEnv = python.withPackages (p: with p; [
+		pygobject3
+	]);
+
 	nativeBuildInputs = [
-		python
+		self.pythonEnv
 		meson
 		ninja
 		pkg-config
+		gi-docgen
 	];
 
 	buildInputs = [
@@ -42,9 +56,9 @@ in {
 		gobject-introspection
 	];
 
-	# mesonFlags = [
-	# 	(lib.mesonBool "wheel" true)
-	# ];
+	installCheckPhase = "mesonCheckPhase";
+
+	mesonBuildType = "debugoptimized";
 
 	meta = {
 		description = "Experimental GObject Introspection wrapper for app-facing PipeWire APIs";
