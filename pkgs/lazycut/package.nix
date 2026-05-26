@@ -4,6 +4,7 @@
 	srcOnly,
 	fetchFromGitHub,
 	fetchGoModules,
+	go,
 	goHooks,
 }: stdenv.mkDerivation (finalAttrs: let
 	self = finalAttrs.finalPackage;
@@ -36,6 +37,7 @@ in {
 		license = with lib.licenses; [ mit ];
 		maintainers = with lib.maintainers; [ qyriad ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		broken = lib.versionOlder go.version "1.27.0";
 		mainProgram = "lazycut";
 	};
 })
