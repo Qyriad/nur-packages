@@ -22,7 +22,9 @@
 		optionalDarwin
 	;
 	inherit (stdenv) hostPlatform buildPlatform;
-in stdenv.mkDerivation (self: {
+in stdenv.mkDerivation (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "cyme";
 	version = "2.3.0";
 
@@ -32,12 +34,12 @@ in stdenv.mkDerivation (self: {
 	src = fetchFromGitHub {
 		owner = "tuna-f1sh";
 		repo = "cyme";
-		rev = "refs/tags/v${self.version}";
+		tag = "v${self.version}";
 		hash = "sha256-Jgm/IIrtsoUQQ6WmS3Ol20rc+oQJsfpOyHqP06jcPfM=";
 	};
 
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-0CeyrHoqKdt5cy9F+LpZAsCR2nXMtXvyk1Dr+f9SS44=";
 	};
@@ -78,8 +80,8 @@ in stdenv.mkDerivation (self: {
 
 	passthru = {
 		updateScript = nix-update-script { };
-		tests.version = testers.testVersion { package = self.finalPackage; };
-		fromHead = lib.mkHeadFetch { self = self.finalPackage; };
+		tests.version = testers.testVersion { package = self; };
+		fromHead = lib.mkHeadFetch { inherit self; };
 	};
 
 	meta = {
