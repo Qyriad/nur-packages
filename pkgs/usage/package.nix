@@ -13,7 +13,7 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
 in stdenv.mkDerivation (self: {
 	pname = "usage";
-	version = "2.16.1";
+	version = "3.4.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -22,13 +22,13 @@ in stdenv.mkDerivation (self: {
 		owner = "jdx";
 		repo = "usage";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-HPBZ4fNAD3dflXEXfP6eAroJpZDvLZd8qSTcSmKaxxE=";
+		hash = "sha256-qavPQi3qIp47HYFY1ACW+RvCOMtWdVBGvjYtDgaammk=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-z5L8UGoTMBvk+x/8OlkDiSUQx76QWxxdc7Irw0du8Uc=";
+		hash = "sha256-mzXdgcZNRvKbjHokTtxiaaN+xQLbbEMpHOMur3/zIjA=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
@@ -51,7 +51,8 @@ in stdenv.mkDerivation (self: {
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		platforms = lib.platforms.all;
-		broken = lib.versionOlder cargo.version "1.88.0";
+		# MRSV of dependency "kdl@6.7.0".
+		broken = lib.versionOlder cargo.version "1.95.0";
 		mainProgram = "usage";
 	};
 }))
