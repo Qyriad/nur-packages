@@ -14,7 +14,7 @@
 	cargoInstallHook,
 }: stdenv.mkDerivation (self: {
 	pname = "age-plugin-openpgp-card";
-	version = "0.1.1";
+	version = "0.1.2";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -23,7 +23,7 @@
 		owner = "wiktor-k";
 		repo = "age-plugin-openpgp-card";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-uJmYtc+GxJZtCjLQla/h9vpTzPcsL+zbM2uvAQsfwIY=";
+		hash = "sha256-z1Q1Sg6qcQwhNDI6dCMf4BejZn5K9VzqLCVvkisB//k=";
 	};
 
 	nativeBuildInputs = [
@@ -42,7 +42,7 @@
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-YZGrEO6SOS0Kir+1d8shf54420cYjvcfKYS+T2NlEug=";
+		hash = "sha256-MrtCm41Q/Zs3FZCkdsNX30vFFuxIHNHHz4fbhMXuxD4=";
 	};
 	cargoBuildType = "release";
 
@@ -56,6 +56,7 @@
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit asl20 ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		broken = lib.versionOlder cargo.version lib.commonVersions.rust.edition2024;
 		mainProgram = "age-plugin-openpgp-card";
 	};
 }))
