@@ -25,14 +25,14 @@
 	qtsvg,
 }: stdenv.mkDerivation (self: {
 	pname = "qsynth";
-	version = "1.0.3";
+	version = "1.0.6";
 
 	strictDeps = true;
 	__structuredAttrs = true;
 
 	src = fetchzip {
 		url = "mirror://sourceforge/qsynth/qsynth-${self.version}.tar.gz";
-		hash = "sha256-HvF0ITBKLINQ+cQJzcGsNsP/ks2CbypdWhDW00eigZg=";
+		hash = "sha256-J3kwV5TDG5JdoXK5G3JiPypRSYWUgDCgBZPsgUp4U2E=";
 	};
 
 	outputs = [ "out" "man" ];
