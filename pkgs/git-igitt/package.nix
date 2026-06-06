@@ -11,7 +11,7 @@
 	importCargoLock,
 }: stdenv.mkDerivation (self: {
 	pname = "git-igitt";
-	version = "0.1.19";
+	version = "0.1.21";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -21,13 +21,13 @@
 		owner = "mlange-42";
 		repo = "git-igitt";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-kryC07G/sMMtz1v6EZPYdCunl/CjC4H+jAV3Y91X9Cg=";
+		hash = "sha256-5AVKBew+HShWFZwm4xRmRSL76N2c84Yi97jgcqsslxM=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.pname}-cargo-deps-${self.version}";
 		inherit (self) src;
-		hash = "sha256-45ME5Uaqa6qKuqvO1ETEVrySiAylPmx30uShQPPGNmY=";
+		hash = "sha256-Z+Y6h9QYszpXFmahU5qXNHvuC4uJ4wJiCd39wndxw5c=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
@@ -56,7 +56,8 @@
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
-		broken = lib.versionOlder cargo.version "1.83.0";
+		# Dependency "time@0.3.47" MRSV.
+		broken = lib.versionOlder cargo.version "1.88.0";
 		mainProgram = "git-igitt";
 	};
 }))
