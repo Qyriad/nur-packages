@@ -4,6 +4,10 @@
 			url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 			flake = false;
 		};
+		nixpkgs-26_05 = {
+			url = "github:NixOS/nixpkgs/release-26.05";
+			flake = false;
+		};
 		nixpkgs-25_11 = {
 			url = "github:NixOS/nixpkgs/release-25.11";
 			flake = false;
@@ -21,6 +25,7 @@
 	outputs = {
 		self,
 		nixpkgs,
+		nixpkgs-26_05,
 		nixpkgs-25_11,
 		nixpkgs-25_05,
 		nixpkgs-24_11,
@@ -59,6 +64,7 @@
 
 		checks = forAllSystems (system: {
 			packages = self.packages.${system}.default;
+			nixpkgs-26_05 = (genForNixpkgs system nixpkgs-26_05).farm;
 			nixpkgs-25_11 = (genForNixpkgs system nixpkgs-25_11).farm;
 			nixpkgs-25_05 = (genForNixpkgs system nixpkgs-25_05).farm;
 			nixpkgs-24_11 = (genForNixpkgs system nixpkgs-24_11).farm;
