@@ -10,7 +10,7 @@
 	fetchCargoVendor,
 }: stdenv.mkDerivation (self: {
 	pname = "wild";
-	version = "0.8.0";
+	version = "0.9.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -19,13 +19,13 @@
 		owner = "davidlattimore";
 		repo = "wild";
 		rev = "refs/tags/${self.version}";
-		hash = "sha256-E5cmZuOtF+MNTPyalKjnguhin70zqtDDB0D71ZpeE48=";
+		hash = "sha256-v4lPgZDPvRTAekkU9Vku9llgpOsaVtKt91VFUGrEeKw=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-r0r7sN1SW5TIybHORfzJkN51Y0REEC2/h7q71GxUgAM=";
+		hash = "sha256-ADJLtTRXcVWcbvgwXvCs0wxcGp2XP1LZJUJ4hpuzVHQ=";
 	};
 
 	versionCheckProgramArg = "--version";
@@ -44,8 +44,8 @@
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit asl20 ];
 		platforms = lib.platforms.linux;
-    # Wild's MSRV is 1.89.
-		broken = lib.versionOlder cargo.version "1.89";
+		# Wild's MSRV is 1.94.
+		broken = lib.versionOlder cargo.version "1.94";
 		mainProgram = "wild";
 	};
 }))
