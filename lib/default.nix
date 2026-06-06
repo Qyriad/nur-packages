@@ -17,6 +17,8 @@
 in childExports // {
 	ansi = importChild ./ansi.nix;
 
+	commonVersions = importChild ./common-versions.nix;
+
 	/** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
 	 *
 	 * If the `tryEval` succeeded, return its value. Otherwise, return `fallback`.
