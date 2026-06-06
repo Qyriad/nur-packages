@@ -45,7 +45,14 @@
 			# Just the user-facing packages, and only ones that are available on this platform.
 			packages = nurPackages.availablePackages;
 
-			farm = pkgs.linkFarmFromDrvs "qyriad-nur-all" (lib.attrValues packages);
+			farm = packages
+			|> lib.attrValues
+			|> pkgs.linkFarmFromDrvs "qyriad-nur-all"
+			|> (drv: drv.overrideAttrs (final: prev: {
+				meta = prev.meta or { } // {
+					description = "Link-farm of all packages in this NUR";
+				};
+			}));
 		in {
 			inherit nurPackages farm;
 			packages = packages // {
