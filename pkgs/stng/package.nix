@@ -11,7 +11,7 @@
 	self = final.finalPackage;
 in {
 	pname = "stng";
-	version = "1.2.0";
+	version = "1.5.1";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -21,13 +21,13 @@ in {
 		owner = "atomdrift";
 		repo = "stng";
 		tag = "v${self.version}";
-		hash = "sha256-wxchyduplUcXINqhPmbTpIfPZyuYDsbqPJO4mU0AEcw=";
+		hash = "sha256-YOvvYeiR8VMTJ68g4PjQgph28KZJ7N/zknZRpC5iZiE=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-WXWVsmgevsAoi+J75iOdPx7Z02BlztbQV1kAxxSfXmI=";
+		hash = "sha256-P/5p/+PVbQ9BoWKkBULI1fkD6FqZg6OQCZOaAy6p3Ow=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
