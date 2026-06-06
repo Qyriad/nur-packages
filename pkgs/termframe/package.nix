@@ -14,7 +14,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "termframe";
-	version = "0.8.1";
+	version = "0.8.5";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -28,13 +28,13 @@ in {
 		owner = "pamburus";
 		repo = "termframe";
 		tag = "v${self.version}";
-		hash = "sha256-rW+45Idx2cehFOLxo6KJwVYLEuxlb+olZEQU7mn0HZg=";
+		hash = "sha256-7+odV1mkUtObSV8LiDJn5MmT3xBm42XScHulFk23KB4=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-J8ceIWwhSb0pyiccVAGxJIcAkMNZS72uqUa8PU+ttRM=";
+		hash = "sha256-Ws+0L752D/ESOZJe9RU63TGlKfpGsS2DxKy+8uYmCfw=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
