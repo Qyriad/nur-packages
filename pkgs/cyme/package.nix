@@ -26,7 +26,7 @@ in stdenv.mkDerivation (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "cyme";
-	version = "2.3.0";
+	version = "3.0.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -35,13 +35,13 @@ in {
 		owner = "tuna-f1sh";
 		repo = "cyme";
 		tag = "v${self.version}";
-		hash = "sha256-Jgm/IIrtsoUQQ6WmS3Ol20rc+oQJsfpOyHqP06jcPfM=";
+		hash = "sha256-5BDvFtqBkMxhZu9Yk8Ov30Hmfg8xD1kRnD7lnEvR6v0=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-0CeyrHoqKdt5cy9F+LpZAsCR2nXMtXvyk1Dr+f9SS44=";
+		hash = "sha256-kzpYbpCo8E5KQBkPwxe5pz+vjD1H3J51fnVdOW9LawM=";
 	};
 	cargoBuildFeatures = [
 		"libusb"
