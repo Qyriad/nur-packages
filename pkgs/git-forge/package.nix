@@ -33,6 +33,7 @@ in {
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		broken = lib.versionOlder goHooks.go.version "1.26.0";
 		mainProgram = "forge";
 	};
 })
