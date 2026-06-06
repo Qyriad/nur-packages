@@ -18,7 +18,7 @@
 	qtutilities,
 }: stdenv.mkDerivation (self: {
 	pname = "qjackctl";
-	version = "1.0.4";
+	version = "1.0.6";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -27,7 +27,7 @@
 		owner = "rncbc";
 		repo = "qjackctl";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-eZ3PBacRdMJCHHwE0qYi4jgSb7G7uS2Q+j02EdnSYqA=";
+		hash = "sha256-EZR6E6swVRcD8uKZm8zCtps/P/marCfhdUaaOvArayo=";
 	};
 
 	nativeBuildInputs = [
