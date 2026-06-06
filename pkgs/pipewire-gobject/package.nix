@@ -16,7 +16,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "pipewire-gobject";
-	version = "0.3.8";
+	version = "0.3.9";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -30,7 +30,7 @@ in {
 		owner = "bhack";
 		repo = "pipewire-gobject";
 		tag = self.version;
-		hash = "sha256-dxW06jWAp5olpaTFTBC6TiLpjyhUf9WrhaU+LUc2qV4=";
+		hash = "sha256-k2AyGBobcK1gsQTey51dvh38J5jKZYV22xbT17lWe5o=";
 	};
 
 	postPatch = ''
