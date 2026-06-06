@@ -18,7 +18,7 @@
 	stdenv = clangStdenv;
 in stdenv.mkDerivation (self: {
 	pname = "wiremix";
-	version = "0.9.0";
+	version = "0.11.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -30,13 +30,13 @@ in stdenv.mkDerivation (self: {
 		owner = "tsowell";
 		repo = "wiremix";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-gX8GgJhckfXDCJvmVCHxZTfTcKeHqpghZuUOZOUR24c=";
+		hash = "sha256-gg5wh7f6M1YZxtBBos2ORKIGzNvV6gH04Z00PoNtF1Y=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-WqC+JVjE0zxvn9/64eGmMIwSqIBXj/OsEmvUHnGKEkA=";
+		hash = "sha256-QT96vzK0PirBn4nf40SEghcbAt+aRplETUREONZtY3I=";
 	};
 
 	env.LIBCLANG_PATH = (lib.getLib libclang) + "/lib";
