@@ -65,6 +65,7 @@ in {
 		homepage = "https://github.com/bhack/pipewire-gobject";
 		license = with lib.licenses; [ mit ];
 		maintainers = with lib.maintainers; [ qyriad ];
+		platforms = pipewire.meta.platforms;
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 	};
 }))
