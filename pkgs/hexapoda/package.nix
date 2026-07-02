@@ -13,7 +13,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "hexapoda";
-	version = "0.2.3";
+	version = "0.2.4";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -25,13 +25,13 @@ in {
 		owner = "simonomi";
 		repo = "hexapoda";
 		tag = "v${self.version}";
-		hash = "sha256-ZIZVioyo/1U7sy6rWLcuABRsHO6rU69keQpfH6tfcD0=";
+		hash = "sha256-5vl2S/ydmFmPgLVpaWnvy+n4HXCz7J4vdM0peOk24lo=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		inherit (self) src;
 		name = lib.suffixName self "cargo-deps";
-		hash = "sha256-4MeStfLWv/M3rycdTULuqAli7bUQXQ0WDZvYHWpOd1A=";
+		hash = "sha256-9PUhcWLdMuq7xhxdS9hGftEfUTtslBAly/dW/xRRyko=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
