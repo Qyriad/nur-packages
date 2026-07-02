@@ -8,7 +8,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "git-forge";
-	version = "0.5.1";
+	version = "0.6.0";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -17,12 +17,12 @@ in {
 		owner = "git-pkgs";
 		repo = "forge";
 		tag = "v${self.version}";
-		hash = "sha256-oLkaqnyCV8dOs33bz1FqhQT7A/smupk2Y5kaAuD1F3M=";
+		hash = "sha256-kVKDHcrtXbOqqZoiKb/SxOKbTy2A7oHomlUImkcnxmA=";
 	};
 
 	goModules = fetchGoModules {
 		inherit (self) name src;
-		hash = "sha256-HqO2GsPkpACAlNSm6VGoyAWKzWgkADmDrevLHIHNTaI=";
+		hash = "sha256-sduEepxhOCLk7/YMJbIwtt78Bo9UJ5olb8po7drxPZw=";
 	};
 
 	nativeBuildInputs = goHooks.asList;
