@@ -8,7 +8,7 @@
 	versionCheckHook,
 }: stdenv.mkDerivation (self: {
 	pname = "folderify";
-	version = "4.1.1";
+	version = "4.1.3";
 
 	strictDeps = true;
 	__structuredAttrs = true;
@@ -20,13 +20,13 @@
 		owner = "lgarron";
 		repo = "folderify";
 		tag = "v${self.version}";
-		hash = "sha256-mC4Fc/gY6iqmgrghaXu6xAaITs+nrMBUdICoeq0Az6g=";
+		hash = "sha256-Gq6rXqvvnFmAzKxnoJ70x2zLA4h/P0hjMMldNMc6jtI=";
 	};
 
 	cargoDeps = rustPlatform.fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-W1H7F8LNJ8Z9Ir/eDianp2GSr68maziT/4GxkM/5HFc=";
+		hash = "sha256-XyNcWwqy4w+b/epvjx6Jt7IBoZgxfowLOWeC6pMvaVo=";
 	};
 
 	versionCheckProgramArg = "--version";
