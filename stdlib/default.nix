@@ -39,6 +39,8 @@
 	|> lib.map (self.overridePkgStdenvCC pkg)
 	|> lib.lists.findFirst lib.isEnabledDerivation null;
 
+	makePackage = qpkgs.callPackage ./make-package { };
+
 	#overridePkgStdenv = newStdenv: drv: let
 	#	overrideArgs = lib.functionArgs drv.override;
 	#	stdenvArgs = overrideArgs
