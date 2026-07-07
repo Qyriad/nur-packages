@@ -1,12 +1,13 @@
 {
 	lib,
 	stdenvNoCC,
+	stdlib,
 	fetchurl,
 	unzip,
 }:
 # This cannot be built from source since Hammerspoon requires entitlements to work,
 # and codesigning entitlements is unfortunately incompatible with immutability.
-stdenvNoCC.mkDerivation (self: {
+stdlib.makePackage stdenvNoCC (self: {
 	pname = "hammerspoon";
 	version = "0.9.100";
 
