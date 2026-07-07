@@ -1,5 +1,6 @@
 {
 	stdenvNoCC,
+	stdlib,
 	lib,
 	go,
 	git,
@@ -12,7 +13,7 @@
 	GOTOOLCHAIN ? "local",
 	deleteVendor ? false,
 	drvAttrs ? { },
-}: stdenvNoCC.mkDerivation (self: {
+}: stdlib.makePackage stdenvNoCC (self: {
 	name = "${name}-go-modules";
 
 	strictDeps = true;
