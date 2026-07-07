@@ -92,7 +92,10 @@ in lib.makeScope pkgs.newScope (self: let
 	|> passedLib.mapDerivationAttrset mkPretty
 	|> passedLib.mapAttrs lib.maybeAppendAttrPath;
 
-	mkPretty = pkg: if (pkg ? overrideAttrs) && (!(pkg._isPretty or false)) then stdlib.mkStdenvPretty pkg else pkg;
+	# stdlib.makePackage already does this,
+	# so this will only apply to packages like obs-studio-unwrapped
+	# which purely use .overrideAttrs.
+	mkPretty = pkg: if (pkg ? overrideAttrs) && (pkg.preHook or "" == "") then stdlib.mkStdenvPretty pkg else pkg;
 
 in discoveredPackages // {
 
