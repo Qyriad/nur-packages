@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenvNoCC,
+	stdlib,
 	python3Packages,
 	pythonHooks,
 	fetchPypi,
@@ -10,13 +11,9 @@
 	pythonImportsCheckHook,
 }: let
 	stdenv = stdenvNoCC;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "pipe";
 	version = "2.2";
-
-	__structuredAttrs = true;
-	strictDeps = true;
-
 	doCheck = true;
 	doInstallCheck = true;
 

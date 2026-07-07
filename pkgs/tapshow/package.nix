@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	fetchGoModules,
 	goHooks,
@@ -12,14 +13,11 @@
 	gdk-pixbuf,
 	pango,
 	gtk4,
-}: stdenv.mkDerivation (finalAttrs: let
+}: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "tapshow";
 	version = "0.3.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "hmnd";

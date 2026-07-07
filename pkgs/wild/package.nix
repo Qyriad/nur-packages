@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustPlatform,
 	rustHooks,
@@ -8,12 +9,9 @@
 	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "wild";
 	version = "0.9.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "davidlattimore";

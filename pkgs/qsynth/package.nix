@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchzip,
 	qt6Packages,
 	alsa-lib,
@@ -23,12 +24,9 @@
 	qtbase,
 	qttools,
 	qtsvg,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "qsynth";
 	version = "1.0.6";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchzip {
 		url = "mirror://sourceforge/qsynth/qsynth-${self.version}.tar.gz";

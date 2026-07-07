@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	pkg-config,
 	cmake,
@@ -8,12 +9,9 @@
 	obs-studio,
 	curl,
 	qt6Packages,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "obs-chapter-marker-manager";
 	version = "1.2.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "StreamUPTips";

@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustPlatform,
 	rustHooks,
@@ -9,12 +10,9 @@
 	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "otree";
 	version = "0.6.5";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	doCheck = true;
 	doInstallCheck = true;

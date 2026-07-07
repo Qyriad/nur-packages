@@ -1,15 +1,13 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	fetchGoModules,
 	goHooks,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "sequin";
 	version = "0.3.1";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "charmbracelet";

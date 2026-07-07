@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	kdePackages,
 	qt6Packages,
@@ -16,12 +17,9 @@
 	qtsvg,
 	qttools,
 	qtutilities,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "qjackctl";
 	version = "1.0.6";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "rncbc";

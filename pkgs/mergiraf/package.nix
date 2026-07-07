@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitea,
 	rustHooks,
 	rustPlatform,
@@ -15,12 +16,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "mergiraf";
 	version = "0.17.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 	doCheck = true;
 
 	src = fetchFromGitea {

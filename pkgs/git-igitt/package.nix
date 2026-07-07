@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustHooks,
 	rustPlatform,
@@ -9,12 +10,9 @@
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 	importCargoLock,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "git-igitt";
 	version = "0.1.21";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 	doCheck = true;
 
 	src = fetchFromGitHub {

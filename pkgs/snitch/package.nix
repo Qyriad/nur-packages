@@ -1,15 +1,13 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	fetchGoModules,
 	goHooks,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "snitch";
 	version = "0.2.2";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "karol-broda";

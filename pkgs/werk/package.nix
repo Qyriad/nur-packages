@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	rustHooks,
 	rustPlatform,
 	cargo,
@@ -9,14 +10,11 @@
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 	importCargoLock,
-}: stdenv.mkDerivation (finalAttrs: let
+}: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "werk";
 	version = "0.2.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	doCheck = true;
 	doInstallCheck = true;

@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenvNoCC,
+	stdlib,
 	fetchFromGitHub,
 	pythonHooks,
 	python3,
@@ -11,7 +12,7 @@
 	pytz,
 }: let
 	stdenv = stdenvNoCC;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "python-pluralkit";
 	version = "1.0.0";
 

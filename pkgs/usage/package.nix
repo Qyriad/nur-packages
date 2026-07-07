@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustHooks,
 	rustPlatform,
@@ -11,12 +12,9 @@
 	fetchCargoVendor,
 }: let
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "usage";
 	version = "3.4.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "jdx";

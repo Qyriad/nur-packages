@@ -1,13 +1,11 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "sloth";
 	version = "2020-09-16-HEAD";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "lunasorcery";

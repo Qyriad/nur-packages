@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustHooks,
 	rustPlatform,
@@ -10,14 +11,11 @@
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 	importCargoLock,
-}: stdenv.mkDerivation (finalAttrs: let
+}: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "termframe";
 	version = "0.8.7";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	doCheck = true;
 	doInstallCheck = true;

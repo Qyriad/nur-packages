@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	rustHooks,
 	rustPlatform,
 	cargo,
@@ -30,12 +31,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalLinux
 	;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "simp";
 	version = "3.9.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "Kl4rry";

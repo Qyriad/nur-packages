@@ -1,6 +1,7 @@
 {
 	lib,
 	clangStdenv,
+	stdlib,
 	fetchFromGitHub,
 	pkg-config,
 	rustPlatform,
@@ -16,12 +17,9 @@
 	# There seem to be bindgen issues trying to mix GCC and Clang,
 	# so let's just use Clang.
 	stdenv = clangStdenv;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "wiremix";
 	version = "0.11.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	doCheck = true;
 	doInstallCheck = true;

@@ -1,17 +1,15 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	fetchGoModules,
 	goHooks,
-}: stdenv.mkDerivation (finalAttrs: let
+}: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "git-forge";
 	version = "0.6.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "git-pkgs";

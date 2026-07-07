@@ -1,17 +1,15 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustPlatform,
 	rustHooks,
 	cargo,
 	versionCheckHook,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "folderify";
 	version = "4.1.3";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	doCheck = true;
 	doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

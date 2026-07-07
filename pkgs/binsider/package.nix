@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustPlatform,
 	libiconv,
@@ -14,12 +15,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 		;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "binsider";
 	version = "0.3.2";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "orhun";

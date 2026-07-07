@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	darwin,
 	apple-sdk,
 	fetchFromGitHub,
@@ -16,12 +17,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "pik";
 	version = "1.0.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	doCheck = true;
 	doInstallCheck = true;

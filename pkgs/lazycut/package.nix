@@ -1,12 +1,13 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	srcOnly,
 	fetchFromGitHub,
 	fetchGoModules,
 	go,
 	goHooks,
-}: stdenv.mkDerivation (finalAttrs: let
+}: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "lazycut";

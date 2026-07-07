@@ -1,5 +1,6 @@
 {
 	lib,
+	stdlib,
 	python3Packages,
 	fetchFromGitHub,
 	meson,
@@ -12,14 +13,11 @@
 }: lib.callWith' python3Packages ({
 	python,
 	stdenv,
-}: stdenv.mkDerivation (finalAttrs: let
+}: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "pipewire-gobject";
 	version = "0.3.9";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	# The tests rely on the libraries at the installed paths existing.
 	doInstallCheck = true;

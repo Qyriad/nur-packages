@@ -1,20 +1,18 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitea,
 	rustPlatform,
 	rustHooks,
 	cargo,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
-}: stdenv.mkDerivation (final: let
+}: stdlib.makePackage stdenv (final: let
 	self = final.finalPackage;
 in {
 	pname = "stng";
 	version = "1.7.0";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitea {
 		domain = "codeberg.org";

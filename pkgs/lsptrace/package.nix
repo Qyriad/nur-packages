@@ -1,15 +1,13 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	fetchGoModules,
 	goHooks,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "lsptrace";
 	version = "2024-12-05-34daa52";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "mparq";

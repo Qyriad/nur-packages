@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	darwin,
 	fetchFromGitHub,
 	rustPlatform,
@@ -14,12 +15,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdenv.mkDerivation (self: {
+in stdlib.makePackage stdenv (self: {
 	pname = "intentrace";
 	version = "0.10.4";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	doCheck = true;
 	doInstallCheck = true;

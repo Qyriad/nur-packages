@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenvNoCC,
+	stdlib,
 	fetchFromGitHub,
 	python3Packages,
 	pythonHooks,
@@ -13,15 +14,11 @@
 	prompt-toolkit,
 }: let
 	stdenv = stdenvNoCC;
-in stdenv.mkDerivation (finalAttrs: let
+in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "xontrib-abbrevs";
 	version = "0.1.1";
-
-	__structuredAttrs = true;
-	strictDeps = true;
-
 	doCheck = true;
 	doInstallCheck = true;
 

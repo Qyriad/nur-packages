@@ -1,6 +1,7 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchFromGitHub,
 	rustPlatform,
 	cargo,
@@ -12,12 +13,9 @@
 	cargoBuildHook,
 	cargoCheckHook,
 	cargoInstallHook,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "age-plugin-openpgp-card";
 	version = "0.1.2";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "wiktor-k";

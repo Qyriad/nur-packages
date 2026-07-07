@@ -1,5 +1,6 @@
 {
 	lib,
+	stdlib,
 	stdenv,
 	darwin,
 	fetchFromGitHub,
@@ -22,14 +23,11 @@
 		optionalDarwin
 	;
 	inherit (stdenv) hostPlatform buildPlatform;
-in stdenv.mkDerivation (finalAttrs: let
+in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "cyme";
 	version = "3.0.1";
-
-	strictDeps = true;
-	__structuredAttrs = true;
 
 	src = fetchFromGitHub {
 		owner = "tuna-f1sh";

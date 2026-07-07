@@ -1,16 +1,13 @@
 {
 	lib,
 	stdenv,
+	stdlib,
 	fetchzip,
 	xz,
 	perl,
-}: stdenv.mkDerivation (self: {
+}: stdlib.makePackage stdenv (self: {
 	pname = "pslist";
 	version = "1.4.0";
-
-	__structuredAttrs = true;
-	strictDeps = true;
-
 	outputs = [ "out" "man" ];
 
 	src = fetchzip {
