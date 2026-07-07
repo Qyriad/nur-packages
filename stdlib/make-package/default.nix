@@ -32,6 +32,7 @@
 			preHook ? "",
 			postHook ? "",
 			nativeBuildInputs ? [ ],
+			cmakeFlags ? [ ],
 			...
 		}@args: args // {
 			inherit strictDeps __structuredAttrs;
@@ -50,14 +51,13 @@
 				"${postHook}"
 			];
 
+			cmakeFlags = [ "-DCMAKE_COLOR_DIAGNOSTICS=ON" ] ++ cmakeFlags;
+
 			passthru = passthru // {
 				fromHead = passthru.fromHead or (lib.mkHeadFetch { inherit self; });
 				overrideStdenv = newStdenv: stdlib.makePackage newStdenv mkDerivationArgs;
 				byStdenv = validStdenvs
 				|> lib.mapAttrs (lib.const self.overrideStdenv);
-
-				/** XXX: Will be removed shortly. */
-				_isPretty = true;
 			};
 		};
 	};

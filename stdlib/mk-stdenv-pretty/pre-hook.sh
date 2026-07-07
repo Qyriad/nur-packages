@@ -57,9 +57,15 @@ function _nixLogWithLevel()
 #	echo -n "$output"
 #}
 
+# Nixpkgs's ninjaBuildPhase sets TERM=dumb,
+# which in Clang and GCC blocks color no matter what.
+# With TERM unset, it'll be up to -fcolor options and isatty.
 function ninja()
 {
-	TERM=xterm command ninja "$@" | cat
+	(
+		unset TERM
+		command ninja "$@"
+	)
 }
 
 function _logHook()
