@@ -55,6 +55,9 @@
 				overrideStdenv = newStdenv: stdlib.makePackage newStdenv mkDerivationArgs;
 				byStdenv = validStdenvs
 				|> lib.mapAttrs (lib.const self.overrideStdenv);
+
+				/** XXX: Will be removed shortly. */
+				_isPretty = true;
 			};
 		};
 	};

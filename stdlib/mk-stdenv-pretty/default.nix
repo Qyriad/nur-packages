@@ -19,4 +19,9 @@ in pkg: pkg.overrideAttrs (prev: {
 		"source ${prettyPostHook}"
 		"${prev.postHook or ""}"
 	];
+
+	passthru = prev.passthru or { } // {
+		/** XXX: Will be removed shortly. */
+		_isPretty = true;
+	};
 })

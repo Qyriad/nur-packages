@@ -92,7 +92,7 @@ in lib.makeScope pkgs.newScope (self: let
 	|> passedLib.mapDerivationAttrset mkPretty
 	|> passedLib.mapAttrs lib.maybeAppendAttrPath;
 
-	mkPretty = pkg: if pkg ? overrideAttrs then stdlib.mkStdenvPretty pkg else pkg;
+	mkPretty = pkg: if (pkg ? overrideAttrs) && (!(pkg._isPretty or false)) then stdlib.mkStdenvPretty pkg else pkg;
 
 in discoveredPackages // {
 
