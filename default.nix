@@ -108,7 +108,11 @@ in discoveredPackages // {
 	# Same as `lib`, but *only* our additions.
 	nurLib = import ./lib { lib = passedLib; };
 
-	/** qpkgs stdlib, in contrast with `lib`, is for functions tied to `pkgs`. */
+	/**
+	 * qpkgs stdlib, in contrast with `lib`, is for functions tied to `pkgs`.
+	 *
+	 * Notably includes `makePackage`, our lighly enhanced mkDerivation.
+	 */
 	stdlib = import ./stdlib {
 		qpkgs = self;
 		inherit (self) lib;
@@ -162,7 +166,9 @@ in discoveredPackages // {
 		self.validStdenvs.clangLldStdenv
 	);
 
-	/** Our scope's callPackage will try each of these in order that isn't `meta.broken`. */
+	/** Our scope's callPackage will try each of these in order that isn't `meta.broken`.
+	 * Or at least, it will when we unbreak it.
+	 */
 	preferredStdenvs = [
 		validStdenvs.libcxxLldStdenv
 		validStdenvs.clangLldStdenv
