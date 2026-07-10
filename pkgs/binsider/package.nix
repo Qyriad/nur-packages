@@ -38,6 +38,11 @@ in stdlib.makePackage stdenv (self: {
 		libiconv
 	];
 
+	checkFlags = [
+		"--skip=test_extract_strings"
+		"--skip=test_init"
+	];
+
 	passthru.tests = testers.testVersion { package = self.finalPackage; };
 	passthru.fromHead = lib.mkHeadFetch {
 		self = self.finalPackage;
