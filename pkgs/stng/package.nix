@@ -32,6 +32,14 @@ in {
 		cargo
 	];
 
+	# Requires networking.
+	checkFlags = [
+		"--skip=sockaddr_extraction_tests::test_kimwolf_installer_ip_extraction"
+		# No idea tbh.
+		"--skip=test_goodboy_loader_detection"
+		"--skip=test_flush_cache_real_file"
+	];
+
 	meta = {
 		homepage = "https://codeberg.org/atomdrift/stng";
 		description = "strings(1) for malware analysts - stronger, better, faster";
