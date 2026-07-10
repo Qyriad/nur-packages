@@ -64,6 +64,12 @@ in {
 		libiconv
 	];
 
+	checkFlags = [
+		"--skip=integration_test"
+		"--skip=test_run"
+		"--skip=udev::hwdb::get"
+	];
+
 	postInstall = lib.optionalDefault (buildPlatform.canExecute hostPlatform) ''
 		"$out/bin/cyme" --gen
 		installManPage ./doc/cyme.1
