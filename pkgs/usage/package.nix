@@ -7,14 +7,19 @@
 	rustPlatform,
 	cargo,
 	libiconv,
-	testers,
+	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 }: let
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "usage";
 	version = "3.4.0";
+
+	# Some of the tests rely on `usage` in PATH. We'll fix those later.
+	dontCargoCheck = true;
 
 	src = fetchFromGitHub {
 		owner = "jdx";
@@ -24,7 +29,7 @@ in stdlib.makePackage stdenv (self: {
 	};
 
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-mzXdgcZNRvKbjHokTtxiaaN+xQLbbEMpHOMur3/zIjA=";
 	};
@@ -33,13 +38,16 @@ in stdlib.makePackage stdenv (self: {
 		cargo
 	];
 
+	nativeInstallCheckInputs = [
+		versionCheckHook
+	];
+
 	buildInputs = optionalDarwin [
 		libiconv
 	];
 
 	passthru = {
-		fromHead = lib.mkHeadFetch { self = self.finalPackage; };
-		tests.version = testers.testVersion { package = self.finalPackage; };
+		fromHead = lib.mkHeadFetch { inherit self; };
 	};
 
 	meta = {
