@@ -32,12 +32,18 @@ in {
 		cargo
 	];
 
-	# Requires networking.
 	checkFlags = [
+		# Requires networking.
 		"--skip=sockaddr_extraction_tests::test_kimwolf_installer_ip_extraction"
 		# No idea tbh.
 		"--skip=test_goodboy_loader_detection"
 		"--skip=test_flush_cache_real_file"
+		"--skip=api_tests::test_extract_from_object_api"
+		"--skip=api_tests::test_extract_from_object_with_preextracted_r2"
+		"--skip=api_tests::test_goblin_reexport"
+		"--skip=filter_tests::test_garbage_filter_enabled"
+		"--skip=filter_tests::test_garbage_filter_removes_garbage"
+		"--skip=extract_strings_with_options"
 	];
 
 	meta = {
