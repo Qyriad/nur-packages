@@ -41,6 +41,8 @@
 		in {
 			strictDeps ? true,
 			__structuredAttrs ? true,
+			doCheck ? true,
+			doInstallCheck ? true,
 			passthru ? { },
 			preHook ? "",
 			postHook ? "",
@@ -49,6 +51,7 @@
 			...
 		}@args: args // {
 			inherit strictDeps __structuredAttrs;
+			inherit doCheck doInstallCheck;
 
 			nativeBuildInputs = nativeBuildInputs ++ [
 				bat
