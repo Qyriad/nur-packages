@@ -4,6 +4,7 @@
 	stdlib,
 	fetchFromGitHub,
 	rustPlatform,
+	rustHooks,
 	cargo,
 	pkg-config,
 	pcsclite,
@@ -13,23 +14,21 @@
 	cargoBuildHook,
 	cargoCheckHook,
 	cargoInstallHook,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "age-plugin-openpgp-card";
 	version = "0.1.2";
 
 	src = fetchFromGitHub {
 		owner = "wiktor-k";
 		repo = "age-plugin-openpgp-card";
-		rev = "refs/tags/v${self.version}";
+		tag = "v${self.version}";
 		hash = "sha256-z1Q1Sg6qcQwhNDI6dCMf4BejZn5K9VzqLCVvkisB//k=";
 	};
 
-	nativeBuildInputs = [
+	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
-		cargoSetupHook
-		cargoBuildHook
-		cargoCheckHook
-		cargoInstallHook
 		pkg-config
 	];
 
@@ -38,14 +37,13 @@
 	];
 
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-MrtCm41Q/Zs3FZCkdsNX30vFFuxIHNHHz4fbhMXuxD4=";
 	};
-	cargoBuildType = "release";
 
 	passthru = {
-		fromHead = lib.mkHeadFetch { self = self.finalPackage; };
+		fromHead = lib.mkHeadFetch { inherit self; };
 	};
 
 	meta = {
