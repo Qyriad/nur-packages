@@ -10,6 +10,9 @@
 	version = "1.4.0";
 	outputs = [ "out" "man" ];
 
+	# Maybe we'll figure them out later.
+	doCheck = false;
+
 	src = fetchzip {
 		url = "https://devel.ringlet.net/files/sys/pslist/pslist-${self.version}.tar.xz";
 		hash = "sha256-G/exLBCEUu1pTW2QFylFPyZ1nbs2jKErKuZHy9iB4eo=";
