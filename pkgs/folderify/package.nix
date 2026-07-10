@@ -45,6 +45,8 @@
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		platforms = lib.platforms.darwin;
+		# MSRV of dependency time@0.3.47.
+		broken = lib.versionOlder cargo.version "1.88.0";
 		mainProgram = "folderify";
 	};
 })
