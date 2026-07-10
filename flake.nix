@@ -35,6 +35,13 @@
 		inherit (lib.systems) flakeExposed;
 		forAllSystems = lib.genAttrs flakeExposed;
 
+		eachNixpkgs = {
+			inherit nixpkgs nixpkgs-26_05 nixpkgs-25_11 nixpkgs-25_05 nixpkgs-24_11;
+		};
+
+		eachNixpkgsFarm = system: eachNixpkgs
+		|> lib.mapAttrs (_: nixpkgs: (genForNixpkgs system nixpkgs).farm);
+
 		genForNixpkgs = system: nixpkgs: let
 			pkgs = import nixpkgs { inherit system; config = import ./nixpkgs-config.nix; };
 			nurScope = import ./default.nix { inherit pkgs; };
@@ -69,12 +76,18 @@
 		# Everything, from user-facing packages to hooks to functions.
 		legacyPackages = forAllSystems (system: (genForNixpkgs system nixpkgs).nurPackages);
 
-		checks = forAllSystems (system: {
-			packages = self.packages.${system}.default;
-			nixpkgs-26_05 = (genForNixpkgs system nixpkgs-26_05).farm;
-			nixpkgs-25_11 = (genForNixpkgs system nixpkgs-25_11).farm;
-			nixpkgs-25_05 = (genForNixpkgs system nixpkgs-25_05).farm;
-			nixpkgs-24_11 = (genForNixpkgs system nixpkgs-24_11).farm;
+		checks = forAllSystems (system: let
+			# Feels bad to reimport Nixpkgs here...
+			# But we need pkgs.linkFarm one more time.
+			pkgs = import nixpkgs { inherit system; config = import ./nixpkgs-config.nix; };
+			farms = eachNixpkgsFarm system;
+			nixpkgs-all-farms = (pkgs.linkFarm "qyriad-nur-all-nixpkgs-farms" farms).overrideAttrs (prev: {
+				meta = prev.meta or { } // {
+					description = "Run nix store delete --delete-closure --skip-live to free up the nix flake check drvs.";
+				};
+			});
+		in farms // {
+			inherit nixpkgs-all-farms;
 		});
 	};
 }
