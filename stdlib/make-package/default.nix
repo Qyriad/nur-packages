@@ -7,6 +7,19 @@
 	removeOverrideAttrs = lib.removeAttrsCalled [ "overrideAttrs" ];
 	validStdenvs = stdlib.getStdenvs { };
 
+	mkForStdenv = mkDerivationArgs: stdenvName: newStdenv: let
+		# We want to change the name so it's clear in build logs.
+		# We do NOT change pname.
+		# Doing it this way also means that going multiple deep only suffixes once.
+		newArgs = mkDerivationArgs // {
+			name = lib.suffixName mkDerivationArgs stdenvName;
+			passthru = mkDerivationArgs.passthru // {
+				overridenStdenvName = stdenvName;
+				overridenStdenv = newStdenv;
+			};
+		};
+	in stdlib.makePackage newStdenv newArgs;
+
 	/** stdlib.makePackage: a slightly better stdenv.mkDerivation
 	 *
 	 * Takes all the same arguments as stdenv.mkDerivation, but some defaults are added:
@@ -57,7 +70,7 @@
 				fromHead = passthru.fromHead or (lib.mkHeadFetch { inherit self; });
 				overrideStdenv = newStdenv: stdlib.makePackage newStdenv mkDerivationArgs;
 				byStdenv = validStdenvs
-				|> lib.mapAttrs (lib.const self.overrideStdenv);
+				|> lib.mapAttrs (mkForStdenv mkDerivationArgs);
 			};
 		};
 	};
