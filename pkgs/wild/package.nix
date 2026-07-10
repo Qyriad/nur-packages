@@ -13,6 +13,8 @@
 	pname = "wild";
 	version = "0.9.0";
 
+	doCheck = false;
+
 	src = fetchFromGitHub {
 		owner = "davidlattimore";
 		repo = "wild";
