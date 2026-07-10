@@ -20,9 +20,8 @@ in {
 	version = "0.3.9";
 
 	# The tests rely on the libraries at the installed paths existing.
+	doCheck = false;
 	doInstallCheck = true;
-
-	outputs = [ "out" ];
 
 	src = fetchFromGitHub {
 		owner = "bhack";
