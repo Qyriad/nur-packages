@@ -11,13 +11,14 @@
 	alsa-lib,
 	jack2,
 	portaudio,
-	versionCheckHook,
 }: lib.callWith [ kdePackages qt6Packages ] ({
 	qtbase,
 	qtsvg,
 	qttools,
 	qtutilities,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "qjackctl";
 	version = "1.0.6";
 
@@ -32,7 +33,6 @@
 		cmake
 		ninja
 		pkg-config
-		versionCheckHook
 	];
 
 	buildInputs = [
@@ -54,9 +54,9 @@
 	# Unncecessary. Works fine without wrapping.
 	dontWrapQtApps = true;
 
-	versionCheckProgramArg = "--version";
+	# FIXME: get versionCheckHook working at some point.
 
-	passthru.fromHead = lib.mkHeadFetch { self = self.finalPackage; };
+	passthru.fromHead = lib.mkHeadFetch { inherit self; };
 
 	meta = {
 		homepage = "https://qjackctl.sourceforge.io/";
