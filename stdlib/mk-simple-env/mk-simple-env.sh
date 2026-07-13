@@ -14,14 +14,15 @@ function mkSimpleEnvBuildPhase()
 	mkdir -p "$out"
 
 	for pathElem in "${allPaths[@]}"; do
-		#nixLog "working on '$pathElem"
-		# We're copying store paths, and cp will preserve their read-only nature,
+		#nixLog "working on '$pathElem'"
+		# We're working on store paths, and cp will preserve their read-only nature,
 		# but we still need to modify things in "$out".
+		# We do this every time, since each iteration might've added more read-only things.
+		# We don't use --no-preserve=mode to not clobber other mode bits.
 		chmod -R u+w "$out"
-
 		pushd "$pathElem" > /dev/null
 
-		cp -f --reflink=auto --recursive * "$out"
+		cp -f --reflink=auto --recursive --no-preserve=links --dereference * "$out"
 
 		popd > /dev/null
 	done
