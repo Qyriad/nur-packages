@@ -5,6 +5,8 @@
 	qpkgs ? import ../default.nix { },
 	lib ? qpkgs.lib,
 }: lib.makeExtensible (self: {
+	makePackage = qpkgs.callPackage ./make-package { };
+
 	runCommandMinimal = qpkgs.callPackage ./run-command-minimal { };
 
 	# FIXME: can we hack something to make `meta.position` work?
@@ -38,8 +40,6 @@
 	pkgByFirstWorkingStdenv = stdenvs: assert lib.isList stdenvs; { ... }@pkg: stdenvs
 	|> lib.map (self.overridePkgStdenvCC pkg)
 	|> lib.lists.findFirst lib.isEnabledDerivation null;
-
-	makePackage = qpkgs.callPackage ./make-package { };
 
 	#overridePkgStdenv = newStdenv: drv: let
 	#	overrideArgs = lib.functionArgs drv.override;
