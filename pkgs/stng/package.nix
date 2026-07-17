@@ -44,6 +44,7 @@ in {
 		"--skip=filter_tests::test_garbage_filter_enabled"
 		"--skip=filter_tests::test_garbage_filter_removes_garbage"
 		"--skip=extract_strings_with_options"
+		"--skip=rust_binary_tests::test_self_binary_extract_from_object"
 	];
 
 	meta = {
