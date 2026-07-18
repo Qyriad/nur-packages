@@ -48,6 +48,9 @@
 			postHook ? "",
 			nativeBuildInputs ? [ ],
 			cmakeFlags ? [ ],
+
+			cmakeBuildType ? "RelWithDebInfo",
+			mesonBuildType ? "debugoptimized",
 			...
 		}@args: args // {
 			inherit strictDeps __structuredAttrs;
@@ -68,6 +71,7 @@
 			];
 
 			cmakeFlags = [ "-DCMAKE_COLOR_DIAGNOSTICS=ON" ] ++ cmakeFlags;
+			inherit cmakeBuildType mesonBuildType;
 
 			passthru = passthru // {
 				fromHead = passthru.fromHead or (lib.mkHeadFetch { inherit self; });
