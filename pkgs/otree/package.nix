@@ -12,7 +12,7 @@
 	fetchCargoVendor,
 }: stdlib.makePackage stdenv (self: {
 	pname = "otree";
-	version = "0.6.5";
+	version = "0.7.1";
 
 	doCheck = true;
 	doInstallCheck = true;
@@ -21,13 +21,13 @@
 		owner = "fioncat";
 		repo = "otree";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-w3ZS3hg9hrqjYcNKacT86llhz7PzJbz1r7/bDJJWxxs=";
+		hash = "sha256-Kcdhppc1hdPCQ+Q0ogmGSS9skC+ql96WQgCgKMBKcss=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		inherit (self) src;
 		name = "${self.finalPackage.name}-cargo-deps";
-		hash = "sha256-S7ZG+p9grgqb5O7QqPdDUyhJnRWnPpCCDonyLQEznxc=";
+		hash = "sha256-B72PRaCMF4jEvsoUJyGFRNnA0ok3UYZfIwU/MAiWMJo=";
 	};
 
 	versionCheckProgramArg = "--version";
@@ -51,6 +51,8 @@
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		# MSRV of multiple dependencies.
+		broken = lib.versionOlder cargo.version "1.95.0";
 		mainProgram = "otree";
 	};
 }))
