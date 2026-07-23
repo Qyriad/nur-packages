@@ -18,20 +18,20 @@
 	;
 in stdlib.makePackage stdenv (self: {
 	pname = "serie";
-	version = "0.8.0";
+	version = "0.8.1";
 	doCheck = true;
 
 	src = fetchFromGitHub {
 		owner = "lusingander";
 		repo = "serie";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-+kiNeMhturrWWxU9/GrQnen4vxZEaxQEUbA8sCYHvk8=";
+		hash = "sha256-R2k83G3ciszqI/KF1NgpFquEvJ0a9im2o+X29kJT210=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.finalPackage.name}-cargo-deps";
 		inherit (self) src;
-		hash = "sha256-0VkBnKF3DEkaoqn4r6aUMteUSzabpoHyCrqBXQ0UELs=";
+		hash = "sha256-ZQhMG6vwu/weL7mmaaf2to+0miR1GKeEvwunFiuNyn8=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
