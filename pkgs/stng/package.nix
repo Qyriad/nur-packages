@@ -12,20 +12,20 @@
 	self = final.finalPackage;
 in {
 	pname = "stng";
-	version = "1.7.0";
+	version = "1.7.1";
 
 	src = fetchFromGitea {
 		domain = "codeberg.org";
 		owner = "atomdrift";
 		repo = "stng";
 		tag = "v${self.version}";
-		hash = "sha256-cIQV1pJ97XX4bhotVfDvFSABG6sU3/nL4o1S3cpKI7s=";
+		hash = "sha256-aWsXBvLtU/QpuC105RK16EjR+Zk3trlNYMBFATC8Nyw=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-0msK2XFFCNohe0sbrwZM7bl2DAnPcTO3n75l5Nobfbc=";
+		hash = "sha256-xAAuGNtp/v1tnrEt7LcgCwhBJ1hrJ1pffTuC3EYyq3k=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
