@@ -32,7 +32,7 @@ in childExports // {
 		if lib.length list != 0 then (
 			lib.head list
 		) else (
-			""
+			fallback
 		)
 	;
 
