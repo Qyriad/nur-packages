@@ -20,7 +20,7 @@ function fetchGoModulesBuildPhase()
 
 	go mod vendor "${goModVendorFlags[@]}"
 
-	mkdir -p "vendor"
+	mkdir -p "$NIX_BUILD_TOP/$sourceRoot/vendor"
 
 	runHook postBuild
 }
