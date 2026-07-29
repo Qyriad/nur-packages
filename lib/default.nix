@@ -27,8 +27,6 @@ in childExports // {
 	/** Same as `tryResOr` but with opposite argument order. */
 	tryResFallback = fallback: { success, value }: if success then value else fallback;
 
-	startsWith = needle: heystack: (lib.match "^(${lib.escapeRegex heystack}).*$") != null;
-
 	headOr = fallback: list:
 		assert lib.isList list;
 		if lib.length list != 0 then (
