@@ -24,7 +24,9 @@
 	qtbase,
 	qttools,
 	qtsvg,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "qsynth";
 	version = "1.0.6";
 
@@ -81,9 +83,9 @@
 
 	meta = {
 		description = "Fluidsynth GUI";
-		longDescription = self.finalPackage.meta.description
+		longDescription = self.meta.description
 		+ "\n\nOptional features: "
-		+ lib.mkOptionalFeaturesDesc self.finalPackage.optionalFeatures;
+		+ lib.mkOptionalFeaturesDesc self.optionalFeatures;
 		mainProgram = "qsynth";
 		homepage = "https://sourceforge.net/projects/qsynth";
 		license = with lib.licenses; [ gpl2Plus] ;

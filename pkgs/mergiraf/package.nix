@@ -17,7 +17,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "mergiraf";
 	version = "0.18.0";
 
@@ -54,9 +56,9 @@ in stdlib.makePackage stdenv (self: {
 	];
 
 	passthru = {
-		tests.version = testers.testVersion { package = self.finalPackage; };
+		tests.version = testers.testVersion { package = self; };
 		fromHead = lib.mkHeadFetch {
-			self = self.finalPackage;
+			inherit self;
 			extraAttrs = self: {
 				cargoDeps = importCargoLock {
 					lockFile = self.src + "/Cargo.lock";

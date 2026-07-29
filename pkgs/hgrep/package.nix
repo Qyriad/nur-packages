@@ -17,7 +17,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "hgrep";
 	version = "0.3.9";
 
@@ -30,7 +32,7 @@ in stdlib.makePackage stdenv (self: {
 
 	cargoBuildType = "release";
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-TP+PClv7FX3kRBwJ0RAKbKoTKpi7hTZgw/Z/ktFKbwQ=";
 	};

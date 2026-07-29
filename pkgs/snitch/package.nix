@@ -5,7 +5,9 @@
 	fetchFromGitHub,
 	fetchGoModules,
 	goHooks,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "snitch";
 	version = "0.2.2";
 

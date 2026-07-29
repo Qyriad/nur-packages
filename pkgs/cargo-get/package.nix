@@ -12,7 +12,9 @@
 	fetchCargoVendor,
 }: let
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform) optionalDarwin;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "cargo-get";
 	version = "1.4.0";
 
@@ -28,7 +30,7 @@ in stdlib.makePackage stdenv (self: {
 
 	cargoDeps = fetchCargoVendor {
 		inherit (self) src;
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		hash = "sha256-vDqpDZziWjrU9WSH1cWvJZwRtwNIAO/sJl2XnkLS0Ss=";
 	};
 
@@ -48,7 +50,7 @@ in stdlib.makePackage stdenv (self: {
 
 	passthru = {
 		fromHead = lib.mkHeadFetch {
-			self = self.finalPackage;
+			inherit self;
 			headRef = "master";
 		};
 	};

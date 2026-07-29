@@ -31,7 +31,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalLinux
 	;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "simp";
 	version = "3.9.0";
 
@@ -53,13 +55,13 @@ in stdlib.makePackage stdenv (self: {
 	'';
 
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-j2bP2mrfm59W7DlFh6HNHaNmlKlVup07ttmXzgPLMfM=";
 	};
 
 	absoluteDylibsHook = lib.optionalDrvAttr stdenv.isLinux (mkAbsoluteDylibsHook {
-		inherit (self.finalPackage) name;
+		inherit (self) name;
 		# Wow, 7 months later and this is some of the wildest Nix code we've written.
 		runtimeDependenciesFor."$out/bin/simp" = map (lib.splatTo getLibrary) [
 			[ wayland "wayland-client" ]

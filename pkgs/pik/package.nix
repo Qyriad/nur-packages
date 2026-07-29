@@ -17,14 +17,16 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "pik";
 	version = "1.0.0";
 
 	doCheck = true;
 	doInstallCheck = true;
 
-	__darwinAllowLocalNetworking = self.finalPackage.doCheck;
+	__darwinAllowLocalNetworking = self.doCheck;
 
 	src = fetchFromGitHub {
 		owner = "jacek-kurlit";
@@ -34,7 +36,7 @@ in stdlib.makePackage stdenv (self: {
 	};
 
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-gHx6G3MUbv/JCbFGdAUm2ep11d0ksVLlEbSBCtXm7ls=";
 	};

@@ -15,7 +15,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "ubi";
 	version = "0.9.0";
 
@@ -39,8 +41,8 @@ in stdlib.makePackage stdenv (self: {
 
 	# The integration tests seem to have to preconditions.
 	cargoTestFlags = [ "--lib" ];
-	__darwinAllowLocalNetworking = self.finalPackage.doCheck;
-	__noChroot = stdenv.buildPlatform.isDarwin && self.finalPackage.doCheck;
+	__darwinAllowLocalNetworking = self.doCheck;
+	__noChroot = stdenv.buildPlatform.isDarwin && self.doCheck;
 
 	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
@@ -56,7 +58,7 @@ in stdlib.makePackage stdenv (self: {
 
 	passthru = {
 		fromHead = lib.mkHeadFetch {
-			self = self.finalPackage;
+			inherit self;
 			headRef = "master";
 			extraAttrs = self: {
 				# Use IFD to get the latest Cargo dependencies too.

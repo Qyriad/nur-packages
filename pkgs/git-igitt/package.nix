@@ -10,7 +10,9 @@
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 	importCargoLock,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "git-igitt";
 	version = "0.1.21";
 	doCheck = true;
@@ -37,7 +39,7 @@
 	];
 
 	passthru.fromHead = lib.mkHeadFetch {
-		self = self.finalPackage;
+		inherit self;
 		headRef = "master";
 		extraAttrs = self: {
 			# Use IFD to get the latest Cargo dependencies too.

@@ -10,7 +10,9 @@
 	hatchling,
 }: let
 	stdenv = stdenvNoCC;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "macbundler";
 	version = "0.2.3";
 

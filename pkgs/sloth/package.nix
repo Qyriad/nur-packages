@@ -3,7 +3,9 @@
 	stdenv,
 	stdlib,
 	fetchFromGitHub,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "sloth";
 	version = "2020-09-16-HEAD";
 

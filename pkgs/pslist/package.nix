@@ -5,7 +5,9 @@
 	fetchzip,
 	xz,
 	perl,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "pslist";
 	version = "1.4.0";
 	outputs = [ "out" "man" ];

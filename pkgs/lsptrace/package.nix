@@ -5,7 +5,9 @@
 	fetchFromGitHub,
 	fetchGoModules,
 	goHooks,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "lsptrace";
 	version = "2024-12-05-34daa52";
 

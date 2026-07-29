@@ -16,7 +16,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "serie";
 	version = "0.8.1";
 	doCheck = true;
@@ -29,7 +31,7 @@ in stdlib.makePackage stdenv (self: {
 	};
 
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-ZQhMG6vwu/weL7mmaaf2to+0miR1GKeEvwunFiuNyn8=";
 	};
@@ -47,9 +49,9 @@ in stdlib.makePackage stdenv (self: {
 	];
 
 	passthru = {
-		tests.version = testers.testVersion { package = self.finalPackage; };
+		tests.version = testers.testVersion { package = self; };
 		fromHead = lib.mkHeadFetch {
-			self = self.finalPackage;
+			inherit self;
 			headRef = "master";
 			extraAttrs = self: {
 				cargoDeps = importCargoLock {

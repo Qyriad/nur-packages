@@ -7,7 +7,9 @@
 	rustHooks,
 	cargo,
 	versionCheckHook,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "folderify";
 	version = "4.1.3";
 

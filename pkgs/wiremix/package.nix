@@ -17,7 +17,9 @@
 	# There seem to be bindgen issues trying to mix GCC and Clang,
 	# so let's just use Clang.
 	stdenv = clangStdenv;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "wiremix";
 	version = "0.11.0";
 
@@ -59,7 +61,7 @@ in stdlib.makePackage stdenv (self: {
 	];
 
 	passthru.fromHead = lib.mkHeadFetch {
-		self = self.finalPackage;
+		inherit self;
 		extraAttrs = self: {
 			cargoDeps = importCargoLock {
 				lockFile = self.src + "/Cargo.lock";

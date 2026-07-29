@@ -9,7 +9,9 @@
 	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "wild";
 	version = "0.9.0";
 
@@ -23,7 +25,7 @@
 	};
 
 	cargoDeps = fetchCargoVendor {
-		name = "${self.finalPackage.name}-cargo-deps";
+		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
 		hash = "sha256-ADJLtTRXcVWcbvgwXvCs0wxcGp2XP1LZJUJ4hpuzVHQ=";
 	};

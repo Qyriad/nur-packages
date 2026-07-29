@@ -9,7 +9,9 @@
 	obs-studio,
 	curl,
 	qt6Packages,
-}: stdlib.makePackage stdenv (self: {
+}: stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "obs-chapter-marker-manager";
 	version = "1.2.0";
 

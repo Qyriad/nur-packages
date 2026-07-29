@@ -15,7 +15,9 @@
 	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
 		optionalDarwin
 	;
-in stdlib.makePackage stdenv (self: {
+in stdlib.makePackage stdenv (finalAttrs: let
+	self = finalAttrs.finalPackage;
+in {
 	pname = "obs-cmd";
 	version = "1.0.1";
 	doCheck = true;
@@ -48,7 +50,7 @@ in stdlib.makePackage stdenv (self: {
 	];
 
 	passthru.fromHead = lib.mkHeadFetch {
-		self = self.finalPackage;
+		inherit self;
 		headRef = "master";
 		extraAttrs = self: {
 			cargoDeps = importCargoLock {
