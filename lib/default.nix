@@ -175,7 +175,18 @@ in childExports // {
 		finalFrom = foldAttrList fromList;
 	in self.callWith' finalFrom f;
 
-	suffixName = pkg: suffix: "${pkg.pname}-${suffix}-${pkg.version}";
+	/** The naïve version is:
+		suffixName = pkg: suffix: "${pkg.pname}-${suffix}-${pkg.version}";
+	 * This version is resilient against packages with `name` only.
+	 */
+	suffixName = { ... }@pkg: suffix: let
+		pname = lib.getName pkg;
+		version = lib.getVersion pkg;
+	in self.concatNonemptyStringsSep "-" [
+		pname
+		suffix
+		version
+	];
 
 	/** Uses an eval-time impure fetch to attempt to build a package derivation
 	 * from the latest version of its source. Probably won't work a lot of the time!

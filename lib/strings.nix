@@ -36,7 +36,9 @@ in {
 
 	/** Like `builtins.concatStringsSep`, but does not count empty strings. */
 	concatNonemptyStringsSep =
+		# We are strict in the type of `separator`.
 		separator: assert lib.isString separator;
+		# And we are strict in the type of `list`, but not its elements.
 		list: assert lib.isList list;
 		list
 		|> lib.filter (s: s != "")
