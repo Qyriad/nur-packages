@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+declare -a goModVendorFlags
+
 function fetchGoModulesBuildPhase()
 {
 	runHook preBuild
