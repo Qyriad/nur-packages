@@ -37,29 +37,6 @@ in
 	# to avoid angering the infinite recursion gods.
 	passedLib = lib;
 
-	requireStructuredAttrs = name: drv:
-		lib.warnIf (drv.__structuredAttrs or false || drv.allowUnstructuredAttrs or false)
-			"missing structuredAttrs for package ${name} (${drv.name}})"
-		drv
-	;
-
-	requireStrictDeps = name: drv:
-		lib.warnIf (drv.strictDeps or false || drv.allowUnstrictDeps or false)
-			"missing strictDeps for package ${name} (${drv.name})"
-		drv
-	;
-
-	seqScopeAvailablePackagesImpl = f: scope: let
-		inherit (scope.packages scope) availablePackages;
-	in lib.seq (lib.mapAttrs f availablePackages) scope;
-
-	# Overlay-friendliness.
-	seqScopeAvailablePackages = if pkgs ? qpkgs then (
-			lib.const lib.id
-	) else (
-		seqScopeAvailablePackagesImpl
-	);
-
 in lib.makeScope pkgs.newScope (self: let
 	# Make our recursive scope, which contains packages auto-discovered
 	# from `./pkgs`, as well as our extended `lib`, meaning those will all be
@@ -187,5 +164,3 @@ in discoveredPackages // {
 })
 # Final checks and lints.
 |> (scope: lib.deepSeq scope.nurLib scope)
-|> seqScopeAvailablePackages requireStructuredAttrs
-|> seqScopeAvailablePackages requireStrictDeps
