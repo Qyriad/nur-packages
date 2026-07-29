@@ -54,6 +54,7 @@
 			doCheck ? true,
 			doInstallCheck ? true,
 			passthru ? { },
+			meta ? { },
 			preHook ? "",
 			postHook ? "",
 			nativeBuildInputs ? [ ],
@@ -92,6 +93,12 @@
 				srcOnly = passthru.srcOnly or (
 					(srcOnly self).overrideAttrs { name = lib.suffixName self "src"; }
 				);
+			} // lib.optionalAttrs (passthru.meta or { } != { }) {
+				# passthru.meta entirely overrides meta.
+				# That sucks, so let's merge it.
+				# We'll do so *shallowly*.
+				# TODO: which should override?
+				meta = passthru.meta // meta;
 			};
 		};
 	};
