@@ -40,10 +40,6 @@
 		versionCheckHook
 	];
 
-	passthru = {
-		updateScript = nix-update-script { };
-	};
-
 	meta = {
 		homepage = "https://github.com/fioncat/otree";
 		description = "Command line tool to view objects (JSON/YAML/TOML) in a TUI tree widget";

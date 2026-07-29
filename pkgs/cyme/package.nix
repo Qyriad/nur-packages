@@ -11,7 +11,6 @@
 	installShellFiles,
 	libusb1,
 	udev,
-	nix-update-script,
 	testers,
 }: lib.callWith [ darwin rustPlatform ] ({
 	libiconv,
@@ -83,7 +82,6 @@ in {
 	'';
 
 	passthru = {
-		updateScript = nix-update-script { };
 		tests.version = testers.testVersion { package = self; };
 	};
 
