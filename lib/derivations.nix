@@ -5,7 +5,7 @@
 
 	isEnabledDerivation = { ... }@drv: lib.all lib.trivial.id [
 		(lib.isDerivation drv)
-		(lib.meta.broken or false != true)
+		(drv.meta.broken or false != true)
 		(drv.meta.disabled or false != true)
 	];
 
