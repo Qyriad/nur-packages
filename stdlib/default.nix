@@ -7,6 +7,8 @@
 }: lib.makeExtensible (self: {
 	makePackage = qpkgs.callPackage ./make-package { };
 
+	mkSetupHook = qpkgs.callPackage ./mk-setup-hook { };
+
 	runCommandMinimal = qpkgs.callPackage ./run-command-minimal { };
 
 	# FIXME: can we hack something to make `meta.position` work?
