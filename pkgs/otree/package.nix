@@ -42,7 +42,6 @@
 
 	passthru = {
 		updateScript = nix-update-script { };
-		fromHead = lib.mkHeadFetch { self = self.finalPackage; };
 	};
 
 	meta = {

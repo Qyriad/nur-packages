@@ -51,10 +51,6 @@ in stdlib.makePackage stdenv (self: {
 		versionCheckHook
 	];
 
-	passthru = {
-		fromHead = lib.mkHeadFetch { self = self.finalPackage; };
-	};
-
 	meta = {
 		homepage = "https://github.com/jacek-kurlit/pik";
 		description = "Process interactive kill";

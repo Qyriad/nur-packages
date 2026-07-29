@@ -46,10 +46,6 @@ in {
 		libiconv
 	];
 
-	passthru = {
-		fromHead = lib.mkHeadFetch { inherit self; };
-	};
-
 	meta = {
 		homepage = "https://github.com/jdx/usage";
 		description = "A tool for CLI specifications";

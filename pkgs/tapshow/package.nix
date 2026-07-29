@@ -46,10 +46,6 @@ in {
 		gtk4
 	];
 
-	passthru = {
-		fromHead = lib.mkHeadFetch { inherit self; };
-	};
-
 	meta = {
 		homepage = "https://github.com/hmnd/tapshow";
 		description = "Minimal keystroke visualizer for Wayland";

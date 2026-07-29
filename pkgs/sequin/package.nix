@@ -24,10 +24,6 @@
 
 	nativeBuildInputs = goHooks.asList;
 
-	passthru = {
-		fromHead = lib.mkHeadFetch { self = self.finalPackage; };
-	};
-
 	meta = {
 		homepage = "https://github.com/charmbracelet/sequin";
 		description = "Human-readable ANSI sequences";

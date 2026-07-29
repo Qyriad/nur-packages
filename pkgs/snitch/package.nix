@@ -24,8 +24,6 @@
 
 	nativeBuildInputs = goHooks.asList;
 
-	passthru.fromHead = lib.mkHeadFetch { self = self.finalPackage; };
-
 	meta = {
 		homepage = "https://github.com/karol-broda/snitch";
 		description = "a prettier way to inspect network connections";

@@ -42,10 +42,6 @@ in {
 		hash = "sha256-MrtCm41Q/Zs3FZCkdsNX30vFFuxIHNHHz4fbhMXuxD4=";
 	};
 
-	passthru = {
-		fromHead = lib.mkHeadFetch { inherit self; };
-	};
-
 	meta = {
 		homepage = "https://github.com/wiktor-k/age-plugin-openpgp-card";
 		description = "Age plugin for using ed255519 on OpenPGP Card devices (Yubikeys, Nitrokeys)";

@@ -56,8 +56,6 @@ in {
 
 	# FIXME: get versionCheckHook working at some point.
 
-	passthru.fromHead = lib.mkHeadFetch { inherit self; };
-
 	meta = {
 		homepage = "https://qjackctl.sourceforge.io/";
 		description = "JACK Audio Connection Kit Qt GUI Interface";

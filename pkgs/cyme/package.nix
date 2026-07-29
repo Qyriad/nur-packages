@@ -85,7 +85,6 @@ in {
 	passthru = {
 		updateScript = nix-update-script { };
 		tests.version = testers.testVersion { package = self; };
-		fromHead = lib.mkHeadFetch { inherit self; };
 	};
 
 	meta = {

@@ -49,10 +49,6 @@ in stdlib.makePackage stdenv (self: {
 		versionCheckHook
 	];
 
-	passthru = {
-		fromHead = lib.mkHeadFetch { self = self.finalPackage; };
-	};
-
 	meta = {
 		homepage = "https://github.com/sectordistrict/intentrace";
 		description = "strace with intent";
