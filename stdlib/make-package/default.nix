@@ -70,12 +70,12 @@
 				bat
 			];
 
-			preHook = lib.concatStringsSep "\n" [
+			preHook = lib.concatNonemptyStringsSep "\n" [
 				"source ${prettyPreHook}"
 				"${preHook}"
 			];
 
-			postHook = lib.concatStringsSep "\n" [
+			postHook = lib.concatNonemptyStringsSep "\n" [
 				"source ${prettyPostHook}"
 				"${postHook}"
 			];
