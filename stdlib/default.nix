@@ -9,6 +9,8 @@
 
 	mkSetupHook = qpkgs.callPackage ./mk-setup-hook { };
 
+	replaceFilesHook = qpkgs.callPackage ./replace-files-hook { };
+
 	runCommandMinimal = qpkgs.callPackage ./run-command-minimal { };
 
 	# FIXME: can we hack something to make `meta.position` work?
