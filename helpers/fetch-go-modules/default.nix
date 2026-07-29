@@ -48,7 +48,7 @@
 		"GOPROXY"
 	];
 
-	configurePhase = ''
+	configurePhase = lib.dedent ''
 		runHook preConfigure
 
 		export GOCACHE="$TMPDIR/go-cache"
@@ -57,7 +57,7 @@
 		runHook postConfigure
 	'';
 
-	installPhase = ''
+	installPhase = lib.dedent ''
 		runHook preInstall
 
 		cp -r --reflink=auto vendor "$out"
