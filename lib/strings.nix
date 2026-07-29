@@ -33,4 +33,13 @@ in {
 
 	/** Returns true if `name` "looks like" a stdenv name. */
 	isStdenvName = name: name == "stdenv" || lib.strings.hasSuffix "Stdenv" name;
+
+	/** Like `builtins.concatStringsSep`, but does not count empty strings. */
+	concatNonemptyStringsSep =
+		separator: assert lib.isString separator;
+		list: assert lib.isList list;
+		list
+		|> lib.filter (s: s != "")
+		|> lib.concatStringsSep separator
+	;
 }
