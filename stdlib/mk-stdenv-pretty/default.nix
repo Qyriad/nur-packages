@@ -10,12 +10,12 @@ in pkg: pkg.overrideAttrs (prev: {
 		bat
 	];
 
-	preHook = lib.concatStringsSep "\n" [
+	preHook = lib.concatNonemptyStringsSep "\n" [
 		"source ${prettyPreHook}"
 		"${prev.preHook or ""}"
 	];
 
-	postHook = lib.concatStringsSep "\n" [
+	postHook = lib.concatNonemptyStringsSep "\n" [
 		"source ${prettyPostHook}"
 		"${prev.postHook or ""}"
 	];
