@@ -32,8 +32,16 @@
 	 *  - `overrideStdenv :: Stdenv -> Derivation`
 	 *  - `byStdenv`, an attrset mapping this package to each of `qpkgs.validStdenvs`.
 	 */
-	makePackage = stdenv: lib.extendMkDerivation {
-		constructDrv = stdenv.mkDerivation;
+	makePackage = stdenv: let
+		# Error quickly if they forget to pass a stdenv.
+		# We do it this way instead of `{ mkDerivation }@stdenv:`, because the error message for that one
+		# is "function 'makePackage' called without required argument 'mkDerivation',
+		# which is arguably *more* confusing, not less.
+		mkDerivation = stdenv.mkDerivation or (
+			throw "attribute 'mkDerivation' missing: first argument to makePackage must be a stdenv"
+		);
+	in lib.seq mkDerivation lib.extendMkDerivation {
+		constructDrv = mkDerivation;
 
 		extendDrvArgs = finalAttrs: let
 			self = finalAttrs.finalPackage;
