@@ -14,10 +14,16 @@
 	deleteVendor ? false,
 	drvAttrs ? { },
 }: stdlib.makePackage stdenvNoCC (self: {
-	name = "${name}-go-modules";
-
-	strictDeps = true;
-	__structuredAttrs = true;
+	# TODO: We could just suffix it for them.
+	# But I don't love the `name =` attribute being silently modified in a derivation constructor...
+	name = let
+		pname = lib.getName name;
+	in (
+		lib.warnIfNot
+		(lib.strings.hasSuffix "go-modules" pname)
+		"fetchGoModules name '${pname}' is unclear and should probably end in 'go-modules'"
+		name
+	);
 
 	inherit src;
 
