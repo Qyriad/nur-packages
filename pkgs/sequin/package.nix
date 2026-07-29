@@ -17,7 +17,7 @@
 	};
 
 	goModules = fetchGoModules {
-		inherit (self.finalPackage) name;
+		name = lib.suffixName self "go-modules";
 		inherit (self) src;
 		hash = "sha256-mpmGd6liBzz9XPcB00ZhHaQzTid6lURD5I3EvehXsA8=";
 	};
