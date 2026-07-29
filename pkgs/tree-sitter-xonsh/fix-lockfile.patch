@@ -1,0 +1,19 @@
+diff --git a/package-lock.json b/package-lock.json
+index 8bdac282ef..7936b4be1a 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "tree-sitter-xonsh",
+-  "version": "0.2.0",
++  "version": "0.2.1",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "tree-sitter-xonsh",
+-      "version": "0.2.0",
++      "version": "0.2.1",
+       "license": "MIT",
+       "devDependencies": {
+         "tree-sitter-cli": "^0.26.3",
