@@ -1,6 +1,7 @@
 {
 	lib,
 	stdlib,
+	srcOnly,
 	bat,
 }: let
 	inherit (stdlib.stdenvPrettyHooks) prettyPreHook prettyPostHook;
@@ -27,6 +28,7 @@
 	 *  - `__structuredAttrs = true`
 	 *  - `stdlib.mkPretty` is applied by default.
 	 *  - `passthru.fromHead = lib.mkHeadFetch { inherit self }`
+	 *  - `passthru.srcOnly = pkgs.srcOnly self` (but with a "-src" suffix on the name.)
 	 *
 	 * As well as the follow augmentations that aren't overrideable:
 	 *  - `overrideStdenv :: Stdenv -> Derivation`
@@ -86,6 +88,10 @@
 				overrideStdenv = newStdenv: stdlib.makePackage newStdenv mkDerivationArgs;
 				byStdenv = validStdenvs
 				|> lib.mapAttrs (mkForStdenv mkDerivationArgs);
+
+				srcOnly = passthru.srcOnly or (
+					(srcOnly self).overrideAttrs { name = lib.suffixName self "src"; }
+				);
 			};
 		};
 	};
