@@ -20,6 +20,12 @@ function hlBash()
 	printf "%s" "$*" | bat -l bash --style=plain --paging=never --color=always
 }
 
+
+# HACK: we are overriding this private function from Nixpkgs setup.sh.
+if ! declare -f _nixLogWithLevel > /dev/null; then
+	echo "mk-stdenv-pretty pre-hook: ERROR: Nixpkgs internals changed!"
+fi
+
 function _nixLogWithLevel()
 {
 	[[ -z ${NIX_LOG_FD-} || ${NIX_DEBUG:-0} -lt ${1:?} ]] && return 0
@@ -68,6 +74,38 @@ function ninja()
 	)
 }
 
+function stripIndendationFromVar()
+{
+	if [[ "$#" -ne 1 ]]; then
+		echo "usage: stripIndendationFromVar <nameOfStringVariable>" >&2
+		return 1
+	fi
+
+	local name="$1"
+	local -n value="$name"
+	value="${value#"${value%%[![:space:]]*}"}"
+}
+
+# Outputs "1" if the value of the named variable contains the needle.
+# Outputs an empty string otherwise.
+function doesVarContainString()
+{
+	if [[ "$#" -ne 2 ]]; then
+		echo "usage: doesVarCalledContainString <nameOfStringVariable> <needle>"
+		return 1
+	fi
+
+	local name="$1"
+	local -n value="$name"
+	needle="$2"
+
+	if [[ "${value/${needle}/}" != "$value" ]]; then
+		echo "1"
+	else
+		echo ""
+	fi
+}
+
 function _logHook()
 {
 	# Fast path in case nixTalkativeLog is no-op.
@@ -81,33 +119,32 @@ function _logHook()
 
 	if declare -F "$hookExpr" > /dev/null 2>&1; then
 		nixTalkativeLog "${ANSI_FAINT}calling '${ANSI_RESET}$hookKind' ${ANSI_FAINT}function hook${ANSI_RESET} '${ANSI_CYAN}$hookExpr${ANSI_RESET}'" "$@"
-		#echo "$(hlBash "$(declare -f "$hookExpr" | tail -n+2)")"
 
 	elif type -p "$hookExpr" > /dev/null; then
 		nixTalkativeLog "sourcing '$hookKind' script hook '$hookExpr'"
 
 	elif [[ "$hookExpr" != "_callImplicitHook"* ]]; then
 		# Here we have a string hook to eval.
-		# Join lines onto one with literal \n characters unless NIX_DEBUG >= 5.
+		# Join lines onto one with literal ; characters unless NIX_DEBUG >= 5.
 		local exprToOutput
 		if [[ ${NIX_DEBUG:-0} -ge 5 ]]; then
 			exprToOutput="$hookExpr"
 		else
-			# We have `r'\n'.join([line.lstrip() for lines in text.split('\n')])` at home.
+			# We have `r'; '.join([line.lstrip() for lines in text.split('\n')])` at home.
 			local hookExprLine
 			while IFS= read -r hookExprLine; do
 				# These lines often have indentation,
 				# so let's remove leading whitespace.
-				hookExprLine="${hookExprLine#"${hookExprLine%%[![:space:]]*}"}"
+				stripIndendationFromVar hookExprLine
 				# If this line wasn't entirely whitespace,
 				# then add it to our output
 				if [[ -n "$hookExprLine" ]]; then
-					exprToOutput+="$hookExprLine\\n "
+					exprToOutput+="$hookExprLine; "
 				fi
 			done <<< "$hookExpr"
 
-			# And then remove the final, unnecessary, \n
-			exprToOutput="${exprToOutput%%\\n }"
+			# And then remove the final, unnecessary, ;
+			exprToOutput="${exprToOutput%%; }"
 		fi
 		local exprHl
 		exprHl="$(hlBash "$exprToOutput")"

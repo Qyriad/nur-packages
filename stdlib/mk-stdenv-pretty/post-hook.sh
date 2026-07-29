@@ -15,8 +15,6 @@ function showPhaseHeader()
 
 	local realPhase
 	local logCmd
-	local logPrefix
-
 	local fullMsg
 
 	if [[ -n "${!phase:-}" ]]; then
@@ -25,8 +23,31 @@ function showPhaseHeader()
 
 		local prefixPart
 		prefixPart="${ANSI_FAINT}Running custom ${ANSI_RESET}$phase${ANSI_FAINT}: "
+
 		local phasePart
-		phasePart="'${ANSI_CYAN}$realPhase${ANSI_RESET}${ANSI_FAINT}'"
+
+		if declare -F "$realPhase" > /dev/null 2>&1; then
+			local phaseToOutput="$realPhase"
+			phasePart="${ANSI_CYAN}$realPhase${ANSI_RESET}${ANSI_FAINT}"
+
+		elif [[ -n "$(doesVarContainString realPhase $'\n')" ]]; then
+			# If it has multiple lines, we'll idnent them.
+			local phaseToOutput=$'\n'
+			local phaseExprLine
+			while IFS= read -r phaseExprLine; do
+				stripIndendationFromVar phaseExprLine
+				# If this line wasn't entirely whitespace, add it to the output.
+				if [[ -n "$phaseExprLine" ]]; then
+					phaseToOutput+="  $phaseExprLine"$'\n'
+				fi
+			done <<< "$realPhase"
+
+			# And then remove the final, unnecessary, \n.
+			phaseToOutput="${phaseToOutput%%$'\n' }"
+			# And highlight it as bash.
+			phasePart="$(hlBash "$phaseToOutput")"
+		fi
+
 		fullMsg="$prefixPart${ANSI_RESET}$phasePart${ANSI_RESET}"
 
 	else
