@@ -1,7 +1,9 @@
 {
 	lib,
+	stdlib,
 	newScope,
 	makeSetupHook,
+	stdenvNoCC,
 	rustPlatform,
 	clippy,
 }: lib.recurseIntoAttrs (lib.makeScope newScope (self: {
@@ -29,9 +31,10 @@
 			dontSetCargoDefaults: set to non-empty to not set cargoBuildType=release
 			and cargoCheckType=test
 	*/
-	cargoDefaultsHook = makeSetupHook {
+	cargoDefaultsHook = stdlib.mkSetupHook stdenvNoCC {
 		name = "cargo-defaults-hook";
-	} ./cargo-defaults-hook.sh;
+		script = ./cargo-defaults-hook.sh;
+	};
 
 	/**
 		Arguments:
