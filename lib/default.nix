@@ -72,7 +72,7 @@ in childExports // {
 	 */
 	mkPlatformPredicates = plat: let
 		# All the `hostPlatform.isLinux`-like attrs.
-		platPredicates = lib.filterAttrs (lib.const self.startsWith "is") plat;
+		platPredicates = lib.filterAttrs (name: _: lib.hasPrefix "is" name) plat;
 	in platPredicates |> lib.mapAttrs' (name: value: {
 		name = "optional${lib.removePrefix "is" name}";
 		value = self.optionalDefault value;
