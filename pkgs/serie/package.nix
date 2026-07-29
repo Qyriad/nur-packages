@@ -7,8 +7,8 @@
 	rustPlatform,
 	cargo,
 	libiconv,
-	testers,
 	git,
+	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 	importCargoLock,
@@ -48,8 +48,11 @@ in {
 		libiconv
 	];
 
+	nativeInstallCheckInputs = [
+		versionCheckHook
+	];
+
 	passthru = {
-		tests.version = testers.testVersion { package = self; };
 		fromHead = lib.mkHeadFetch {
 			inherit self;
 			headRef = "master";

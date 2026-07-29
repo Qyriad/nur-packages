@@ -11,7 +11,7 @@
 	installShellFiles,
 	libusb1,
 	udev,
-	testers,
+	versionCheckHook,
 }: lib.callWith [ darwin rustPlatform ] ({
 	libiconv,
 	DarwinTools,
@@ -69,6 +69,10 @@ in {
 		"--skip=udev::hwdb::get"
 	];
 
+	nativeInstallCheckInputs = [
+		versionCheckHook
+	];
+
 	postInstall = lib.optionalDefault (buildPlatform.canExecute hostPlatform) ''
 		"$out/bin/cyme" --gen
 		installManPage ./doc/cyme.1
@@ -80,10 +84,6 @@ in {
 
 		install -Dm444 ./doc/cyme_example_config.json --target-directory "$out/share/cyme"
 	'';
-
-	passthru = {
-		tests.version = testers.testVersion { package = self; };
-	};
 
 	meta = {
 		homepage = "https://github.com/tuna-f1sh/cyme";

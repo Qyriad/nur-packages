@@ -7,7 +7,7 @@
 	libiconv,
 	cargo,
 	rustHooks,
-	testers,
+	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 	importCargoLock,
@@ -45,7 +45,10 @@ in {
 		"--skip=test_init"
 	];
 
-	passthru.tests = testers.testVersion { package = self; };
+	nativeInstallCheckInputs = [
+		versionCheckHook
+	];
+
 	passthru.fromHead = lib.mkHeadFetch {
 		inherit self;
 		extraAttrs = self: {
