@@ -4,7 +4,7 @@
 # default.nix
 
 {
-	warnUndeclaredOptions = false;
+	warnUndeclaredOptions = true;
 	allowAliases = false;
 	checkMeta = true;
 	allowUnfree = true;
