@@ -38,6 +38,11 @@ in childExports // {
 
 	notNull = value: value != null;
 
+	/** True if the value is null, empty string, empty list, or empty attrset. */
+	isEmpty = value: value == null || value == "" || value == [ ] || value == { };
+	/** True if the value has data for its type: non-empty list, non-empty string, non-empty attrs. */
+	isNonEmpty = value: value != null && value != "" && value != [ ] && value != { };
+
 	optionalDefault = cond: valueIfTrue: let
 		fnByType = {
 			list = lib.optionals;
