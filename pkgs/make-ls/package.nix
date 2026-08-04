@@ -19,7 +19,7 @@ in {
 	};
 
 	goModules = fetchGoModules {
-		inherit (self) name;
+		name = lib.suffixName self "go-modules";
 		inherit (self) src;
 		hash = "sha256-7QwDZZ8MKL210z/Bs8DKkRhj/Ju63yYQFlqQ2zJI5OE=";
 	};
@@ -33,6 +33,7 @@ in {
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		broken = lib.versionOlder goHooks.go.version "1.25.0";
 		mainProgram = "make-ls";
 	};
 })
