@@ -36,7 +36,7 @@ in {
 
 	meta = {
 		homepage = "https://github.com/fasouto/termaid";
-		description = "";
+		description = "Render Mermaid diagrams in your terminal or Python app";
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
