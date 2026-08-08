@@ -20,12 +20,18 @@
 	libXinerama ? throw "older Nixpkgs has libXinerama",
 	libxrandr ? libXrandr,
 	libXrandr ? throw "older Nixpkgs has libXrandr",
+	libxi ? libXi,
+	libXi ? throw "older Nixpkgs has libXi",
 	fontconfig,
 	freetype,
 	juce,
 	libspecbleach-full,
 }: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
+	inherit (lib.mkPlatformPredicates stdenv.hostPlatform)
+		optionalLinux
+		optionalDarwin
+	;
 in {
 	pname = "noise-repellent";
 	version = "0.4.1";
@@ -34,7 +40,7 @@ in {
 		owner = "lucianodato";
 		repo = "noise-repellent";
 		tag = "v${self.version}";
-		hash = "sha256-Ar0apmKd8a/7NXQlPXRPjuc5KpAQEUOsRrlOhNNO5YM=";
+		hash = "sha256-cv2eqY4x5Nj2nFVKTYwY1mYCkv5/icM2cGw4cN225ug=";
 	};
 
 	nativeBuildInputs = [
@@ -48,9 +54,19 @@ in {
 		(lib.cmakeBool "USE_SYSTEM_SPECBLEACH" true)
 		(lib.cmakeBool "USE_SYSTEM_JUCE" true)
 		(lib.cmakeBool "ENABLE_PLUGIN_TESTS" self.doCheck)
+	] ++ optionalDarwin [
+		# Their default install directories are absolute `/Library/…`.
+		"-DINSTALL_VST3_DIR=${placeholder "out"}/Library/Audio/Plug-Ins/VST3"
+		"-DINSTALL_AU_DIR=${placeholder "out"}/Library/Audio/Plug-Ins/Components"
+		"-DINSTALL_LV2_DIR=${placeholder "out"}/Library/Audio/Plug-Ins/LV2"
 	];
 
 	buildInputs = [
+		fontconfig
+		freetype
+		juce
+		libspecbleach-full
+	] ++ optionalLinux [
 		alsa-lib
 		libGL
 		libx11
@@ -59,10 +75,7 @@ in {
 		libxext
 		libxinerama
 		libxrandr
-		fontconfig
-		freetype
-		juce
-		libspecbleach-full
+		libxi
 	];
 
 	meta = {
