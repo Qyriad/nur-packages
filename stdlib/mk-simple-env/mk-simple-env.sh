@@ -30,32 +30,6 @@ function mkSimpleEnvBuildPhase()
 	runHook postInstall
 }
 
-filesWithShebangsIn()
-{
-	set -euo pipefail
-	# Probably "$out/bin"
-	local dirForFilesToSearch="$1"
-
-	local ripgrepOutput
-	local -a ripgrepCmd
-	ripgrepCmd=("rg" "--files-with-matches" "^#!/.*" "$dirForFilesToSearch")
-	ripgrepOutput="$("${ripgrepCmd[@]}")" || {
-		# Exit handling.
-		local rtcode="$?"
-		printf "%s: $ %s\n" "$name" "${ripgrepCmd[*]}" >&2
-		echo "$ripgrepOutput" >&2
-		return "$rtcode"
-	}
-
-	while IFS= read -r fileWithMatch; do
-		local firstLine
-		firstLine="$(head -1 "$fileWithMatch")"
-		if (echo "$firstLine" | rg "^#!/") >/dev/null; then
-			echo "$fileWithMatch"
-		fi
-	done <<< "$ripgrepOutput"
-}
-
 if [[ -n "${installPhase:-}" ]]; then
 	printf "%s: \x1b[34moverriding previous installPhase:\x1b[0m\n" "$name" >&2
 	declare -p installPhase >&2
