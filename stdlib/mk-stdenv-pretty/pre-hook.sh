@@ -69,8 +69,9 @@ function _nixLogWithLevel()
 function ninja()
 {
 	(
+		export CLICOLOR_FORCE=1
 		unset TERM
-		command ninja "$@"
+		command ninja "$@" | cat -
 	)
 }
 
