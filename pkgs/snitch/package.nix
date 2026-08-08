@@ -14,7 +14,7 @@ in {
 	src = fetchFromGitHub {
 		owner = "karol-broda";
 		repo = "snitch";
-		rev = "refs/tags/v${self.version}";
+		tag = "v${self.version}";
 		hash = "sha256-SssAiRUfUaDgAoVO2rDacru8e914Wl+4sA4JQ4Mv4eA=";
 	};
 
