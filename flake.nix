@@ -52,12 +52,13 @@
 			# Just the user-facing packages, and only ones that are available on this platform.
 			packages = nurPackages.availablePackages;
 
+			pkgsVersion = pkgs.lib.version;
 			farm = packages
 			|> lib.attrValues
-			|> pkgs.linkFarmFromDrvs "qyriad-nur-all"
+			|> pkgs.linkFarmFromDrvs "qyriad-nur-all-${pkgsVersion}"
 			|> (drv: drv.overrideAttrs (final: prev: {
 				meta = prev.meta or { } // {
-					description = "Link-farm of all packages in this NUR";
+					description = "Link-farm of all packages in this NUR (Nixpkgs ${pkgsVersion})";
 				};
 			}));
 		in {
