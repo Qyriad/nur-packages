@@ -41,7 +41,7 @@ in {
 		text: let
 			ansiBefore = lib.concatStringsSep "" styles;
 		in (
-			if text == "" then "" else "${ansiBefore}${text}${self.reset}"
+			if text == "" then "" else "${ansiBefore}${text}${self.ansi.reset}"
 	);
 
 	/**
@@ -49,12 +49,19 @@ in {
 
 		Type: stylizeError :: String -> String
 	*/
-	stylizeError = text: self.stylize [ self.style.bold self.color.fg.red ] text;
+	stylizeError = text: self.ansi.stylize [ self.ansi.style.bold self.ansi.color.fg.red ] text;
 
 	/**
 		Stylizes a string as bold and yellow.
 
 		Type: stylizeWarn :: String -> String
 	*/
-	stylizeWarn = text: self.stylize [ self.style.bold self.color.fg.yellow ] text;
+	stylizeWarn = text: self.ansi.stylize [ self.ansi.style.bold self.ansi.color.fg.yellow ] text;
+
+	/**
+	 * Stylizes as string as cyan.
+	 *
+	 * Type: stylizeHint :: String -> String
+	 */
+	stylizeHint = text: self.ansi.stylize [ self.ansi.color.fg.cyan ] text;
 }

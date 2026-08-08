@@ -10,14 +10,19 @@
 		./fixed-points.nix
 		./override-attrs.nix
 		./strings.nix
+		./arguments.nix
 	]
 	|> lib.map importChild
 	|> lib.mergeAttrsList;
+
+	inherit (self.arguments) validateArg mkHint optionalErrorContext;
 
 in childExports // {
 	ansi = importChild ./ansi.nix;
 
 	commonVersions = importChild ./common-versions.nix;
+
+	arguments = importChild ./arguments.nix;
 
 	/** Takes the result of a `builtins.tryEval` invocation, and a fallback value.
 	 *
@@ -169,11 +174,36 @@ in childExports // {
 	autocallWith = import ./autocall-with.nix { inherit lib; };
 
 	# Autocall with no explicit args. Handy for inline destructring.
-	callWith' = from: f: self.autocallWith from f { };
+	callWith' =
+		# An experiment for argument validation error messages.
+		# Let's see how this goes.
+		from: assert validateArg "callWith'" "from" (
+			(assert lib.isAttrs from; true)
+			|> optionalErrorContext (lib.isList from) (mkHint ''
+				`lib.callWith'` takes a single attrset; did you mean `lib.callWith`?
+			'')
+		);
+		f: assert validateArg "callWith'" "f" (
+			(assert lib.isFunction f; true)
+		); (
+			self.autocallWith from f { }
+		);
 
 	# Autocall with no explicit args, from a list of attrsets.
 	# Handy for inline destructuring.
-	callWith = fromList: f: let
+	callWith =
+		# An experiment for argument validation error messages.
+		# Let's see how this goes.
+		fromList: assert validateArg "callWith" "fromList" (
+			(assert lib.isList fromList; true)
+			|> optionalErrorContext (lib.isAttrs fromList) (mkHint ''
+				`lib.callWith takes a list of attrsets; did you mean `lib.callWith'`?
+			'')
+		);
+		f: assert validateArg "callWith" "f" [
+			(assert lib.isFunction f; true)
+		];
+	let
 		foldAttrList = lib.foldl lib.mergeAttrs { };
 		finalFrom = foldAttrList fromList;
 	in self.callWith' finalFrom f;
