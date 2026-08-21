@@ -46,6 +46,8 @@
 	|> lib.map (self.overridePkgStdenvCC pkg)
 	|> lib.lists.findFirst lib.isEnabledDerivation null;
 
+	pnpmHooks = qpkgs.callPackage ./pnpm-hooks { };
+
 	#overridePkgStdenv = newStdenv: drv: let
 	#	overrideArgs = lib.functionArgs drv.override;
 	#	stdenvArgs = overrideArgs
