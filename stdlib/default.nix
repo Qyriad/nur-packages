@@ -10,6 +10,7 @@
 	mkSetupHook = qpkgs.callPackage ./mk-setup-hook { };
 
 	replaceFilesHook = qpkgs.callPackage ./replace-files-hook { };
+	consolidateDirsFromWrapperArgsHook = qpkgs.callPackage ./consolidate-dirs-from-wrapper-args-hook { };
 
 	runCommandMinimal = qpkgs.callPackage ./run-command-minimal { };
 
