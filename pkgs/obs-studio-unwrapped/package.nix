@@ -7,6 +7,7 @@
 	libvlc,
 	libsysprof-capture,
 	rnnoise,
+	versionCheckHook,
 }: let
 	inherit (lib.mkPlatformGetters stdenv.hostPlatform)
 		getLibrary;
@@ -32,6 +33,13 @@ in obs-studio.overrideAttrs (final: prev: {
 	nativeBuildInputs = prev.nativeBuildInputs ++ [
 		final.absoluteDylibsHook
 	];
+
+	doInstallCheck = true;
+	nativeInstallCheckInputs = [
+		versionCheckHook
+	];
+	# Needed for older Nixpkgs, as the command name is `obs`, not `obs-studio`.
+	versionCheckProgram = "${placeholder "out"}/bin/obs";
 
 	meta = prev.meta // {
 		description = prev.meta.description + " (with absolute dylibs)";
