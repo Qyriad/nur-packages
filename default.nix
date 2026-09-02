@@ -98,6 +98,7 @@ in discoveredPackages // {
 	# Equivalent to setting `config.fetchedSourceNameDefault` but just for this scope.
 	repoRevToNameMaybe = lib.repoRevToName "full";
 	# Defined in terms of `repoRevToNameMaybe`.
+	fetchzip = self.callPackage pkgs.fetchzip.override { };
 	fetchFromGitHub = self.callPackage pkgs.fetchFromGitHub.override { };
 	# Defined in terms of `fetchFromGitHub`.
 	fetchFromGitea = self.callPackage pkgs.fetchFromGitea.override { };
