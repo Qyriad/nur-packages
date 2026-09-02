@@ -197,5 +197,5 @@ function consolidateFromWrapperIntoDir()
 	done
 	# We've removed all the `--prefix` arguments for "$dirsVar".
 	# So now it's time to add the consolidated one:
-	wrapperArgs+=("--prefix" "$dirsVar" ":" "$dest")
+	wrapperArgsRef+=("--prefix" "$dirsVar" ":" "$dest")
 }
