@@ -18,7 +18,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "xonsh-lsp";
-	version = "0.2.1";
+	version = "0.2.2";
 
 	outputs = [ "out" "dist" ];
 
@@ -26,7 +26,7 @@ in {
 		owner = "FoamScience";
 		repo = "xonsh-language-server";
 		tag = "v${self.version}";
-		hash = "sha256-3aM5nD8qBHt05df8ElPPstWZiICPOZrBqJqULZrJdLU=";
+		hash = "sha256-OqGk33NvDRo8TBicmuIGUdd7vcEoqKZmCOJ9JQzhYrg=";
 	};
 
 	nativeBuildInputs = (pythonHooks python).asList ++ [
