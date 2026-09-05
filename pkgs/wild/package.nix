@@ -13,7 +13,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "wild";
-	version = "0.9.0";
+	version = "0.10.0";
 
 	doCheck = false;
 
@@ -21,13 +21,13 @@ in {
 		owner = "davidlattimore";
 		repo = "wild";
 		rev = "refs/tags/${self.version}";
-		hash = "sha256-v4lPgZDPvRTAekkU9Vku9llgpOsaVtKt91VFUGrEeKw=";
+		hash = "sha256-jIkeR68C41jn0A3DjEpbrEYCwuqIS3n0bRed2K6c5iY=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-ADJLtTRXcVWcbvgwXvCs0wxcGp2XP1LZJUJ4hpuzVHQ=";
+		hash = "sha256-GWS94lacSiUjE733wlBKVpHHbbimYIV411a812ryL3U=";
 	};
 
 	versionCheckProgramArg = "--version";
