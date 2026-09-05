@@ -14,7 +14,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "hexapoda";
-	version = "0.2.4";
+	version = "1.0.0";
 
 	doCheck = true;
 	doInstallCheck = true;
@@ -23,13 +23,13 @@ in {
 		owner = "simonomi";
 		repo = "hexapoda";
 		tag = "v${self.version}";
-		hash = "sha256-5vl2S/ydmFmPgLVpaWnvy+n4HXCz7J4vdM0peOk24lo=";
+		hash = "sha256-UL9y7ofI9VRGbmKG2tX2Ax/So1OhemznUFPR9LOA6Os=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		inherit (self) src;
 		name = lib.suffixName self "cargo-deps";
-		hash = "sha256-9PUhcWLdMuq7xhxdS9hGftEfUTtslBAly/dW/xRRyko=";
+		hash = "sha256-pfzziyjlrMFM65+ZusqXpp+utVHHV0pWE2lCZwHYiBM=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
