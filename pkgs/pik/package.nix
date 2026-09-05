@@ -3,7 +3,6 @@
 	stdenv,
 	stdlib,
 	darwin,
-	apple-sdk,
 	fetchFromGitHub,
 	rustPlatform,
 	rustHooks,
@@ -21,7 +20,7 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "pik";
-	version = "1.0.0";
+	version = "1.0.1";
 
 	doCheck = true;
 	doInstallCheck = true;
@@ -31,14 +30,14 @@ in {
 	src = fetchFromGitHub {
 		owner = "jacek-kurlit";
 		repo = "pik";
-		rev = "refs/tags/${self.version}";
-		hash = "sha256-YachIoJeMDJPBvmucALRvyhIwFpMqatesKn3mdrGguE=";
+		tag = "${self.version}";
+		hash = "sha256-t9qrN6R+4jbwpIBXaUvGgnemZtSqDltly6Aspcd/sr8=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-gHx6G3MUbv/JCbFGdAUm2ep11d0ksVLlEbSBCtXm7ls=";
+		hash = "sha256-SMoejcJW0Fk/j7+64VZSIwdBEwyK7plVesnOK2C6dio=";
 	};
 
 	versionCheckProgramArg = "--version";
@@ -60,8 +59,8 @@ in {
 		license = with lib.licenses; [ mit ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
 		# lol with doesn't shadow.
-		# Dependency 'sysinfo@0.37.0' requires rustc 1.88.
-		broken = lib.versionOlder cargo.version "1.88";
+		# Dependency 'sysinfo@0.39.4' requires rustc 1.95
+		broken = lib.versionOlder cargo.version "1.95.0";
 		mainProgram = "pik";
 	};
 }))
