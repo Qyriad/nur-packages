@@ -19,14 +19,14 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "obs-cmd";
-	version = "1.0.1";
+	version = "1.0.2";
 	doCheck = true;
 
 	src = fetchFromGitHub {
 		owner = "grigio";
 		repo = "obs-cmd";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-yIS9P2ljyiT8tiJmieQXWQcSkKmP7p0/XErujQRxDCE=";
+		hash = "sha256-eND7XTiEilEPjq2V2sftElssHrgiB76o7xePQ5uVl7A=";
 	};
 
 	cargoDeps = fetchCargoVendor {
