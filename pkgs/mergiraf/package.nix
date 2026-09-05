@@ -21,20 +21,20 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "mergiraf";
-	version = "0.18.0";
+	version = "0.19.1";
 
 	src = fetchFromGitea {
 		domain = "codeberg.org";
 		owner = "mergiraf";
 		repo = "mergiraf";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-PfGiPH7CU8z+Flj3X04XnRdWcv5K+hTZMfvHpM52Fic=";
+		hash = "sha256-belYegVxLLrXr3h+n1qjmF14+rJoadkXoNwL+S/2jZE=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-1MDjaaH2PcvQz0DKSTADRB+8YEUWP1GN2edHk4EDVGA=";
+		hash = "sha256-DioS90ecNOEryE7zVddu3ov2S3ylTRtLxe+Zmw2hkmM=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
