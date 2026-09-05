@@ -7,6 +7,7 @@
 	rustPlatform,
 	cargo,
 	libiconv,
+	cacert,
 	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
@@ -19,7 +20,7 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "ubi";
-	version = "0.9.0";
+	version = "0.12.0";
 
 	doCheck = true;
 	doInstallCheck = true;
@@ -27,14 +28,14 @@ in {
 	src = fetchFromGitHub {
 		owner = "houseabsolute";
 		repo = "ubi";
-		rev = "refs/tags/v${self.version}";
-		hash = "sha256-3+cC1X/Ao7x30UCmwUCz/E6HXaIk2G5EDKhgGUKexaE=";
+		tag = "v${self.version}";
+		hash = "sha256-rLrh+8onizKeM3azqO20X0QH0lFy2F3zPhFqQ+FpM3Y=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.pname}-cargo-deps-${self.version}";
 		inherit (self) src;
-		hash = "sha256-qTzJ3s9tsv30gN3Rz8DJqHhRnQW5svTkWBDkR1ZOlIo=";
+		hash = "sha256-+jWn5mM2jD99wdwgIx3CEl88T9aZP9HdHAWPI/dehEY=";
 	};
 
 	versionCheckProgramArg = "--version";
@@ -54,6 +55,7 @@ in {
 
 	nativeInstallCheckInputs = [
 		versionCheckHook
+		cacert
 	];
 
 	passthru = {
@@ -76,7 +78,7 @@ in {
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ mit asl20 ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
-		broken = lib.versionOlder cargo.version "1.85";
+		broken = lib.versionOlder cargo.version "1.88";
 		mainProgram = "ubi";
 	};
 }))
