@@ -35,13 +35,13 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "simp";
-	version = "3.9.0";
+	version = "3.11.0";
 
 	src = fetchFromGitHub {
 		owner = "Kl4rry";
 		repo = "simp";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-G2xA5UPRMpz2XVyWFzJvU4bNmpEYfOmKIEEmSeF3EiM=";
+		hash = "sha256-Yh4k+cnNDX/DUoguPIJKboJf/HoxBIRGltf3jOS6790=";
 	};
 
 	# simp's build.rs calls `git rev-parse`. We'll just fake it.
@@ -57,7 +57,7 @@ in {
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-j2bP2mrfm59W7DlFh6HNHaNmlKlVup07ttmXzgPLMfM=";
+		hash = "sha256-lvo4ibneJEvmbbfg3nxAGtPbgahKs/8H8ZOFYnqP058=";
 	};
 
 	absoluteDylibsHook = lib.optionalDrvAttr stdenv.isLinux (mkAbsoluteDylibsHook {
