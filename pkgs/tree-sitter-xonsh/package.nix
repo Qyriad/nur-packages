@@ -21,7 +21,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "tree-sitter-xonsh";
-	version = "0.2.1";
+	version = "0.2.3";
 
 	outputs = [ "out" "lib" "dev" ];
 
@@ -29,7 +29,7 @@ in {
 		owner = "FoamScience";
 		repo = "tree-sitter-xonsh";
 		tag = "v${self.version}";
-		hash = "sha256-Hm/gqn+uvec3+HE4bzzxPoRnXcxUFMAkTXQgLnv+xFE=";
+		hash = "sha256-Wb/kTKRD/pU0KbjsMbdjFZtKwwCfxjDe1VhsQFMqc58=";
 		postFetch = ''
 			cp -vf "${./package-lock.json}" "$NIX_BUILD_TOP/$sourceRoot/package-lock.json"
 		'';
