@@ -16,10 +16,6 @@
 			url = "github:NixOS/nixpkgs/release-25.05";
 			flake = false;
 		};
-		nixpkgs-24_11 = {
-			url = "github:NixOS/nixpkgs/release-24.11";
-			flake = false;
-		};
 	};
 
 	outputs = {
@@ -28,7 +24,6 @@
 		nixpkgs-26_05,
 		nixpkgs-25_11,
 		nixpkgs-25_05,
-		nixpkgs-24_11,
 	}: let
 		lib = import (nixpkgs + "/lib");
 		nurLib = import ./lib { inherit lib; };
@@ -36,7 +31,7 @@
 		forAllSystems = lib.genAttrs flakeExposed;
 
 		eachNixpkgs = {
-			inherit nixpkgs nixpkgs-26_05 nixpkgs-25_11 nixpkgs-25_05 nixpkgs-24_11;
+			inherit nixpkgs nixpkgs-26_05 nixpkgs-25_11 nixpkgs-25_05;
 		};
 
 		eachNixpkgsFarm = system: eachNixpkgs
