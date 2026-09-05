@@ -9,19 +9,19 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "git-forge";
-	version = "0.6.0";
+	version = "0.10.0";
 
 	src = fetchFromGitHub {
 		owner = "git-pkgs";
 		repo = "forge";
 		tag = "v${self.version}";
-		hash = "sha256-kVKDHcrtXbOqqZoiKb/SxOKbTy2A7oHomlUImkcnxmA=";
+		hash = "sha256-L0n8fROMUUtTSWIgiPzSJKKO9MhfQKh8NtFbhJTZZNw=";
 	};
 
 	goModules = fetchGoModules {
 		name = lib.suffixName self "go-modules";
 		inherit (self) src;
-		hash = "sha256-sduEepxhOCLk7/YMJbIwtt78Bo9UJ5olb8po7drxPZw=";
+		hash = "sha256-5LY38XYsNXaR9tMeP4Y3CvN7MWbRgoeg1tpIQEVGmzk=";
 	};
 
 	nativeBuildInputs = goHooks.asList;
