@@ -56,6 +56,8 @@ in {
 	nativeInstallCheckInputs = [
 		versionCheckHook
 	];
+	# Needed for older Nixpkgs, as the command name is not pname.
+	versionCheckProgram = "${placeholder "out"}/bin/${self.meta.mainProgram}";
 
 	postFixupHooks = [ "wrapPythonPrograms" ];
 
