@@ -26,19 +26,19 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "cyme";
-	version = "3.0.1";
+	version = "3.0.2";
 
 	src = fetchFromGitHub {
 		owner = "tuna-f1sh";
 		repo = "cyme";
 		tag = "v${self.version}";
-		hash = "sha256-yc4oV5Sm5BuABEcfQVu7otNtHGDWVmSkV/FjTLER78Q=";
+		hash = "sha256-7+7OGG++UmUfSut/P5HWbim7dAw+dT9FxvNxkpBJciI=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-zNRZOOrKvYhDgCaNRS5P+UIZ8uzSW9nePciOn13LLB8=";
+		hash = "sha256-nnZ0vquGARZ/JlUVBVPzPpwSBYdmZ2bjOMx6fQe1jis=";
 	};
 	cargoBuildFeatures = [
 		"libusb"
