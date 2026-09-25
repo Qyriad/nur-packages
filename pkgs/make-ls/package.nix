@@ -9,13 +9,13 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "make-ls";
-	version = "0.1.20";
+	version = "0.1.25";
 
 	src = fetchFromGitHub {
 		owner = "owenrumney";
 		repo = "make-ls";
 		tag = "v${self.version}";
-		hash = "sha256-tnOiPKl8ULN2+fcEqdXgsRGTlbR2y2lDicaHyFxQkFs=";
+		hash = "sha256-0E/aUbhlRliAL8aLOINuWm7YyzVtTpzq5jJiVEGk38Y=";
 	};
 
 	goModules = fetchGoModules {
