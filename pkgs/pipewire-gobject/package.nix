@@ -17,7 +17,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "pipewire-gobject";
-	version = "0.3.9";
+	version = "0.3.10";
 
 	# The tests rely on the libraries at the installed paths existing.
 	doCheck = false;
@@ -27,7 +27,7 @@ in {
 		owner = "bhack";
 		repo = "pipewire-gobject";
 		tag = self.version;
-		hash = "sha256-k2AyGBobcK1gsQTey51dvh38J5jKZYV22xbT17lWe5o=";
+		hash = "sha256-kpZJ7wspoBPA6OS/7881KraCvvfT2M5rBGxD8G9D008=";
 	};
 
 	postPatch = ''
