@@ -20,20 +20,20 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "serie";
-	version = "0.8.2";
+	version = "0.9.1";
 	doCheck = true;
 
 	src = fetchFromGitHub {
 		owner = "lusingander";
 		repo = "serie";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-FD4GIDaPnd44xgT+NsDuhRuL7CnPZFVX96ATWlUGrHo=";
+		hash = "sha256-mFR/Q1gxoyu82wOfS5qIHV1P6Lia0lqlg1+u/hicG1w=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-NQxjqe1kzEIxr6G5Iac9DQVIG26lox77AumgKLtYQ48=";
+		hash = "sha256-5V4QnTW92GTDP0jceFt7tnEW06cTr1NyM+XGz0OGN5A=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
