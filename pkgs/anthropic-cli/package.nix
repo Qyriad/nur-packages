@@ -10,19 +10,19 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "anthropic-cli";
-	version = "1.35.0";
+	version = "1.38.0";
 
 	src = fetchFromGitHub {
 		owner = "anthropics";
 		repo = "anthropic-cli";
 		tag = "v${self.version}";
-		hash = "sha256-p8vrZF+DSANOiitA4NVrVuxU51sy8s2xbe0V3dtWqlU=";
+		hash = "sha256-A1bjgStLzueOxv+v8vcGXaLKGgd12K6vDDTmnmdvP4A=";
 	};
 
 	goModules = fetchGoModules {
 		name = lib.suffixName self "go-modules";
 		inherit (self) src;
-		hash = "sha256-oMQM1jU7ad/9cHRpcAhCXw6LVlaF0sGPw6LDljYP034=";
+		hash = "sha256-82uhGTEGvL6AdXxyUKpCus7v8D2k+tJRSKfr71cwIto=";
 	};
 
 	nativeBuildInputs = goHooks.asList ++ [
