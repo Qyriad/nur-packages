@@ -49,13 +49,13 @@
 	;
 in {
 	pname = "juce";
-	version = "9.0.2";
+	version = "9.0.3";
 
 	src = fetchFromGitHub {
 		owner = "juce-framework";
 		repo = "JUCE";
 		tag = "${self.version}";
-		hash = "sha256-N9n/ptqNI7jQLKZ28Xm541M9gUDJPMLS6Dgj1lNVJ3g=";
+		hash = "sha256-eB5HvUiKXRAp53EApiX0jGNhXVtt83zD9TaNOhdQIjc=";
 	};
 
 	# Upstream uses install directories like `lib/pkgconfig/JUCE-9.0.2/…`
