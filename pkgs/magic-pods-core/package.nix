@@ -94,6 +94,7 @@ in {
 		maintainers = with lib.maintainers; [ qyriad ];
 		license = with lib.licenses; [ gpl3Only ];
 		sourceProvenance = with lib.sourceTypes; [ fromSource ];
+		platforms = lib.platforms.linux;
 		mainProgram = "magicpodscore";
 	};
 })
