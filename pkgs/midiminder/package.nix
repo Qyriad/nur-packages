@@ -69,8 +69,13 @@ in {
 		# The systemd service.
 		install --verbose -Dm644 --target-directory="$out/lib/systemd/system" "$NIX_BUILD_TOP/$sourceRoot/midiminder.service"
 
+		# And example rules.
+		fd -t f . "$NIX_BUILD_TOP/$sourceRoot/rules" | while IFS= read -r exampleRule; do
+			install --verbose -Dm644 --target-directory="$out/share/doc/midiminder/examples" "$exampleRule"
+		done
+
+		# Finally, the Bash completions.
 		fd -t f . "$NIX_BUILD_TOP/$sourceRoot/bash-completion" | while IFS= read -r completionScript; do
-			# Finally, the Bash completions.
 			installShellCompletion --bash "$completionScript"
 		done
 	'';
