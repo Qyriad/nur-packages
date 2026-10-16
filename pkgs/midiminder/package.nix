@@ -27,6 +27,11 @@ in {
 
 	hardeningEnable = [ "glibcxxassertions" "libcxxhardeningextensive" ];
 
+	postPatch = lib.dedent ''
+		substituteInPlace "$NIX_BUILD_TOP/$sourceRoot/midiminder.service" \
+			--replace-fail "/usr/" "$out/"
+	'';
+
 	makeFlags = [
 		"PREFIX=${placeholder "out"}"
 	];
