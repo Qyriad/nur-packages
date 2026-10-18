@@ -30,6 +30,9 @@ in {
 	postPatch = lib.dedent ''
 		substituteInPlace "$NIX_BUILD_TOP/$sourceRoot/midiminder.service" \
 			--replace-fail "/usr/" "$out/"
+		# Comment out the `EnvironmentFile=/etc/environment` line, as it doesn't conventionally exist on NixOS.
+		substituteInPlace "$NIX_BUILD_TOP/$sourceRoot/midiminder.service" \
+			--replace-fail "EnvironmentFile=/etc/environment" "#EnvironmentFile=/etc/environment"
 	'';
 
 	makeFlags = [
