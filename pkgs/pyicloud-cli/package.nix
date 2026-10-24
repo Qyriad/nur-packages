@@ -37,7 +37,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "pyicloud-cli";
-	version = "2.7.0";
+	version = "2026.10.1";
 
 	outputs = [ "out" "dist" ];
 
@@ -45,7 +45,7 @@ in {
 		owner = "timlaing";
 		repo = "pyicloud";
 		tag = "${self.version}";
-		hash = "sha256-XQIE85fpod+Wmgg8t3PgHo8Vn2sF91h/I5hSvrCBSrk=";
+		hash = "sha256-Bzv7wSCeB8h+V1TJMFjT3r972PghR5MNupoqf2rWPG4=";
 	};
 
 	nativeBuildInputs = (pythonHooks python).asList ++ [
