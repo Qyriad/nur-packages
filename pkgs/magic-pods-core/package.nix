@@ -19,7 +19,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "magic-pods-core";
-	version = "2026-10-10";
+	version = "2.0.10";
 
 	src = fetchFromGitHub {
 		owner = "haileyok";
