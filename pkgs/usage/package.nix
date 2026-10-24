@@ -16,7 +16,7 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "usage";
-	version = "6.12.0";
+	version = "7.1.2";
 
 	# Some of the tests rely on `usage` in PATH. We'll fix those later.
 	dontCargoCheck = true;
@@ -25,13 +25,13 @@ in {
 		owner = "jdx";
 		repo = "usage";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-mq13YS+jOXJMmIgAC3mwk1jqQuNjzbGvHp1RVyuyTrY=";
+		hash = "sha256-A7x5lm4bNqpfsVQO5ie7XbtSuIAqeYA3e2gtLOUncxQ=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-o/Vb5ijCArwXD7bYSp6hg6ByXaqRyNnekjR9nmoNTnU=";
+		hash = "sha256-M3TJt3aHIPuHUn1jPczhPLgVLjzruxzT0BebVLV0UTA=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
