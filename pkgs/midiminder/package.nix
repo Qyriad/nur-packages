@@ -2,7 +2,8 @@
 	lib,
 	stdlib,
 	stdenv,
-	fetchFromForgejo,
+	fetchFromForgejo ? fetchFromGitea,
+	fetchFromGitea,
 	installShellFiles,
 	groff,
 	unixtools,
@@ -25,7 +26,10 @@ in {
 		hash = "sha256-l4NxKZOqciW31nijaOHcFMEzatZROPrb6DjupGScfrw=";
 	};
 
-	hardeningEnable = [ "glibcxxassertions" "libcxxhardeningextensive" ];
+	hardeningEnable = lib.optionals (lib.versionAtLeast lib.version "25.11") [
+		"glibcxxassertions"
+		"libcxxhardeningextensive"
+	];
 
 	postPatch = lib.dedent ''
 		substituteInPlace "$NIX_BUILD_TOP/$sourceRoot/midiminder.service" \
