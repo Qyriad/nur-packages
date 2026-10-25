@@ -10,6 +10,7 @@
 	python,
 	pythonRelaxDepsHook,
 	setuptools-scm,
+	click,
 	dacite,
 	giturlparse,
 	mako,
@@ -43,6 +44,7 @@ in {
 	pythonRelaxDeps = true;
 
 	propagatedBuildInputs = [
+		click
 		dacite
 		giturlparse
 		mako
