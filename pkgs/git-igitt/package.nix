@@ -14,20 +14,20 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "git-igitt";
-	version = "0.2.0";
+	version = "0.2.1";
 	doCheck = true;
 
 	src = fetchFromGitHub {
 		owner = "mlange-42";
 		repo = "git-igitt";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-ge4QheY9dEqU4ndYJcO11TPvVwSuL7/RK6WIakHrV7c=";
+		hash = "sha256-3heVYUe9bAApkZVMM0uAj54X6Hx0lvs7sx4bIJ0elJw=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = "${self.pname}-cargo-deps-${self.version}";
 		inherit (self) src;
-		hash = "sha256-XopYsa//QKeXh9yQbqLnbhxj//Umbt5Rm4XSHkAlBuc=";
+		hash = "sha256-0LH7CVeXxyRXcyCS5NZ0b5Gst5AHsF/4wF7hcOppNxI=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
