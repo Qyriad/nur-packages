@@ -19,20 +19,20 @@ in stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "obs-cmd";
-	version = "1.0.2";
+	version = "1.0.3";
 	doCheck = true;
 
 	src = fetchFromGitHub {
 		owner = "grigio";
 		repo = "obs-cmd";
 		rev = "refs/tags/v${self.version}";
-		hash = "sha256-eND7XTiEilEPjq2V2sftElssHrgiB76o7xePQ5uVl7A=";
+		hash = "sha256-Yqj3G9oZeQdJjTWtkZtGkJYxLdxQ7i0CWZT04/Q3i6o=";
 	};
 
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-jEGgTyqGprvtDkoWc5qihdeN91/4is3i7JBeqlm9KDw=";
+		hash = "sha256-rfC67Uht+SKK7vqavhqZVhl5MdmkvTBniLk6lg32uCI=";
 	};
 
 	versionCheckProgramArg = "--version";
