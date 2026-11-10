@@ -13,7 +13,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "termaid";
-	version = "0.9.1";
+	version = "0.12.0";
 
 	outputs = [ "out" "dist" ];
 
@@ -21,7 +21,7 @@ in {
 		owner = "fasouto";
 		repo = "termaid";
 		tag = "v${self.version}";
-		hash = "sha256-CxTrEzX1a2eNE1tw3DxoJYawi/FW2OcJL4sl1khILwc=";
+		hash = "sha256-UMDcmiDo17JS8Wn9OVhgfhZSA5Ks+fnxjGJDepF+R3g=";
 	};
 
 	nativeBuildInputs = (pythonHooks python).asList ++ [
