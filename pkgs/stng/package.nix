@@ -6,6 +6,8 @@
 	rustPlatform,
 	rustHooks,
 	cargo,
+	pkg-config,
+	rust-jemalloc-sys,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
 }: stdlib.makePackage stdenv (final: let
@@ -30,6 +32,11 @@ in {
 
 	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
+		pkg-config
+	];
+
+	buildInputs = [
+		rust-jemalloc-sys
 	];
 
 	checkFlags = [
