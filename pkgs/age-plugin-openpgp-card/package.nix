@@ -18,13 +18,13 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "age-plugin-openpgp-card";
-	version = "0.1.2";
+	version = "0.1.3";
 
 	src = fetchFromGitHub {
 		owner = "wiktor-k";
 		repo = "age-plugin-openpgp-card";
 		tag = "v${self.version}";
-		hash = "sha256-z1Q1Sg6qcQwhNDI6dCMf4BejZn5K9VzqLCVvkisB//k=";
+		hash = "sha256-JTZs4kJCi3O3QIlqFz7VPbAlqDqRhfs2b/fHKMd5zKg=";
 	};
 
 	nativeBuildInputs = rustHooks.asList ++ [
@@ -39,7 +39,7 @@ in {
 	cargoDeps = fetchCargoVendor {
 		name = lib.suffixName self "cargo-deps";
 		inherit (self) src;
-		hash = "sha256-MrtCm41Q/Zs3FZCkdsNX30vFFuxIHNHHz4fbhMXuxD4=";
+		hash = "sha256-pOcjSB+N9u72sfZaAoTNsKQC0lCCX0TWhwN6dLGJ2wk=";
 	};
 
 	meta = {
