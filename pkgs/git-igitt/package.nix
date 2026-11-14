@@ -6,6 +6,9 @@
 	rustHooks,
 	rustPlatform,
 	cargo,
+	pkg-config,
+	libgit2,
+	oniguruma,
 	zlib,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
@@ -32,9 +35,12 @@ in {
 
 	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
+		pkg-config
 	];
 
 	buildInputs = [
+		libgit2
+		oniguruma
 		zlib
 	];
 
