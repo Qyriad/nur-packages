@@ -5,7 +5,10 @@
 	rustHooks,
 	rustPlatform,
 	cargo,
+	pkg-config,
 	fetchFromGitHub,
+	zstd,
+	libgit2,
 	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
@@ -35,6 +38,12 @@ in {
 
 	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
+		pkg-config
+	];
+
+	buildInputs = [
+		zstd
+		libgit2
 	];
 
 	nativeInstallCheckInputs = [
