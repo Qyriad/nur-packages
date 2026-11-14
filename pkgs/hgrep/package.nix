@@ -6,6 +6,8 @@
 	darwin,
 	rustPlatform,
 	cargo,
+	pkg-config,
+	oniguruma,
 }: lib.callWith [ darwin rustPlatform ] ({
 	libiconv,
 	fetchCargoVendor,
@@ -42,6 +44,7 @@ in {
 		cargoSetupHook
 		cargoBuildHook
 		cargoInstallHook
+		pkg-config
 	];
 
 	doCheck = true;
@@ -50,7 +53,9 @@ in {
 		cargoCheckHook
 	];
 
-	buildInputs = optionalDarwin [
+	buildInputs = [
+		oniguruma
+	] ++ optionalDarwin [
 		libiconv
 	];
 
