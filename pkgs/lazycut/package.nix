@@ -11,7 +11,7 @@
 	self = finalAttrs.finalPackage;
 in {
 	pname = "lazycut";
-	version = "0.3.9";
+	version = "0.4.0";
 
 	doCheck = true;
 	doInstallCheck = true;
@@ -20,7 +20,7 @@ in {
 		owner = "ozemin";
 		repo = "lazycut";
 		tag = "v${self.version}";
-		hash = "sha256-SWcxk8GiXX81UZwv//1lukvXLtgMiJ7u4Rx1z6CKQoY=";
+		hash = "sha256-NBHUoYEs2PYXTNB0I4NWv57wYA6qUWo9Y8oz3gdfZLY=";
 	};
 
 	goModules = fetchGoModules {
