@@ -6,8 +6,11 @@
 	rustHooks,
 	rustPlatform,
 	cargo,
+	pkg-config,
 	libiconv,
 	cacert,
+	jemalloc,
+	zstd,
 	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
@@ -47,9 +50,13 @@ in {
 
 	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
+		pkg-config
 	];
 
-	buildInputs = optionalDarwin [
+	buildInputs = [
+		jemalloc
+		zstd
+	] ++ optionalDarwin [
 		libiconv
 	];
 
