@@ -33,11 +33,12 @@
 	pytest-socket,
 	pytest-timeout,
 	types-requests,
+	mcp,
 }: stdlib.makePackage stdenv (finalAttrs: let
 	self = finalAttrs.finalPackage;
 in {
 	pname = "pyicloud-cli";
-	version = "2026.10.1";
+	version = "2026.11.2";
 
 	outputs = [ "out" "dist" ];
 
@@ -45,7 +46,7 @@ in {
 		owner = "timlaing";
 		repo = "pyicloud";
 		tag = "${self.version}";
-		hash = "sha256-Bzv7wSCeB8h+V1TJMFjT3r972PghR5MNupoqf2rWPG4=";
+		hash = "sha256-zAyitxluJcpumGPNhpnFoMpkJet+yfq+609WboKMKF4=";
 	};
 
 	nativeBuildInputs = (pythonHooks python).asList ++ [
@@ -53,7 +54,7 @@ in {
 		setuptools-scm
 	];
 
-	pythonRelaxDeps = [ "tzlocal" ];
+	pythonRelaxDeps = [ "tzlocal" "pydantic" ];
 
 	propagatedBuildInputs = [
 		certifi
@@ -82,6 +83,13 @@ in {
 		pytest-socket
 		pytest-timeout
 		types-requests
+		mcp
+	];
+
+	# These require specific permissions in the running directory.
+	disabledTestPaths = [
+		"tests/test_mail_sync_cli.py"
+		"tests/test_mail_sync_storage.py"
 	];
 
 	# Needed for older Nixpkgs, as the command name is not pname.
