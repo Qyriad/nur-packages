@@ -6,6 +6,8 @@
 	rustPlatform,
 	rustHooks,
 	cargo,
+	pkg-config,
+	zstd,
 	versionCheckHook,
 }: lib.callWith' rustPlatform ({
 	fetchCargoVendor,
@@ -34,6 +36,11 @@ in {
 
 	nativeBuildInputs = rustHooks.asList ++ [
 		cargo
+		pkg-config
+	];
+
+	buildInputs = [
+		zstd
 	];
 
 	nativeInstallCheckInputs = [
